@@ -110,7 +110,7 @@ playSong :: Song -> IO ()
 playSong s = do
   ALUT.play [global_songs s]
 
-mkAnim :: SF (DrawSpriteDetails, V2 WorldPos) Renderable
+mkAnim :: SF (DrawSpriteDetails Anim, V2 WorldPos) Renderable
 mkAnim = proc (dsd, pos) -> do
   let anim = dsd_anim dsd
   global_tick <- round . (/ 0.1) <$> localTime -< ()

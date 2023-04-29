@@ -11,4 +11,6 @@ extra-deps:
 - ldtk-types-1.2.3
 - git: https://github.com/gbrsales/cabal-appimage.git
   commit: 0f0cf1d14d0e00abd089be0b63213bb505fb1499
+- git: https://github.com/isovector/bones.git
+  commit: 5d8d383bbad2778915baab39d2455e2a448de731
 
