@@ -24,7 +24,7 @@ instance Bounded Char' where
 
 
 frameCounts :: Anim -> Int
-frameCounts (Idle _)   = 4
+frameCounts (Idle _)   = 1
 frameCounts (NoAnim _) = 1
 frameCounts (Run _)    = 4
 

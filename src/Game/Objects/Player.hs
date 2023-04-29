@@ -23,7 +23,7 @@ player pos0 = loopPre 0 $ proc (oi, vel) -> do
 
   let dt = deltaTime oi
 
-  let onGround = touchingGround (collision CollisionCheckGround) ore pos
+  let onGround = touchingGround (collision CollisionCheckGround) playerOre pos
 
 
   let arrows = c_dir $ controls oi
@@ -34,7 +34,7 @@ player pos0 = loopPre 0 $ proc (oi, vel) -> do
 
   let dpos = vel' ^* dt
   let desiredPos = pos + coerce dpos
-  let pos' = fromMaybe pos $ move collision (coerce ore) pos $ dpos
+  let pos' = fromMaybe pos $ move collision (coerce playerOre) pos $ dpos
 
   let vel''
         = (\want have res -> bool 0 res $ abs(want - have) <= epsilon )
@@ -58,16 +58,17 @@ player pos0 = loopPre 0 $ proc (oi, vel) -> do
         , oo_state =
             oi_state oi
               & #os_pos .~ pos'
-              & #os_collision .~ Just ore
+              & #os_collision .~ Just playerOre
               & #os_tags %~ S.insert IsPlayer
               & #os_facing .~ dir
         , oo_render = drawn
         }
-  where
-    ore = OriginRect sz $ sz & _x *~ 0.5
 
-    sz :: Num a => V2 a
-    sz = V2 8 16
+playerOre :: OriginRect Double
+playerOre = OriginRect sz $ sz & _x *~ 0.5
+
+sz :: Num a => V2 a
+sz = V2 24 60
 
 
 touchingGround :: (V2 WorldPos -> Bool) -> OriginRect Double -> V2 WorldPos -> Bool
@@ -139,11 +140,7 @@ drawPlayer =
             , pos
             )
     returnA -< mconcat
-      [ ifA is_totsugeku
-          $ drawGameTextureOriginRect
-              ChickenTexture
-              (mkCenterdOriginRect 24 & #orect_offset . _x -~ bool (-10) 10 dir) pos 0
-          $ V2 dir False
+      [ drawOriginRect (V4 0 255 0 255) playerOre pos
       , r
       ]
 
