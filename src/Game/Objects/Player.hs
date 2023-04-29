@@ -25,7 +25,10 @@ player pos0 = loopPre 0 $ proc (oi, vel) -> do
 
   let onGround = touchingGround (collision CollisionCheckGround) ore pos
 
-  let vel'0 = 0
+
+  let arrows = c_dir $ controls oi
+
+  let vel'0 = fmap fromIntegral arrows ^* (60 * dt)
 
   let vel' = updateVel onGround dt vel vel'0
 
