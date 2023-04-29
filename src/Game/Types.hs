@@ -146,7 +146,7 @@ data Message
 data ParticleType
   = Gore
   | Firework
-  deriving stock (Eq, Ord, Show, Read, Generic)
+  deriving stock (Eq, Ord, Show, Read, Generic, Enum, Bounded)
 
 data TileData
   = Twinkle Int
@@ -154,7 +154,7 @@ data TileData
 
 data AnimationName
   = BallerAnimEntity
-  deriving stock (Eq, Ord, Show, Read, Generic)
+  deriving stock (Eq, Ord, Show, Read, Generic, Enum, Bounded)
 
 
 

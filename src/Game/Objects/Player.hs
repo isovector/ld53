@@ -58,7 +58,9 @@ player pos0 = loopPre 0 $ proc (oi, vel) -> do
 
   let dir = True
 
-  drawn <- drawPlayer -< (dir, pos', ore, False)
+  -- drawn <- drawPlayer -< (dir, pos', ore, False)
+  drawn <- mkPuppet -< (DrawSpriteDetails
+    {dsd_anim = BallerAnimEntity, dsd_rotation = 0, dsd_flips = pure False}, pos)
 
   returnA -< (, vel'') $
     ObjectOutput

@@ -33,9 +33,12 @@ import           Data.Bool (bool)
 import           Data.Coerce
 import           Data.Foldable (toList)
 import           Data.Generics.Labels ()
+import           Data.IntMap (IntMap)
 import           Data.Map (Map)
 import           Data.Monoid (Endo(Endo), appEndo)
 import           Data.Set (Set)
+import qualified Data.Spriter.Types
+import           Data.Spriter.Types (Schema, EntityName)
 import           Data.Text (Text)
 import           Data.Word
 import           Debug.Trace (trace, traceShowId, traceM)
@@ -46,7 +49,6 @@ import           GHC.Generics
 import           Game.Types
 import           SDL hiding (trace, Event)
 import qualified Sound.ALUT as ALUT
-import Data.Spriter.Types (Schema)
 
 
 ------------------------------------------------------------------------------
@@ -95,6 +97,7 @@ data Resources = Resources
   , r_songs    :: Song -> ALUT.Source
   , r_worlds   :: WorldName -> World
   , r_anims    :: Anim -> [WrappedTexture]
+  , r_animschema :: AnimationName -> CannedAnim
   , r_glyphs   :: Char -> Texture
   }
 
@@ -305,11 +308,12 @@ instance HasControls (FrameInfo' a) where
 instance {-# OVERLAPPABLE #-} HasFrameInfo a => HasControls a where
   controls = controls . frameInfo
 
--- data CannedAnim = CannedAnim
---   { _aSchema    :: Schema
---   , _aEntity    :: EntityName
---   , _aAnim      :: AnimationName
---   , _aSpeedMult :: Double
---   , _aRepeat    :: Bool
---   } deriving (Eq)
+data CannedAnim = CannedAnim
+  { _aSchema    :: Schema
+  , _aEntity    :: EntityName
+  , _aAnim      :: Data.Spriter.Types.AnimationName
+  , _aSpeedMult :: Double
+  , _aRepeat    :: Bool
+  , _aTextures  :: IntMap WrappedTexture
+  }
 

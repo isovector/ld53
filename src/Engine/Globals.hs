@@ -21,22 +21,25 @@ global_sounds :: Sound -> ALUT.Source
 global_songs :: Song -> ALUT.Source
 global_worlds :: WorldName -> World
 global_anims :: Anim -> [WrappedTexture]
+global_animschemas :: AnimationName -> CannedAnim
 global_glyphs :: Char -> Texture
 
 Resources
-  { r_textures = global_textures
-  , r_sounds   = global_sounds
-  , r_worlds   = global_worlds
-  , r_anims    = global_anims
-  , r_glyphs   = global_glyphs
-  , r_songs    = global_songs
+  { r_textures   = global_textures
+  , r_sounds     = global_sounds
+  , r_worlds     = global_worlds
+  , r_anims      = global_anims
+  , r_glyphs     = global_glyphs
+  , r_songs      = global_songs
+  , r_animschema = global_animschemas
   } = global_resources
 
 
-{-# NOINLINE global_anims    #-}
-{-# NOINLINE global_glyphs   #-}
-{-# NOINLINE global_songs    #-}
-{-# NOINLINE global_sounds   #-}
-{-# NOINLINE global_textures #-}
-{-# NOINLINE global_worlds   #-}
+{-# NOINLINE global_anims       #-}
+{-# NOINLINE global_glyphs      #-}
+{-# NOINLINE global_songs       #-}
+{-# NOINLINE global_sounds      #-}
+{-# NOINLINE global_textures    #-}
+{-# NOINLINE global_worlds      #-}
+{-# NOINLINE global_animschemas #-}
 

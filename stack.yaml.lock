@@ -37,15 +37,15 @@ packages:
     commit: 0f0cf1d14d0e00abd089be0b63213bb505fb1499
     git: https://github.com/gbrsales/cabal-appimage.git
 - completed:
-    commit: 5d8d383bbad2778915baab39d2455e2a448de731
+    commit: 5d687daab542fc3d2718b492360a12280d1a21a2
     git: https://github.com/isovector/bones.git
     name: bones
     pantry-tree:
-      sha256: adf7819ee58095590a953f310f3f4e864c8dc70259440301c1775138824327e8
+      sha256: c33c337e48f004f1904f895af350ad93f42e9ba29b207646c51fcaebf28aec64
       size: 545
     version: 0.2.0.0
   original:
-    commit: 5d8d383bbad2778915baab39d2455e2a448de731
+    commit: 5d687daab542fc3d2718b492360a12280d1a21a2
     git: https://github.com/isovector/bones.git
 snapshots:
 - completed:

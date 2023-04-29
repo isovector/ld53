@@ -1,8 +1,12 @@
-{-# OPTIONS_GHC -Wno-orphans #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# OPTIONS_GHC -Wno-orphans   #-}
 
 module Game.Resources where
 
+import           Control.Lens (_head)
 import           Control.Monad ((<=<))
+import           Data.Spriter.Skeleton (loadSchema)
+import           Data.Spriter.Types (schemaFolder, folderFile, _fileName)
 import           Data.Traversable (for)
 import           Engine.Resources
 import           Engine.Types
@@ -11,9 +15,11 @@ import           SDL (Texture, textureWidth, textureHeight)
 import           SDL.JuicyPixels (loadJuicyTexture)
 import           SDL.Video (queryTexture)
 import qualified Sound.ALUT as ALUT
-import           System.FilePath ((</>), (<.>))
+import           System.FilePath ((</>), (<.>), takeFileName)
 
 import {-# SOURCE #-} Engine.Importer (loadWorld)
+import qualified Data.Map as M
+import qualified Data.IntMap as IM
 
 newtype Char' = Char' { getChar' :: Char }
   deriving (Eq, Ord, Show, Enum)
@@ -106,6 +112,20 @@ instance IsResource GameTexture WrappedTexture where
   resourceName EggTexture = "coin"
   resourceName ArrowTexture = "green_arrow"
 
+instance IsResource AnimationName CannedAnim where
+  load name e fp = do
+    Right schema <- loadSchema fp
+    rpath <- resourceRootPath
+    textures <-
+      for (schema ^. schemaFolder . _head . folderFile) $ \ff -> do
+        let fn = takeFileName $ _fileName ff
+        loadWrappedTexture e $ rpath </> "puppets" </> fn
+    pure $ case name of
+      BallerAnimEntity -> CannedAnim schema "baller" "Dribble" 1200 True $ IM.fromList $ zip [0..] textures
+  resourceFolder = "puppets"
+  resourceExt    = "scon"
+  resourceName _ = "baller"
+
 -- instance IsResource Song ALUT.Source where
 --   load _ _ fileName = do
 --     buf <- ALUT.createBuffer (ALUT.File fileName)
@@ -146,6 +166,7 @@ loadResources engine = do
   worlds   <- loadResource rpath engine
   anims    <- loadResource rpath engine
   glyphs   <- loadResource rpath engine
+  puppets  <- loadResource rpath engine
 
   pure $ Resources
     { r_engine   = engine
@@ -154,6 +175,7 @@ loadResources engine = do
     , r_songs    = \ _ -> error "omg"
     , r_worlds   = worlds
     , r_anims    = anims
+    , r_animschema = puppets
     , r_glyphs   = glyphs . Char'
     }
 

@@ -1,20 +1,31 @@
-{-# LANGUAGE CPP #-}
+{-# LANGUAGE CPP             #-}
+{-# LANGUAGE RecordWildCards #-}
+
+{-# OPTIONS_GHC -Wno-incomplete-uni-patterns #-}
 
 #ifndef __HLINT__
 
 module Engine.Drawing where
 
+import           Control.Lens (at)
 import           Data.Foldable (for_, traverse_)
+import           Data.Spriter.Skeleton (ResultBone(..), fmod, animate, isBone)
+import           Data.Spriter.Types hiding (AnimationName)
 import           Engine.Camera (viaCamera)
 import           Engine.FRP
 import           Engine.Geometry (rectContains)
-import           Engine.Globals (global_resources, global_anims, global_glyphs, global_textures, global_songs, global_sounds)
+import           Engine.Globals (global_resources, global_anims, global_glyphs, global_textures, global_songs, global_sounds, global_animschemas)
 import           Engine.Types
 import           Engine.Utils (originRectToRect)
 import           Foreign.C
 import           Game.Resources (frameSound, frameCounts)
 import           SDL
 import qualified Sound.ALUT as ALUT
+import Data.Map (Map)
+import qualified Data.Map as M
+import Data.Maybe (fromJust)
+import Data.IntMap (IntMap)
+import qualified Data.IntMap as IM
 
 playSound :: Sound -> IO ()
 playSound s = do
@@ -128,6 +139,40 @@ mkAnim = proc (dsd, pos) -> do
       (dsd_rotation dsd)
       (dsd_flips dsd)
       cam
+
+mkPuppet :: SF (DrawSpriteDetails AnimationName, V2 WorldPos) Renderable
+mkPuppet = proc (dsd, pos) -> do
+  let CannedAnim{..} = global_animschemas $ dsd_anim dsd
+  global_tick <- localTime -< ()
+  new_anim <- onChange -< dsd_anim dsd
+  anim_start <- hold 0 -< global_tick <$ new_anim
+
+  let t = global_tick - anim_start
+
+  let Just entity    = _aSchema ^. schemaEntity    . at _aEntity
+      Just animation = entity   ^. entityAnimation . at _aAnim
+      thisFrame = t * _aSpeedMult
+      totalLength = animation ^. animLength
+      frame = case _aRepeat || thisFrame <= totalLength of
+                True -> fmod totalLength thisFrame
+                False -> totalLength - 1
+
+  returnA -< do
+    case animate animation frame of
+      Nothing -> mempty
+      Just rbs -> foldMap (drawResultBone _aTextures pos) $ filter (not . isBone) rbs
+
+drawResultBone :: IntMap WrappedTexture -> V2 WorldPos -> ResultBone -> Renderable
+drawResultBone wts pos ResultBone{..} =
+  drawSpriteStretched
+    (wts IM.! (_boneObjFile $ fromJust _rbObj))
+    (pos + sz * coerce (V2  _rbX $ negate _rbY))
+    ({- dsd angle + -} - _rbAngle * 180 / pi)
+    (V2 False False)
+    (sz *  V2 _rbScaleX _rbScaleY)
+  where
+    sz :: Fractional a => a
+    sz = 0.25
 
 
 atScreenPos :: Renderable -> Renderable
