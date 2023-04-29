@@ -36,8 +36,8 @@ player pos0 = loopPre 0 $ proc (oi, vel) -> do
 
   let is_ducking = view _y arrows == 1
 
-  let vel'0 = fmap fromIntegral arrows ^* (60 * dt)
-            & _y -~ bool 0 200 wants_to_jump
+  let vel'0 = fmap fromIntegral arrows ^* walkSpeed
+            & _y .~ bool 0 (- jumpPower) (wants_to_jump && onGround)
 
 
   let vel' = updateVel onGround holding_jump dt vel vel'0
@@ -77,10 +77,24 @@ player pos0 = loopPre 0 $ proc (oi, vel) -> do
         }
 
 
+walkSpeed, runSpeed, jumpPower :: Double
+walkSpeed = 200
+runSpeed = 300
+jumpPower = 200
+
+antigravity :: Bool -> V2 Double
+antigravity holding_jump = - bool 0 (V2 0 300) holding_jump
+
+
+airDampening :: Double
+airDampening = 0.025
+
 updateVel :: Bool -> Bool -> Time -> V2 Double -> V2 Double -> V2 Double
-updateVel onGround holding_jump dt old_v dv =
-  (old_v + dv + (gravity - bool 0 (V2 0 300) holding_jump) ^* dt)
-    & _y %~ bool id (\dy -> if dy >= 0 then 0 else dy) onGround
+updateVel True holding_jump dt old_v dv =
+    (old_v & _x .~ 0) + dv
+updateVel False holding_jump dt old_v dv =
+  (old_v + (dv & _x *~ airDampening) + (gravity + antigravity holding_jump) ^* dt)
+    & _x %~ clampAbs walkSpeed
 
 playerOre :: OriginRect Double
 playerOre = OriginRect sz $ sz & _x *~ 0.5
