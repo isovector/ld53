@@ -312,6 +312,7 @@ data CannedAnim = CannedAnim
   { ca_schema   :: PuppetName
   , _aEntity    :: EntityName
   , _aAnim      :: Data.Spriter.Types.AnimationName
+  , ca_scale    :: Double
   , _aSpeedMult :: Double
   , _aRepeat    :: Bool
   }

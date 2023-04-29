@@ -161,19 +161,22 @@ mkPuppet = proc (dsd, pos) -> do
   returnA -< do
     case animate animation frame of
       Nothing -> mempty
-      Just rbs -> foldMap (drawResultBone (ws_textures ws) pos) $ filter (not . isBone) rbs
+      Just rbs -> foldMap (drawResultBone dsd (ws_textures ws) ca_scale pos) $ filter (not . isBone) rbs
 
-drawResultBone :: IntMap WrappedTexture -> V2 WorldPos -> ResultBone -> Renderable
-drawResultBone wts pos ResultBone{..} =
+drawResultBone
+    :: DrawSpriteDetails a
+    -> IntMap WrappedTexture
+    -> Double  -- ^ scale
+    -> V2 WorldPos
+    -> ResultBone
+    -> Renderable
+drawResultBone dsd wts sz pos ResultBone{..} =
   drawSpriteStretched
     (wts IM.! (_boneObjFile $ fromJust _rbObj))
-    (pos + sz * coerce (V2  _rbX $ negate _rbY))
-    ({- dsd angle + -} - _rbAngle * 180 / pi)
-    (V2 False False)
-    (sz *  V2 _rbScaleX _rbScaleY)
-  where
-    sz :: Fractional a => a
-    sz = 0.25
+    (pos + coerce (sz *^ (V2  _rbX $ negate _rbY)))
+    (dsd_rotation dsd - (_rbAngle * 180 / pi))
+    (dsd_flips dsd)
+    (sz *^ V2 _rbScaleX _rbScaleY)
 
 
 atScreenPos :: Renderable -> Renderable

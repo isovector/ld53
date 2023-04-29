@@ -58,11 +58,7 @@ player pos0 = loopPre 0 $ proc (oi, vel) -> do
 
   let dir = True
 
-  -- drawn <- drawPlayer -< (dir, pos', ore, False)
-  V2 vx vy <- derivative -< pos
-  let anim = (bool BallerDribble BallerRun $ abs vx >= epsilon && abs vy < epsilon)
-  drawn <- mkPuppet -< (DrawSpriteDetails
-    {dsd_anim = anim, dsd_rotation = 0, dsd_flips = pure False}, pos)
+  drawn <- drawPlayer -< (dir, pos', ore, False)
 
   returnA -< (, vel'') $
     ObjectOutput
@@ -156,9 +152,9 @@ drawPlayer =
   proc (dir, pos, ore, is_totsugeku) -> do
     -- We can fully animate the player as a function of the position!
     V2 vx vy <- derivative -< pos
-    r <- mkAnim
+    r <- mkPuppet
         -<  ( DrawSpriteDetails
-                (bool (Idle MainCharacter) (Run MainCharacter) $ abs vx >= epsilon && abs vy < epsilon)
+                (bool BallerDribble BallerRun $ abs vx >= epsilon && abs vy < epsilon)
                 0
                 (V2 (not dir) False)
             , pos

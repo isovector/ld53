@@ -179,6 +179,6 @@ loadResources engine = do
     }
 
 getPuppetAnim :: PuppetAnim -> CannedAnim
-getPuppetAnim BallerDribble = CannedAnim BallerPuppet "baller" "Dribble" 1500 True
-getPuppetAnim BallerRun = CannedAnim BallerPuppet "baller" "DribbleRun" 1500 True
+getPuppetAnim BallerDribble = CannedAnim BallerPuppet "baller" "Dribble" 0.25 1500 True
+getPuppetAnim BallerRun = CannedAnim BallerPuppet "baller" "DribbleRun" 0.25 1500 True
 
