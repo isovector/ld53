@@ -89,6 +89,7 @@ data RateLimited a = RateLimited
   }
   deriving (Eq, Ord, Show, Generic)
 
+
 rl_available :: RateLimited a -> Bool
 rl_available = isNothing . rl_cooldown_left
 
@@ -109,3 +110,18 @@ rateLimit cooldown sf = loopPre 0 $ proc ((ev, b), last_ok) -> do
   respawn <- edge -< respawn_at <= t
   returnA -< (RateLimited (bool (Just $ respawn_at - t) Nothing alive) respawn out, respawn_at)
 
+
+select :: SF a Bool -> SF a b -> SF a b -> SF a b
+select sf t f = proc a -> do
+  isTrue <- sf -< a
+  tb <- t -< a
+  fb <- f -< a
+  returnA -< bool fb tb isTrue
+
+holdFor :: Time -> SF (Event a) (Maybe a)
+holdFor dur = proc ev -> do
+  t <- time -< ()
+  startTime <- hold (-100) -< t <$ ev
+  e <- hold (error "holdFor") -< ev
+  let isHeld = t < startTime + dur
+  returnA -< bool Nothing (Just e) isHeld
