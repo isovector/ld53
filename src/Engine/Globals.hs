@@ -21,7 +21,7 @@ global_sounds :: Sound -> ALUT.Source
 global_songs :: Song -> ALUT.Source
 global_worlds :: WorldName -> World
 global_anims :: Anim -> [WrappedTexture]
-global_animschemas :: AnimationName -> CannedAnim
+global_puppets :: PuppetName -> WrappedSchema
 global_glyphs :: Char -> Texture
 
 Resources
@@ -31,7 +31,7 @@ Resources
   , r_anims      = global_anims
   , r_glyphs     = global_glyphs
   , r_songs      = global_songs
-  , r_animschema = global_animschemas
+  , r_puppets = global_puppets
   } = global_resources
 
 
@@ -41,5 +41,5 @@ Resources
 {-# NOINLINE global_sounds      #-}
 {-# NOINLINE global_textures    #-}
 {-# NOINLINE global_worlds      #-}
-{-# NOINLINE global_animschemas #-}
+{-# NOINLINE global_puppets     #-}
 

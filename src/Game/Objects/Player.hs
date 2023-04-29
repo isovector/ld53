@@ -59,8 +59,10 @@ player pos0 = loopPre 0 $ proc (oi, vel) -> do
   let dir = True
 
   -- drawn <- drawPlayer -< (dir, pos', ore, False)
+  V2 vx vy <- derivative -< pos
+  let anim = (bool BallerDribble BallerRun $ abs vx >= epsilon && abs vy < epsilon)
   drawn <- mkPuppet -< (DrawSpriteDetails
-    {dsd_anim = BallerAnimEntity, dsd_rotation = 0, dsd_flips = pure False}, pos)
+    {dsd_anim = anim, dsd_rotation = 0, dsd_flips = pure False}, pos)
 
   returnA -< (, vel'') $
     ObjectOutput

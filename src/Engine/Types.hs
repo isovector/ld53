@@ -91,14 +91,14 @@ data Engine = Engine
 ------------------------------------------------------------------------------
 -- | Things we need to keep track of, like sprites and music and stuff.
 data Resources = Resources
-  { r_engine   :: Engine
-  , r_textures :: GameTexture -> WrappedTexture
-  , r_sounds   :: Sound -> ALUT.Source
-  , r_songs    :: Song -> ALUT.Source
-  , r_worlds   :: WorldName -> World
-  , r_anims    :: Anim -> [WrappedTexture]
-  , r_animschema :: AnimationName -> CannedAnim
-  , r_glyphs   :: Char -> Texture
+  { r_engine      :: Engine
+  , r_textures    :: GameTexture -> WrappedTexture
+  , r_sounds      :: Sound -> ALUT.Source
+  , r_songs       :: Song -> ALUT.Source
+  , r_worlds      :: WorldName -> World
+  , r_anims       :: Anim -> [WrappedTexture]
+  , r_puppets     :: PuppetName -> WrappedSchema
+  , r_glyphs      :: Char -> Texture
   }
 
 
@@ -309,11 +309,16 @@ instance {-# OVERLAPPABLE #-} HasFrameInfo a => HasControls a where
   controls = controls . frameInfo
 
 data CannedAnim = CannedAnim
-  { _aSchema    :: Schema
+  { ca_schema   :: PuppetName
   , _aEntity    :: EntityName
   , _aAnim      :: Data.Spriter.Types.AnimationName
   , _aSpeedMult :: Double
   , _aRepeat    :: Bool
-  , _aTextures  :: IntMap WrappedTexture
   }
+
+data WrappedSchema = WrappedSchema
+  { ws_schema   :: Schema
+  , ws_textures :: IntMap WrappedTexture
+  }
+
 

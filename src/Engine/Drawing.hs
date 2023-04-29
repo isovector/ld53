@@ -14,11 +14,11 @@ import           Data.Spriter.Types hiding (AnimationName)
 import           Engine.Camera (viaCamera)
 import           Engine.FRP
 import           Engine.Geometry (rectContains)
-import           Engine.Globals (global_resources, global_anims, global_glyphs, global_textures, global_songs, global_sounds, global_animschemas)
+import           Engine.Globals (global_resources, global_anims, global_glyphs, global_textures, global_songs, global_sounds, global_puppets)
 import           Engine.Types
 import           Engine.Utils (originRectToRect)
 import           Foreign.C
-import           Game.Resources (frameSound, frameCounts)
+import           Game.Resources (frameSound, frameCounts, getPuppetAnim)
 import           SDL
 import qualified Sound.ALUT as ALUT
 import Data.Map (Map)
@@ -140,16 +140,17 @@ mkAnim = proc (dsd, pos) -> do
       (dsd_flips dsd)
       cam
 
-mkPuppet :: SF (DrawSpriteDetails AnimationName, V2 WorldPos) Renderable
+mkPuppet :: SF (DrawSpriteDetails PuppetAnim, V2 WorldPos) Renderable
 mkPuppet = proc (dsd, pos) -> do
-  let CannedAnim{..} = global_animschemas $ dsd_anim dsd
+  let CannedAnim{..} = getPuppetAnim $ dsd_anim dsd
+      ws = global_puppets ca_schema
   global_tick <- localTime -< ()
   new_anim <- onChange -< dsd_anim dsd
   anim_start <- hold 0 -< global_tick <$ new_anim
 
   let t = global_tick - anim_start
 
-  let Just entity    = _aSchema ^. schemaEntity    . at _aEntity
+  let Just entity    = ws_schema ws ^. schemaEntity    . at _aEntity
       Just animation = entity   ^. entityAnimation . at _aAnim
       thisFrame = t * _aSpeedMult
       totalLength = animation ^. animLength
@@ -160,7 +161,7 @@ mkPuppet = proc (dsd, pos) -> do
   returnA -< do
     case animate animation frame of
       Nothing -> mempty
-      Just rbs -> foldMap (drawResultBone _aTextures pos) $ filter (not . isBone) rbs
+      Just rbs -> foldMap (drawResultBone (ws_textures ws) pos) $ filter (not . isBone) rbs
 
 drawResultBone :: IntMap WrappedTexture -> V2 WorldPos -> ResultBone -> Renderable
 drawResultBone wts pos ResultBone{..} =

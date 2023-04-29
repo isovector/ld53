@@ -112,7 +112,7 @@ instance IsResource GameTexture WrappedTexture where
   resourceName EggTexture = "coin"
   resourceName ArrowTexture = "green_arrow"
 
-instance IsResource AnimationName CannedAnim where
+instance IsResource PuppetName WrappedSchema where
   load name e fp = do
     Right schema <- loadSchema fp
     rpath <- resourceRootPath
@@ -120,8 +120,7 @@ instance IsResource AnimationName CannedAnim where
       for (schema ^. schemaFolder . _head . folderFile) $ \ff -> do
         let fn = takeFileName $ _fileName ff
         loadWrappedTexture e $ rpath </> "puppets" </> fn
-    pure $ case name of
-      BallerAnimEntity -> CannedAnim schema "baller" "Dribble" 1200 True $ IM.fromList $ zip [0..] textures
+    pure $ WrappedSchema schema $ IM.fromList $ zip [0..] textures
   resourceFolder = "puppets"
   resourceExt    = "scon"
   resourceName _ = "baller"
@@ -175,7 +174,11 @@ loadResources engine = do
     , r_songs    = \ _ -> error "omg"
     , r_worlds   = worlds
     , r_anims    = anims
-    , r_animschema = puppets
+    , r_puppets = puppets
     , r_glyphs   = glyphs . Char'
     }
+
+getPuppetAnim :: PuppetAnim -> CannedAnim
+getPuppetAnim BallerDribble = CannedAnim BallerPuppet "baller" "Dribble" 1500 True
+getPuppetAnim BallerRun = CannedAnim BallerPuppet "baller" "DribbleRun" 1500 True
 

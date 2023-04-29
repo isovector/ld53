@@ -152,10 +152,12 @@ data TileData
   = Twinkle Int
   deriving stock (Eq, Ord, Show, Read, Generic)
 
-data AnimationName
-  = BallerAnimEntity
+data PuppetName
+  = BallerPuppet
   deriving stock (Eq, Ord, Show, Read, Generic, Enum, Bounded)
 
-
-
+data PuppetAnim
+  = BallerDribble
+  | BallerRun
+  deriving stock (Eq, Ord, Show, Read, Generic, Enum, Bounded)
 
