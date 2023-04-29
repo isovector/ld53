@@ -12,5 +12,5 @@ extra-deps:
 - git: https://github.com/gbrsales/cabal-appimage.git
   commit: 0f0cf1d14d0e00abd089be0b63213bb505fb1499
 - git: https://github.com/isovector/bones.git
-  commit: 5d687daab542fc3d2718b492360a12280d1a21a2
+  commit: f4e881bff268f631447814388e8129e0329813db
 

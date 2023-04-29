@@ -5,11 +5,13 @@ module Game.Objects.Player where
 import           Control.Lens ((*~))
 import           Control.Monad (void)
 import qualified Data.Set as S
+import qualified Data.Text as T
 import           Engine.Collision
 import           Engine.Drawing
 import           FRP.Yampa ((*^))
 import           Game.Common
 import           Game.Objects.Particle (gore)
+import           Game.Objects.Unknown (unknown)
 import qualified SDL.Vect as SDL
 
 player :: V2 WorldPos -> Object
@@ -41,7 +43,6 @@ player pos0 = loopPre 0 $ proc (oi, vel) -> do
   maybeSlide <- holdFor slideDur -< (bool (-1) 1 dir) * slideSpeed <$ wants_to_start_slide
   let slide = fromMaybe 0 maybeSlide
 
-
   let vel'0 = fmap fromIntegral arrows ^* walkSpeed
             & _y .~ bool 0 (- jumpPower) (wants_to_jump && onGround)
             & _x %~ (+ slide)
@@ -63,8 +64,8 @@ player pos0 = loopPre 0 $ proc (oi, vel) -> do
 
   t <- localTime -< ()
 
-  drawn <- drawPlayer -< (dir, pos', ore, False)
 
+  (boxes, drawn) <- drawPlayer -< (dir, pos', ore, False)
   returnA -< (, vel'') $
     ObjectOutput
         { oo_events =
@@ -72,6 +73,7 @@ player pos0 = loopPre 0 $ proc (oi, vel) -> do
               & #oe_focus .~ mconcat
                   [ start
                   ]
+              & #oe_spawn .~ Event (fmap spawnMe boxes)
         , oo_state =
             oi_state oi
               & #os_pos .~ pos'
@@ -81,6 +83,11 @@ player pos0 = loopPre 0 $ proc (oi, vel) -> do
         , oo_render = drawn
         }
 
+spawnMe :: AnimBox -> Object
+spawnMe ab
+  = withLifetime 0
+  $ unknown (T.pack $ show $ ab_type ab) (coerce $ r_pos $ ab_rect ab)
+  $ OriginRect (r_size $ ab_rect ab) 0
 
 walkSpeed, runSpeed, slideSpeed, slideDur, jumpPower :: Double
 walkSpeed = 200
@@ -154,22 +161,23 @@ dieAndRespawnHandler = proc (pos, on_die) -> do
 
 
 
-drawPlayer :: SF (Bool, V2 WorldPos, OriginRect Double, Bool) Renderable
+drawPlayer :: SF (Bool, V2 WorldPos, OriginRect Double, Bool) ([AnimBox], Renderable)
 drawPlayer =
   proc (dir, pos, ore, is_totsugeku) -> do
     -- We can fully animate the player as a function of the position!
     V2 vx vy <- derivative -< pos
-    r <- mkPuppet
+    (boxes, r) <- mkPuppet
         -<  ( DrawSpriteDetails
                 (bool BallerDribble BallerRun $ abs vx >= epsilon && abs vy < epsilon)
                 0
                 (V2 (not dir) False)
             , pos
             )
-    returnA -< mconcat
-      [ drawOriginRect (V4 0 255 0 255) ore pos
-      , r
-      ]
+    returnA -< (boxes,) $
+      mconcat
+        [ drawOriginRect (V4 0 255 0 255) ore pos
+        , r
+        ]
 
 
 

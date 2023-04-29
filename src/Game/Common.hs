@@ -10,6 +10,15 @@ import qualified Data.Set as S
 import           Engine.Common
 import           Engine.Prelude
 
+withLifetime :: Double -> Object -> Object
+withLifetime dur sf = proc oi -> do
+  ev <- nowish () -< ()
+  t <- time -< ()
+  start <- hold 0 -< t <$ ev
+  die <- edge -< start + dur < t
+  oo <- sf -< oi
+  returnA -< oo & #oo_events . #oe_die <>~ die
+
 
 onHitBy :: ObjectTag -> ObjectInput -> Event ObjectId
 onHitBy otag oi = do

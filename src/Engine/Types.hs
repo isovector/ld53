@@ -322,4 +322,10 @@ data WrappedSchema = WrappedSchema
   , ws_textures :: IntMap WrappedTexture
   }
 
+data AnimBox = AnimBox
+  { ab_type :: BoxType
+  , ab_rect :: Rect Double
+  }
+  deriving (Eq, Ord, Show, Read, Generic)
+
 

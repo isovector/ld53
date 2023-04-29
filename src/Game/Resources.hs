@@ -114,7 +114,7 @@ instance IsResource GameTexture WrappedTexture where
 
 instance IsResource PuppetName WrappedSchema where
   load name e fp = do
-    Right schema <- loadSchema fp
+    schema <- fmap (either error id) $ loadSchema fp
     rpath <- resourceRootPath
     textures <-
       for (schema ^. schemaFolder . _head . folderFile) $ \ff -> do
