@@ -161,3 +161,8 @@ data PuppetAnim
   | BallerRun
   deriving stock (Eq, Ord, Show, Read, Generic, Enum, Bounded)
 
+data BoxType
+  = Hitbox
+  | Hurtbox
+  deriving stock (Eq, Ord, Show, Read, Generic)
+

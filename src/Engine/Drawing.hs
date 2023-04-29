@@ -8,9 +8,14 @@
 module Engine.Drawing where
 
 import           Control.Lens (at)
+import           Control.Monad (guard)
 import           Data.Foldable (for_, traverse_)
+import           Data.IntMap (IntMap)
+import qualified Data.IntMap as IM
+import           Data.Maybe (fromJust, mapMaybe)
 import           Data.Spriter.Skeleton (ResultBone(..), fmod, animate, isBone)
 import           Data.Spriter.Types hiding (AnimationName)
+import qualified Data.Text as T
 import           Engine.Camera (viaCamera)
 import           Engine.FRP
 import           Engine.Geometry (rectContains)
@@ -18,14 +23,10 @@ import           Engine.Globals (global_resources, global_anims, global_glyphs, 
 import           Engine.Types
 import           Engine.Utils (originRectToRect)
 import           Foreign.C
+import           Game.Box (parseBox)
 import           Game.Resources (frameSound, frameCounts, getPuppetAnim)
 import           SDL
 import qualified Sound.ALUT as ALUT
-import Data.Map (Map)
-import qualified Data.Map as M
-import Data.Maybe (fromJust)
-import Data.IntMap (IntMap)
-import qualified Data.IntMap as IM
 
 playSound :: Sound -> IO ()
 playSound s = do
@@ -140,7 +141,7 @@ mkAnim = proc (dsd, pos) -> do
       (dsd_flips dsd)
       cam
 
-mkPuppet :: SF (DrawSpriteDetails PuppetAnim, V2 WorldPos) Renderable
+mkPuppet :: SF (DrawSpriteDetails PuppetAnim, V2 WorldPos) ([AnimBox], Renderable)
 mkPuppet = proc (dsd, pos) -> do
   let CannedAnim{..} = getPuppetAnim $ dsd_anim dsd
       ws = global_puppets ca_schema
@@ -159,9 +160,26 @@ mkPuppet = proc (dsd, pos) -> do
                 False -> totalLength - 1
 
   returnA -< do
-    case animate animation frame of
+    case animate entity _aAnim frame of
       Nothing -> mempty
-      Just rbs -> foldMap (drawResultBone dsd (ws_textures ws) ca_scale pos) $ filter (not . isBone) rbs
+      Just rbs -> do
+        let draw = foldMap (drawResultBone dsd (ws_textures ws) ca_scale pos) $ filter (not . isBone) rbs
+            boxes = mapMaybe (getBox ca_scale pos) rbs
+         in (boxes, draw)
+
+
+getBox :: Double -> V2 WorldPos -> ResultBone -> Maybe AnimBox
+getBox sz pos rb = do
+  oi <- _rbObjInfo rb
+  guard $ _objInfoType oi == SpriterBox
+  let dpos = sz *^ V2 (_rbX rb) (_rbY rb)
+      orig_sz = V2 (_objInfoWidth oi) (_objInfoHeight oi)
+      scale = V2 (_rbScaleX rb) (_rbScaleY rb)
+  box <- parseBox $ T.unpack $ _objInfoName oi
+  pure $ AnimBox box
+       $ Rect (coerce pos + (dpos & _y %~ negate))
+       $ sz *^ (orig_sz * scale)
+
 
 drawResultBone
     :: DrawSpriteDetails a
