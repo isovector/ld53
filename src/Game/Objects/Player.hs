@@ -29,17 +29,23 @@ player pos0 = loopPre 0 $ proc (oi, vel) -> do
 
   let arrows = c_dir $ controls oi
 
+  let is_ducking = view _y arrows == 1
+  let dir = not is_ducking
+
   let holding_jump = c_jump $ controls oi
   jump_changed <- onChange -< holding_jump
   let wants_to_jump = jump_changed == Event True
 
+  let holding_slide = c_slide $ controls oi
+  slide_press <- edge -< holding_slide
+  let wants_to_start_slide = bool NoEvent slide_press $ onGround && is_ducking
 
-
-
-  let is_ducking = view _y arrows == 1
+  maybeSlide <- holdFor slideDur -< (bool (-1) 1 dir) * slideSpeed <$ wants_to_start_slide
+  let slide = fromMaybe 0 maybeSlide
 
   let vel'0 = fmap fromIntegral arrows ^* walkSpeed
             & _y .~ bool 0 (- jumpPower) (wants_to_jump && onGround)
+            & _x %~ (+ slide)
 
 
   let vel' = updateVel onGround holding_jump dt vel vel'0
@@ -58,7 +64,6 @@ player pos0 = loopPre 0 $ proc (oi, vel) -> do
 
   t <- localTime -< ()
 
-  let dir = True
 
   (boxes, drawn) <- drawPlayer -< (dir, pos', ore, False)
   returnA -< (, vel'') $
@@ -84,11 +89,12 @@ spawnMe ab
   $ unknown (T.pack $ show $ ab_type ab) (coerce $ r_pos $ ab_rect ab)
   $ OriginRect (r_size $ ab_rect ab) 0
 
-
-walkSpeed, runSpeed, jumpPower :: Double
+walkSpeed, runSpeed, slideSpeed, slideDur, jumpPower :: Double
 walkSpeed = 200
 runSpeed = 300
+slideSpeed = 300
 jumpPower = 200
+slideDur = 0.5
 
 antigravity :: Bool -> V2 Double
 antigravity holding_jump = - bool 0 (V2 0 300) holding_jump

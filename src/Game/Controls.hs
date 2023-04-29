@@ -23,8 +23,9 @@ parseController js = do
   dx <- axisPosition js 0
   dy <- axisPosition js 1
   pure $ Controls
-    { c_space = a || x
+    { c_space = a
     , c_jump = y
+    , c_slide = x
     , c_attack = b
     , c_reset = r
     , c_full_restart = l
@@ -42,6 +43,7 @@ parseControls :: (SDL.Scancode -> Bool) -> Controls
 parseControls check = Controls
   { c_space = check ScancodeX || check ScancodeSpace
   , c_jump = check ScancodeZ || check ScancodeReturn
+  , c_slide = check ScancodeX || check ScancodeReturn
   , c_attack = check ScancodeC
   , c_reset = check ScancodeR && not (check ScancodeLShift || check ScancodeRShift)
   , c_full_restart = check ScancodeR && (check ScancodeLShift || check ScancodeRShift)

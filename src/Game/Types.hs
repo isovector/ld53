@@ -62,6 +62,7 @@ data LevelLayer
 data Controls = Controls
   { c_space :: Bool
   , c_jump :: Bool
+  , c_slide :: Bool
   , c_attack :: Bool
   , c_reset :: Bool
   , c_full_restart :: Bool
@@ -70,13 +71,14 @@ data Controls = Controls
   deriving (Eq)
 
 instance Semigroup Controls where
-  Controls a1 b1 c1 d1 e1 xy1 <> Controls a2 b2 c2 d2 e2 xy2
+  Controls a1 b1 c1 d1 e1 f1 xy1 <> Controls a2 b2 c2 d2 e2 f2 xy2
     = Controls
         { c_space = a1 || a2
         , c_jump = b1 || b2
-        , c_attack = c1 || c2
-        , c_reset = d1 || d2
-        , c_full_restart = e1 || e2
+        , c_slide = c1 || c2
+        , c_attack = d1 || d2
+        , c_reset = e1 || e2
+        , c_full_restart = f1 || f2
         , c_dir = if xy2 /= 0 then xy2 else xy1
         }
 
@@ -89,6 +91,7 @@ defaultControls = Controls
   , c_reset = False
   , c_full_restart = False
   , c_jump = False
+  , c_slide = False
   , c_attack = False
   , c_dir = V2 0 0
   }
