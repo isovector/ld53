@@ -139,6 +139,7 @@ pushHits oid objs
 noObjectState :: ObjectState
 noObjectState = ObjectState
   { os_pos = 0
+  , os_hp = 0
   , os_collision = Nothing
   , os_tags = mempty
   , os_camera_offset = 0

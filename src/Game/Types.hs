@@ -152,3 +152,10 @@ data TileData
   = Twinkle Int
   deriving stock (Eq, Ord, Show, Read, Generic)
 
+data AnimationName
+  = BallerAnimEntity
+  deriving stock (Eq, Ord, Show, Read, Generic)
+
+
+
+

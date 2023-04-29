@@ -7,38 +7,49 @@ packages:
 - completed:
     hackage: Yampa-0.13.7@sha256:615639c277590d1a5e3fa11b67c39c63433133bb8cd882ea2fedf74be94c3168,6676
     pantry-tree:
-      size: 2168
       sha256: 35bb62f063c3568eb32a8794585f7aa6a3dd89c29ee8b4df3ff61fa7e631b907
+      size: 2168
   original:
     hackage: Yampa-0.13.7
 - completed:
     hackage: dir-traverse-0.2.3.0@sha256:adcc128f201ff95131b15ffe41365dc99c50dc3fa3a910f021521dc734013bfa,2137
     pantry-tree:
-      size: 389
       sha256: b19f0562746dfd0f8f21eccab6584592f55fb781ca3e043da9132cc23d8a5b99
+      size: 389
   original:
     hackage: dir-traverse-0.2.3.0
 - completed:
     hackage: ldtk-types-1.2.3@sha256:17e2e422042da6b6870f4559b29e81434f67373ac5eefe56e0ce65d5a28746ff,2235
     pantry-tree:
-      size: 415
       sha256: 428241f3fe5eb428c9baa590fd2a5ce6ef9cc211bce1f7597b3517d057798303
+      size: 415
   original:
     hackage: ldtk-types-1.2.3
 - completed:
+    commit: 0f0cf1d14d0e00abd089be0b63213bb505fb1499
+    git: https://github.com/gbrsales/cabal-appimage.git
     name: cabal-appimage
-    version: 0.3.0.5
-    git: https://github.com/gbrsales/cabal-appimage.git
     pantry-tree:
-      size: 599
       sha256: 7e572b65331d8ace4b787869bb45d705022b5f5ca295528958e65096ad506078
-    commit: 0f0cf1d14d0e00abd089be0b63213bb505fb1499
+      size: 599
+    version: 0.3.0.5
   original:
-    git: https://github.com/gbrsales/cabal-appimage.git
     commit: 0f0cf1d14d0e00abd089be0b63213bb505fb1499
+    git: https://github.com/gbrsales/cabal-appimage.git
+- completed:
+    commit: 5d8d383bbad2778915baab39d2455e2a448de731
+    git: https://github.com/isovector/bones.git
+    name: bones
+    pantry-tree:
+      sha256: adf7819ee58095590a953f310f3f4e864c8dc70259440301c1775138824327e8
+      size: 545
+    version: 0.2.0.0
+  original:
+    commit: 5d8d383bbad2778915baab39d2455e2a448de731
+    git: https://github.com/isovector/bones.git
 snapshots:
 - completed:
+    sha256: 63539429076b7ebbab6daa7656cfb079393bf644971156dc349d7c0453694ac2
     size: 586296
     url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/18/18.yaml
-    sha256: 63539429076b7ebbab6daa7656cfb079393bf644971156dc349d7c0453694ac2
   original: lts-18.18

@@ -46,6 +46,7 @@ import           GHC.Generics
 import           Game.Types
 import           SDL hiding (trace, Event)
 import qualified Sound.ALUT as ALUT
+import Data.Spriter.Types (Schema)
 
 
 ------------------------------------------------------------------------------
@@ -209,6 +210,7 @@ instance Monoid ObjectEvents where
 
 data ObjectState = ObjectState
   { os_pos :: V2 WorldPos
+  , os_hp :: Int
   , os_collision :: Maybe (OriginRect Double)
   , os_tags :: Set ObjectTag
   , os_camera_offset :: V2 Double
@@ -251,8 +253,8 @@ instance (Bounded b, Enum a, Enum b) => Enum (a, b) where
   fromEnum (a, b) = fromEnum a * (1 + fromEnum (maxBound @b)) + fromEnum b
 
 
-data DrawSpriteDetails = DrawSpriteDetails
-  { dsd_anim :: Anim
+data DrawSpriteDetails a = DrawSpriteDetails
+  { dsd_anim :: a
   , dsd_rotation :: Double
   , dsd_flips :: V2 Bool
   }
@@ -302,4 +304,12 @@ instance HasControls (FrameInfo' a) where
 
 instance {-# OVERLAPPABLE #-} HasFrameInfo a => HasControls a where
   controls = controls . frameInfo
+
+-- data CannedAnim = CannedAnim
+--   { _aSchema    :: Schema
+--   , _aEntity    :: EntityName
+--   , _aAnim      :: AnimationName
+--   , _aSpeedMult :: Double
+--   , _aRepeat    :: Bool
+--   } deriving (Eq)
 
