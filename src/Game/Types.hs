@@ -61,7 +61,7 @@ data LevelLayer
 -- | Input for the frame.
 data Controls = Controls
   { c_space :: Bool
-  , c_z :: Bool
+  , c_jump :: Bool
   , c_c :: Bool
   , c_reset :: Bool
   , c_full_restart :: Bool
@@ -73,7 +73,7 @@ instance Semigroup Controls where
   Controls a1 b1 c1 d1 e1 xy1 <> Controls a2 b2 c2 d2 e2 xy2
     = Controls
         { c_space = a1 || a2
-        , c_z = b1 || b2
+        , c_jump = b1 || b2
         , c_c = c1 || c2
         , c_reset = d1 || d2
         , c_full_restart = e1 || e2
@@ -88,7 +88,7 @@ defaultControls = Controls
   { c_space = False
   , c_reset = False
   , c_full_restart = False
-  , c_z = False
+  , c_jump = False
   , c_c = False
   , c_dir = V2 0 0
   }

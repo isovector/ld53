@@ -49,7 +49,7 @@ nextMenuItem n = succ n
 
 
 anyKey :: Controls -> Bool
-anyKey c = c_c c || c_space c || c_z c
+anyKey c = c_c c || c_space c || c_jump c
 
 mainMenu :: SF RawFrameInfo (IO (), Event MenuItem)
 mainMenu = loopPre Start $ proc (fi, sel) -> do
@@ -90,13 +90,13 @@ mainMenu = loopPre Start $ proc (fi, sel) -> do
                           { c_dir = V2 (-1) 0
                           }
                       , defaultControls
-                          { c_z = True
+                          { c_jump = True
                           }
                       , defaultControls
-                          { c_z = True
+                          { c_jump = True
                           }
                       , defaultControls
-                          { c_z = True
+                          { c_jump = True
                           }
                       , defaultControls
                       , defaultControls

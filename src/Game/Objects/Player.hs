@@ -25,14 +25,22 @@ player pos0 = loopPre 0 $ proc (oi, vel) -> do
 
   let onGround = touchingGround (collision CollisionCheckGround) playerOre pos
 
-
   let arrows = c_dir $ controls oi
+
+  let holding_jump = c_jump $ controls oi
+  jump_changed <- onChange -< holding_jump
+  let wants_to_jump = jump_changed == Event True
+
+
+
 
   let is_ducking = view _y arrows == 1
 
   let vel'0 = fmap fromIntegral arrows ^* (60 * dt)
+            & _y -~ bool 0 200 wants_to_jump
 
-  let vel' = updateVel onGround dt vel vel'0
+
+  let vel' = updateVel onGround holding_jump dt vel vel'0
 
   let ore = bool playerOre duckingOre is_ducking
 
@@ -68,6 +76,12 @@ player pos0 = loopPre 0 $ proc (oi, vel) -> do
         , oo_render = drawn
         }
 
+
+updateVel :: Bool -> Bool -> Time -> V2 Double -> V2 Double -> V2 Double
+updateVel onGround holding_jump dt old_v dv =
+  (old_v + dv + (gravity - bool 0 (V2 0 300) holding_jump) ^* dt)
+    & _y %~ bool id (\dy -> if dy >= 0 then 0 else dy) onGround
+
 playerOre :: OriginRect Double
 playerOre = OriginRect sz $ sz & _x *~ 0.5
 
@@ -91,26 +105,8 @@ touchingGround toHit ore pos =
   touchDist = V2 0 1
 
 
-updateVelAir :: Time -> V2 Double -> V2 Double -> V2 Double
-updateVelAir dt vel dvel =
-    freeVel & _x %~ clampAbs maxXSpeed
-  where
-    maxXSpeed = 110
-    freeVel = vel + ((dvel & _y %~ max 0) + gravity) ^* dt
-
-updateVelGround :: Time -> V2 Double -> V2 Double -> V2 Double
-updateVelGround dt vel dvel@(V2 dvx _) =
-    V2 (maxXSpeed * signum dvx) air_y
-  where
-    maxXSpeed = 110
-    (V2 _ air_y) = vel + dvel + gravity ^* dt
-
 gravity :: Num a => V2 a
 gravity = V2 0 625
-
-updateVel :: Bool -> Time -> V2 Double -> V2 Double -> V2 Double
-updateVel True = updateVelGround
-updateVel False = updateVelAir
 
 clampAbs :: (Num a, Ord a) => a -> a -> a
 clampAbs maxv val =
@@ -144,7 +140,7 @@ drawPlayer =
     V2 vx vy <- derivative -< pos
     r <- mkAnim
         -<  ( DrawSpriteDetails
-                (bool (Idle MainCharacter) (Run MainCharacter) $ abs vx >= epsilon && abs vy < epsilon && not is_totsugeku)
+                (bool (Idle MainCharacter) (Run MainCharacter) $ abs vx >= epsilon && abs vy < epsilon)
                 0
                 (V2 (not dir) False)
             , pos
