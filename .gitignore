@@ -1,0 +1,9 @@
+.stack-work/
+.vscode/
+*.cabal
+*.svg
+*.prof
+dist-newstyle/
+*~
+result
+releases/

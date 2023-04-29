@@ -1,0 +1,14 @@
+resolver: lts-18.18
+
+allow-newer: true
+
+packages:
+- .
+
+extra-deps:
+- Yampa-0.13.7
+- dir-traverse-0.2.3.0
+- ldtk-types-1.2.3
+- git: https://github.com/gbrsales/cabal-appimage.git
+  commit: 0f0cf1d14d0e00abd089be0b63213bb505fb1499
+
