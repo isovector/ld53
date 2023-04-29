@@ -70,4 +70,3 @@ initialGlobalState w
       (GameState 0 mempty False 0)
 
 #endif
-

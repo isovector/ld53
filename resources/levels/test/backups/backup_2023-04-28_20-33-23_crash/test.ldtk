@@ -13,7 +13,7 @@
 	"appBuildId": 464726,
 	"nextUid": 228,
 	"identifierStyle": "Capitalize",
-	"worldLayout": "LinearHorizontal",
+	"worldLayout": "GridVania",
 	"worldGridWidth": 128,
 	"worldGridHeight": 128,
 	"defaultLevelWidth": 256,
@@ -1683,161 +1683,6 @@
 			"fieldDefs": []
 		},
 		{
-			"identifier": "Death",
-			"uid": 178,
-			"tags": [],
-			"width": 16,
-			"height": 16,
-			"resizableX": true,
-			"resizableY": true,
-			"keepAspectRatio": false,
-			"tileOpacity": 1,
-			"fillOpacity": 1,
-			"lineOpacity": 1,
-			"hollow": true,
-			"color": "#7B0A15",
-			"renderMode": "Rectangle",
-			"showName": true,
-			"tilesetId": null,
-			"tileRenderMode": "FitInside",
-			"tileRect": null,
-			"nineSliceBorders": [],
-			"maxCount": 0,
-			"limitScope": "PerLevel",
-			"limitBehavior": "MoveLastOne",
-			"pivotX": 0,
-			"pivotY": 0,
-			"fieldDefs": [
-				{
-					"identifier": "killHero",
-					"doc": null,
-					"__type": "Bool",
-					"uid": 179,
-					"type": "F_Bool",
-					"isArray": false,
-					"canBeNull": false,
-					"arrayMinLength": null,
-					"arrayMaxLength": null,
-					"editorDisplayMode": "Hidden",
-					"editorDisplayPos": "Above",
-					"editorLinkStyle": "StraightArrow",
-					"editorAlwaysShow": false,
-					"editorShowInWorld": true,
-					"editorCutLongValues": true,
-					"editorTextSuffix": null,
-					"editorTextPrefix": null,
-					"useForSmartColor": false,
-					"min": null,
-					"max": null,
-					"regex": null,
-					"acceptFileTypes": null,
-					"defaultOverride": {
-						"id": "V_Bool",
-						"params": [ true ]
-					},
-					"textLanguageMode": null,
-					"symmetricalRef": false,
-					"autoChainRef": true,
-					"allowOutOfLevelRef": true,
-					"allowedRefs": "OnlySame",
-					"allowedRefTags": [],
-					"tilesetUid": null
-				},
-				{
-					"identifier": "killOther",
-					"doc": null,
-					"__type": "Bool",
-					"uid": 180,
-					"type": "F_Bool",
-					"isArray": false,
-					"canBeNull": false,
-					"arrayMinLength": null,
-					"arrayMaxLength": null,
-					"editorDisplayMode": "Hidden",
-					"editorDisplayPos": "Above",
-					"editorLinkStyle": "StraightArrow",
-					"editorAlwaysShow": false,
-					"editorShowInWorld": true,
-					"editorCutLongValues": true,
-					"editorTextSuffix": null,
-					"editorTextPrefix": null,
-					"useForSmartColor": false,
-					"min": null,
-					"max": null,
-					"regex": null,
-					"acceptFileTypes": null,
-					"defaultOverride": null,
-					"textLanguageMode": null,
-					"symmetricalRef": false,
-					"autoChainRef": true,
-					"allowOutOfLevelRef": true,
-					"allowedRefs": "OnlySame",
-					"allowedRefTags": [],
-					"tilesetUid": null
-				}
-			]
-		},
-		{
-			"identifier": "PowerUp",
-			"uid": 181,
-			"tags": [],
-			"width": 16,
-			"height": 16,
-			"resizableX": false,
-			"resizableY": false,
-			"keepAspectRatio": false,
-			"tileOpacity": 1,
-			"fillOpacity": 1,
-			"lineOpacity": 1,
-			"hollow": true,
-			"color": "#63C74D",
-			"renderMode": "Ellipse",
-			"showName": true,
-			"tilesetId": null,
-			"tileRenderMode": "FitInside",
-			"tileRect": null,
-			"nineSliceBorders": [],
-			"maxCount": 0,
-			"limitScope": "PerLevel",
-			"limitBehavior": "MoveLastOne",
-			"pivotX": 0.5,
-			"pivotY": 0.5,
-			"fieldDefs": [
-				{
-					"identifier": "power",
-					"doc": null,
-					"__type": "LocalEnum.Power",
-					"uid": 183,
-					"type": "F_Enum(182)",
-					"isArray": false,
-					"canBeNull": false,
-					"arrayMinLength": null,
-					"arrayMaxLength": null,
-					"editorDisplayMode": "ValueOnly",
-					"editorDisplayPos": "Center",
-					"editorLinkStyle": "StraightArrow",
-					"editorAlwaysShow": false,
-					"editorShowInWorld": true,
-					"editorCutLongValues": true,
-					"editorTextSuffix": null,
-					"editorTextPrefix": null,
-					"useForSmartColor": false,
-					"min": null,
-					"max": null,
-					"regex": null,
-					"acceptFileTypes": null,
-					"defaultOverride": null,
-					"textLanguageMode": null,
-					"symmetricalRef": false,
-					"autoChainRef": true,
-					"allowOutOfLevelRef": true,
-					"allowedRefs": "OnlySame",
-					"allowedRefTags": [],
-					"tilesetUid": null
-				}
-			]
-		},
-		{
 			"identifier": "Coin",
 			"uid": 184,
 			"tags": [],
@@ -1863,66 +1708,6 @@
 			"pivotX": 0.5,
 			"pivotY": 0.5,
 			"fieldDefs": []
-		},
-		{
-			"identifier": "Door",
-			"uid": 185,
-			"tags": [],
-			"width": 8,
-			"height": 16,
-			"resizableX": true,
-			"resizableY": true,
-			"keepAspectRatio": false,
-			"tileOpacity": 1,
-			"fillOpacity": 1,
-			"lineOpacity": 1,
-			"hollow": false,
-			"color": "#733E39",
-			"renderMode": "Rectangle",
-			"showName": true,
-			"tilesetId": null,
-			"tileRenderMode": "FitInside",
-			"tileRect": null,
-			"nineSliceBorders": [],
-			"maxCount": 0,
-			"limitScope": "PerLevel",
-			"limitBehavior": "MoveLastOne",
-			"pivotX": 0,
-			"pivotY": 1,
-			"fieldDefs": [
-				{
-					"identifier": "out",
-					"doc": null,
-					"__type": "Point",
-					"uid": 186,
-					"type": "F_Point",
-					"isArray": false,
-					"canBeNull": false,
-					"arrayMinLength": null,
-					"arrayMaxLength": null,
-					"editorDisplayMode": "PointStar",
-					"editorDisplayPos": "Above",
-					"editorLinkStyle": "StraightArrow",
-					"editorAlwaysShow": false,
-					"editorShowInWorld": true,
-					"editorCutLongValues": true,
-					"editorTextSuffix": null,
-					"editorTextPrefix": null,
-					"useForSmartColor": false,
-					"min": null,
-					"max": null,
-					"regex": null,
-					"acceptFileTypes": null,
-					"defaultOverride": null,
-					"textLanguageMode": null,
-					"symmetricalRef": false,
-					"autoChainRef": true,
-					"allowOutOfLevelRef": true,
-					"allowedRefs": "OnlySame",
-					"allowedRefTags": [],
-					"tilesetUid": null
-				}
-			]
 		},
 		{
 			"identifier": "Trampoline",
@@ -2436,8 +2221,8 @@
 			"identifier": "World_Level_0",
 			"iid": "5f42c9f0-7820-11ed-9e01-67600383f3e9",
 			"uid": 220,
-			"worldX": -1,
-			"worldY": -1,
+			"worldX": 0,
+			"worldY": 0,
 			"worldDepth": 0,
 			"pxWid": 304,
 			"pxHei": 1200,
@@ -2736,8 +2521,8 @@
 			"identifier": "AutoLayer",
 			"iid": "a2a50ff0-66b0-11ec-9cd7-c721746049b9",
 			"uid": 70,
-			"worldX": -1,
-			"worldY": -1,
+			"worldX": 384,
+			"worldY": 0,
 			"worldDepth": 0,
 			"pxWid": 3152,
 			"pxHei": 1952,
@@ -2871,23 +2656,6 @@
 							"fieldInstances": []
 						},
 						{
-							"__identifier": "Death",
-							"__grid": [292,142],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "c0375d20-7820-11ed-ab5c-e96ddc73ba2a",
-							"width": 48,
-							"height": 16,
-							"defUid": 178,
-							"px": [2336,1136],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
 							"__identifier": "Checkpoint",
 							"__grid": [149,49],
 							"__pivot": [0,0],
@@ -2916,57 +2684,6 @@
 							"fieldInstances": []
 						},
 						{
-							"__identifier": "Death",
-							"__grid": [174,51],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "0c290a70-7820-11ed-89df-63abaff01802",
-							"width": 16,
-							"height": 24,
-							"defUid": 178,
-							"px": [1392,408],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [180,51],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "0d72c880-7820-11ed-89df-578bfd5a7a33",
-							"width": 16,
-							"height": 24,
-							"defUid": 178,
-							"px": [1440,408],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [186,50],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "0f029040-7820-11ed-89df-b1e313c14eaa",
-							"width": 16,
-							"height": 32,
-							"defUid": 178,
-							"px": [1488,400],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
 							"__identifier": "ToggleLayer",
 							"__grid": [184,96],
 							"__pivot": [0,0],
@@ -2990,23 +2707,6 @@
 							]
 						},
 						{
-							"__identifier": "Death",
-							"__grid": [184,36],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "78dd68f0-7820-11ed-89df-1ffc0a2955d0",
-							"width": 16,
-							"height": 32,
-							"defUid": 178,
-							"px": [1472,288],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
 							"__identifier": "Coin",
 							"__grid": [175,41],
 							"__pivot": [0.5,0.5],
@@ -3021,57 +2721,6 @@
 							"fieldInstances": []
 						},
 						{
-							"__identifier": "Death",
-							"__grid": [219,59],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "54c815e0-7820-11ed-89df-6f6b23ccf6f4",
-							"width": 16,
-							"height": 16,
-							"defUid": 178,
-							"px": [1752,472],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [233,61],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "55f1efe0-7820-11ed-89df-45e22bbe51e0",
-							"width": 16,
-							"height": 16,
-							"defUid": 178,
-							"px": [1864,488],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [238,59],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "58ceaa00-7820-11ed-89df-f94a90feade4",
-							"width": 16,
-							"height": 32,
-							"defUid": 178,
-							"px": [1904,472],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
 							"__identifier": "Checkpoint",
 							"__grid": [249,58],
 							"__pivot": [0,0],
@@ -3084,23 +2733,6 @@
 							"defUid": 177,
 							"px": [1992,464],
 							"fieldInstances": []
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [192,53],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "f932ff50-7820-11ed-89df-516377177637",
-							"width": 32,
-							"height": 24,
-							"defUid": 178,
-							"px": [1536,424],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
 						},
 						{
 							"__identifier": "ToggleLayer",
@@ -3123,40 +2755,6 @@
 									"id": "V_Bool",
 									"params": [ true ]
 								}] }
-							]
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [260,69],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "a4d14ea0-7820-11ed-89df-810cc0043d0b",
-							"width": 32,
-							"height": 24,
-							"defUid": 178,
-							"px": [2080,552],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [266,69],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "a5ba00f0-7820-11ed-89df-d10e5d36ceae",
-							"width": 16,
-							"height": 24,
-							"defUid": 178,
-							"px": [2128,552],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
 							]
 						},
 						{
@@ -3202,40 +2800,6 @@
 							"fieldInstances": [{ "__identifier": "strength", "__value": -400, "__type": "Float", "__tile": null, "defUid": 196, "realEditorValues": [] }]
 						},
 						{
-							"__identifier": "Death",
-							"__grid": [122,122],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "762b71e0-7820-11ed-9973-7d744a00a2d8",
-							"width": 64,
-							"height": 16,
-							"defUid": 178,
-							"px": [976,976],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [162,120],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "99645230-7820-11ed-9973-37d8aaf92ef7",
-							"width": 16,
-							"height": 16,
-							"defUid": 178,
-							"px": [1296,960],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
 							"__identifier": "Trampoline",
 							"__grid": [196,96],
 							"__pivot": [0,0],
@@ -3278,23 +2842,6 @@
 							"fieldInstances": []
 						},
 						{
-							"__identifier": "Death",
-							"__grid": [204,18],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "0d8a0090-7820-11ed-9973-15a3c9628239",
-							"width": 16,
-							"height": 80,
-							"defUid": 178,
-							"px": [1632,144],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
 							"__identifier": "Text",
 							"__grid": [184,27],
 							"__pivot": [0,0],
@@ -3314,40 +2861,6 @@
 								}] },
 								{ "__identifier": "color", "__value": "#FFDD00", "__type": "Color", "__tile": null, "defUid": 130, "realEditorValues": [{ "id": "V_Int", "params": [16768256] }] },
 								{ "__identifier": "duration", "__value": null, "__type": "Float", "__tile": null, "defUid": 219, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [218,12],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "214724e0-7820-11ed-9973-8b6a2fc109b8",
-							"width": 32,
-							"height": 32,
-							"defUid": 178,
-							"px": [1744,96],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [228,12],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "1097a3d0-7820-11ed-9973-6b890cf9170e",
-							"width": 48,
-							"height": 32,
-							"defUid": 178,
-							"px": [1824,96],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
 							]
 						},
 						{
@@ -3377,74 +2890,6 @@
 							"defUid": 184,
 							"px": [1988,44],
 							"fieldInstances": []
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [262,30],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "f579ca40-7820-11ed-9973-ed343724ad3a",
-							"width": 128,
-							"height": 16,
-							"defUid": 178,
-							"px": [2096,240],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [281,14],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "540d1030-7820-11ed-9973-1fab93ffda65",
-							"width": 32,
-							"height": 64,
-							"defUid": 178,
-							"px": [2248,112],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [276,22],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "ab36c0e0-7820-11ed-9973-d356d46468d6",
-							"width": 16,
-							"height": 72,
-							"defUid": 178,
-							"px": [2208,176],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [268,44],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "fe80c660-7820-11ed-9973-e13e6307210c",
-							"width": 128,
-							"height": 16,
-							"defUid": 178,
-							"px": [2144,352],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
 						},
 						{
 							"__identifier": "Checkpoint",
@@ -3515,23 +2960,6 @@
 								{ "__identifier": "color", "__value": "#412FD2", "__type": "Color", "__tile": null, "defUid": 130, "realEditorValues": [{ "id": "V_Int", "params": [4272082] }] },
 								{ "__identifier": "duration", "__value": null, "__type": "Float", "__tile": null, "defUid": 219, "realEditorValues": [] }
 							]
-						},
-						{
-							"__identifier": "PowerUp",
-							"__grid": [196,25],
-							"__pivot": [0.5,0.5],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#63C74D",
-							"iid": "ed6c88b0-7820-11ed-9973-8f9610279fa4",
-							"width": 16,
-							"height": 16,
-							"defUid": 181,
-							"px": [1572,204],
-							"fieldInstances": [{ "__identifier": "power", "__value": "PowerupWarpBall", "__type": "LocalEnum.Power", "__tile": null, "defUid": 183, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["PowerupWarpBall"]
-							}] }]
 						},
 						{
 							"__identifier": "ToggleLayer",
@@ -3623,23 +3051,6 @@
 							]
 						},
 						{
-							"__identifier": "Death",
-							"__grid": [254,120],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "1db9e930-7820-11ed-9973-93bd5415a7d2",
-							"width": 32,
-							"height": 16,
-							"defUid": 178,
-							"px": [2032,960],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
 							"__identifier": "Player",
 							"__grid": [89,118],
 							"__pivot": [0.5,1],
@@ -3680,40 +3091,6 @@
 							"defUid": 184,
 							"px": [1356,660],
 							"fieldInstances": []
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [281,26],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "e66e9040-7820-11ed-9973-1fd6488a48fd",
-							"width": 32,
-							"height": 72,
-							"defUid": 178,
-							"px": [2248,208],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [281,22],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "f320af80-7820-11ed-9973-e9d64b3b2e43",
-							"width": 16,
-							"height": 32,
-							"defUid": 178,
-							"px": [2248,176],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
 						},
 						{
 							"__identifier": "Checkpoint",
@@ -3974,23 +3351,6 @@
 							"fieldInstances": [{ "__identifier": "strength", "__value": -400, "__type": "Float", "__tile": null, "defUid": 196, "realEditorValues": [] }]
 						},
 						{
-							"__identifier": "PowerUp",
-							"__grid": [149,152],
-							"__pivot": [0.5,0.5],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#63C74D",
-							"iid": "fef8dbb0-7820-11ed-87b2-8df9fb69ac55",
-							"width": 16,
-							"height": 16,
-							"defUid": 181,
-							"px": [1196,1220],
-							"fieldInstances": [{ "__identifier": "power", "__value": "PowerupTotsugeki", "__type": "LocalEnum.Power", "__tile": null, "defUid": 183, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["PowerupTotsugeki"]
-							}] }]
-						},
-						{
 							"__identifier": "SpawnTrigger",
 							"__grid": [79,63],
 							"__pivot": [0,0],
@@ -4036,108 +3396,6 @@
 							]
 						},
 						{
-							"__identifier": "Death",
-							"__grid": [152,156],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "ab560070-7820-11ed-87b2-a7fbbc018211",
-							"width": 128,
-							"height": 16,
-							"defUid": 178,
-							"px": [1216,1248],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [152,148],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "fbe647b0-7820-11ed-87b2-d54e57238962",
-							"width": 128,
-							"height": 16,
-							"defUid": 178,
-							"px": [1216,1184],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [188,156],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "2ff46ea0-7820-11ed-87b2-1778aba6a159",
-							"width": 16,
-							"height": 80,
-							"defUid": 178,
-							"px": [1504,1248],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [172,164],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "36ca0140-7820-11ed-87b2-a310e5841e5b",
-							"width": 128,
-							"height": 16,
-							"defUid": 178,
-							"px": [1376,1312],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [196,150],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "3b714230-7820-11ed-87b2-1726e07a837f",
-							"width": 16,
-							"height": 96,
-							"defUid": 178,
-							"px": [1568,1200],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [172,172],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "4263f9c0-7820-11ed-87b2-6d37e1a2c1d1",
-							"width": 128,
-							"height": 16,
-							"defUid": 178,
-							"px": [1376,1376],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
 							"__identifier": "Checkpoint",
 							"__grid": [169,170],
 							"__pivot": [0,0],
@@ -4172,40 +3430,6 @@
 									"id": "V_Bool",
 									"params": [ true ]
 								}] }
-							]
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [184,194],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "e9594cb0-7820-11ed-87b2-07e7ca5c252b",
-							"width": 32,
-							"height": 32,
-							"defUid": 178,
-							"px": [1472,1552],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [198,172],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "ee511ea0-7820-11ed-87b2-3f3184bb8fba",
-							"width": 48,
-							"height": 16,
-							"defUid": 178,
-							"px": [1584,1376],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
 							]
 						},
 						{
@@ -4305,23 +3529,6 @@
 								}] },
 								{ "__identifier": "toggle", "__value": false, "__type": "Bool", "__tile": null, "defUid": 176, "realEditorValues": [] }
 							]
-						},
-						{
-							"__identifier": "Door",
-							"__grid": [340,173],
-							"__pivot": [0,1],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#733E39",
-							"iid": "bfdd78a0-7820-11ed-87b2-9d37449f316a",
-							"width": 24,
-							"height": 32,
-							"defUid": 185,
-							"px": [2724,1392],
-							"fieldInstances": [{ "__identifier": "out", "__value": { "cx": 90, "cy": 117 }, "__type": "Point", "__tile": null, "defUid": 186, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["90,117"]
-							}] }]
 						},
 						{
 							"__identifier": "TutorialRegion",
@@ -4717,159 +3924,6 @@
 							]
 						},
 						{
-							"__identifier": "Death",
-							"__grid": [194,236],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "e2bad400-7820-11ed-b537-31c13769ed32",
-							"width": 200,
-							"height": 16,
-							"defUid": 178,
-							"px": [1552,1888],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [219,236],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "fa646a30-7820-11ed-b537-5bd04bd57453",
-							"width": 184,
-							"height": 16,
-							"defUid": 178,
-							"px": [1752,1888],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [242,236],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "04ee0420-7820-11ed-b537-270e39de9f66",
-							"width": 208,
-							"height": 16,
-							"defUid": 178,
-							"px": [1936,1888],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [268,236],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "0e810910-7820-11ed-b537-05700ad98675",
-							"width": 160,
-							"height": 16,
-							"defUid": 178,
-							"px": [2144,1888],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [288,236],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "171dc720-7820-11ed-b537-5f7b02d57da1",
-							"width": 208,
-							"height": 16,
-							"defUid": 178,
-							"px": [2304,1888],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [314,236],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "207fd100-7820-11ed-b537-1d594ca45d0e",
-							"width": 208,
-							"height": 16,
-							"defUid": 178,
-							"px": [2512,1888],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [196,162],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "3159a0f0-7820-11ed-b537-97af743aab65",
-							"width": 16,
-							"height": 96,
-							"defUid": 178,
-							"px": [1568,1296],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [168,148],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "42391630-7820-11ed-b537-5382a884a598",
-							"width": 128,
-							"height": 16,
-							"defUid": 178,
-							"px": [1344,1184],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Death",
-							"__grid": [168,156],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B0A15",
-							"iid": "472612b0-7820-11ed-b537-efdb03d0547b",
-							"width": 128,
-							"height": 16,
-							"defUid": 178,
-							"px": [1344,1248],
-							"fieldInstances": [
-								{ "__identifier": "killHero", "__value": true, "__type": "Bool", "__tile": null, "defUid": 179, "realEditorValues": [] },
-								{ "__identifier": "killOther", "__value": false, "__type": "Bool", "__tile": null, "defUid": 180, "realEditorValues": [] }
-							]
-						},
-						{
 							"__identifier": "SpawnTrigger",
 							"__grid": [195,24],
 							"__pivot": [0,0],
@@ -4904,23 +3958,6 @@
 									"params": [ false ]
 								}] }
 							]
-						},
-						{
-							"__identifier": "Door",
-							"__grid": [88,117],
-							"__pivot": [0,1],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#733E39",
-							"iid": "b1fbb760-7820-11ed-abe7-35896312aeb4",
-							"width": 32,
-							"height": 32,
-							"defUid": 185,
-							"px": [704,944],
-							"fieldInstances": [{ "__identifier": "out", "__value": { "cx": 341, "cy": 172 }, "__type": "Point", "__tile": null, "defUid": 186, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["341,172"]
-							}] }]
 						},
 						{
 							"__identifier": "TutorialRegion",

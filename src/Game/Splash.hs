@@ -16,7 +16,7 @@ splashScreen :: Swont RawFrameInfo (Camera, Renderable) ()
 splashScreen = do
   swont (liftIntoGame mainMenu) >>= \case
     Start -> do
-      swont $ game (initialGlobalState TestWorld)
+      swont $ game (initialGlobalState GameWorld)
       splashScreen
     Fullscreen -> do
       momentary $ (Camera 0, const $ do
@@ -49,7 +49,7 @@ nextMenuItem n = succ n
 
 
 anyKey :: Controls -> Bool
-anyKey c = c_c c || c_space c || c_jump c
+anyKey c = c_attack c || c_space c || c_jump c
 
 mainMenu :: SF RawFrameInfo (IO (), Event MenuItem)
 mainMenu = loopPre Start $ proc (fi, sel) -> do

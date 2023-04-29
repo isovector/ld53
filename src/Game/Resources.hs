@@ -132,7 +132,7 @@ instance IsResource WorldName World where
   load _ = loadWorld
   resourceFolder = "levels"
   resourceExt    = "ldtk"
-  resourceName TestWorld = "test"
+  resourceName GameWorld = "game"
   resourceName HelpWorld = "help"
 
 

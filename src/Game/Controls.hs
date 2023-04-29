@@ -25,7 +25,7 @@ parseController js = do
   pure $ Controls
     { c_space = a || x
     , c_jump = y
-    , c_c = b
+    , c_attack = b
     , c_reset = r
     , c_full_restart = l
     , c_dir = fmap clampAxis $ V2 dx dy
@@ -42,7 +42,7 @@ parseControls :: (SDL.Scancode -> Bool) -> Controls
 parseControls check = Controls
   { c_space = check ScancodeX || check ScancodeSpace
   , c_jump = check ScancodeZ || check ScancodeReturn
-  , c_c = check ScancodeC
+  , c_attack = check ScancodeC
   , c_reset = check ScancodeR && not (check ScancodeLShift || check ScancodeRShift)
   , c_full_restart = check ScancodeR && (check ScancodeLShift || check ScancodeRShift)
   , c_dir =
