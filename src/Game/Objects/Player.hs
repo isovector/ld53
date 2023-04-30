@@ -170,7 +170,7 @@ drawPlayer =
     V2 vx vy <- derivative -< pos
     (boxes, r) <- mkPuppet
         -<  ( DrawSpriteDetails
-                (force_anim $ bool PlayerIdleNoSword PlayerIdleSword $ abs vx >= epsilon && abs vy < epsilon)
+                (force_anim $ bool PlayerIdleSword PlayerRun $ abs vx >= epsilon && abs vy < epsilon)
                 0
                 (V2 (not dir) False)
             , pos
