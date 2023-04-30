@@ -38,7 +38,7 @@ player pos0 = loopPre 0 $ proc (oi, vel) -> do
 
   let holding_slide = c_slide $ controls oi
   slide_press <- edge -< holding_slide
-  let wants_to_start_slide = bool NoEvent slide_press $ onGround && is_ducking
+  let wants_to_start_slide = bool NoEvent slide_press $ onGround
 
   maybeSlide <- holdFor slideDur -< (bool (-1) 1 dir) * slideSpeed <$ wants_to_start_slide
   let slide = fromMaybe 0 maybeSlide
