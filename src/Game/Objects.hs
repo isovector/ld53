@@ -19,7 +19,6 @@ import           Engine.Types
 import           Engine.Utils (tileToPos)
 import           Game.Objects.Checkpoint (checkpoint)
 import           Game.Objects.DespawnTrigger (despawnTrigger)
-import           Game.Objects.Door (door)
 import           Game.Objects.ParticleSpawner (particleSpawner)
 import           Game.Objects.Player (player)
 import           Game.Objects.SpawnTrigger (spawnTrigger)
@@ -40,9 +39,6 @@ buildEntity
     -> Either Text Object
 buildEntity "Player" pos _ _ _ = pure $ player pos
 buildEntity "Checkpoint" pos _ _ _ = pure $ checkpoint pos
-buildEntity "Door" pos ore props _ =
-  door pos ore
-    <$> asPos "Door" "out" props
 buildEntity "TutorialRegion" pos ore props _ =
   tutorialRegion pos ore
     <$> asText "TutorialRegion" "key" props
