@@ -13,6 +13,7 @@ import           Game.Common
 import           Game.Objects.Particle (gore)
 import           Game.Objects.Unknown (unknown)
 import qualified SDL.Vect as SDL
+import Data.List (partition)
 
 
 data PlayerState
@@ -136,6 +137,9 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
               (PStateWalk,    _,         _,         _,          True,       _,            _    ) -> PStateTakeoff
               (p,             _,         _,         _,          _,          _,            _    ) -> p
 
+  -- do hits
+  let (hits, hurts) = partition ((== Hitbox) . ab_type) boxes
+
   returnA -< (, (vel', st')) $
     ObjectOutput
         { oo_events =
@@ -143,14 +147,20 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
               & #oe_focus .~ mconcat
                   [ start
                   ]
-              -- & #oe_spawn .~ Event (fmap spawnMe boxes)
+              -- & #oe_broadcast_message .~ Event (fmap _ boxes)
         , oo_state =
             oi_state oi
               & #os_pos .~ pos'
               & #os_collision .~ Just ore
               & #os_tags %~ S.insert IsPlayer
               & #os_facing .~ True
-        , oo_render = drawn
+        , oo_render = mconcat
+            [ drawn
+            , flip foldMap hits $ \(ab_rect -> Rect abpos absz) ->
+                drawOriginRect (V4 0 255 0 92) (OriginRect absz 0) $ coerce abpos
+            , flip foldMap hurts $ \(ab_rect -> Rect abpos absz) ->
+                drawOriginRect (V4 255 0 0 92) (OriginRect absz 0) $ coerce abpos
+            ]
         }
 
 pick :: SF (a, a -> b) b
