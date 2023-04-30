@@ -69,7 +69,7 @@ jumpHandler = proc _ -> do
 fallHandler :: StateHandler
 fallHandler = proc (oi, _) -> do
   let holding_jump = c_jump $ controls oi
-  returnA -< StateHandlerResult mempty (mkDsd PlayerJump) playerOre $ \v ->
+  returnA -< StateHandlerResult mempty (mkDsd PlayerFall) playerOre $ \v ->
     updateVel False holding_jump (deltaTime oi) v 0
 
 
