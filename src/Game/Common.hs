@@ -9,6 +9,8 @@ import           Data.Monoid
 import qualified Data.Set as S
 import           Engine.Common
 import           Engine.Prelude
+import Control.Monad (guard)
+import Engine.Geometry (intersects)
 
 withLifetime :: Double -> Object -> Object
 withLifetime dur sf = proc oi -> do
@@ -135,6 +137,20 @@ holdFor dur = proc ev -> do
   let isHeld = t < startTime + dur
   returnA -< bool Nothing (Just e) isHeld
 
+
 sendDamage :: Team -> AnimBox -> Message
-sendDamage t (ab_rect -> Rect pos sz) = DamageSource t 1 (coerce pos) sz
+sendDamage t (ab_rect -> Rect pos sz) = DamageSource (Damage t 1) (coerce pos) sz
+
+
+checkDamage :: Team -> [Rect Double] -> ObjectInEvents -> Event [Damage]
+checkDamage t hits evs = mkEvent $ do
+  (_, DamageSource d pos sz) <- fromEvent mempty $ oie_receive evs
+  guard $ t /= d_team d
+  guard $ any (\(Rect p s) -> intersects (Rectangle (coerce pos) sz) $ Rectangle (P p) s) hits
+  pure d
+
+
+mkEvent :: [a] -> Event [a]
+mkEvent [] = NoEvent
+mkEvent a = Event a
 
