@@ -28,6 +28,7 @@ data PlayerState
   | PStateTakeoff
   | PStateJump
   | PStateFall
+  | PStateFallSlice
   | PStateStab
   | PStateStartSlide
   | PStateSlide
@@ -95,8 +96,19 @@ fallHandler :: StateHandler
 fallHandler = proc shi -> do
   let oi = shi_oi shi
   let holding_jump = c_jump $ controls oi
+  let xdir = view _x $ c_dir $ controls $ shi_oi shi
+  let airVel = V2 (fromIntegral xdir * airSpeed) 0
   returnA -< StateHandlerResult mempty (mkDsd PlayerFall) playerOre $ \v ->
-    updateVel False holding_jump (deltaTime oi) v 0
+    updateVel False holding_jump (deltaTime oi) v airVel
+
+fallSliceHandler :: StateHandler
+fallSliceHandler = proc shi -> do
+  let oi = shi_oi shi
+  let holding_jump = c_jump $ controls oi
+  let xdir = view _x $ c_dir $ controls $ shi_oi shi
+  let airVel = V2 (fromIntegral xdir * airSpeed) 0
+  returnA -< StateHandlerResult mempty (mkDsd PlayerFallSlice) playerOre $ \v ->
+    updateVel False holding_jump (deltaTime oi) v airVel
 
 startSlideHandler :: StateHandler
 startSlideHandler = proc shi -> do
@@ -115,12 +127,13 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
   st_changed <- onChange -< st
 
   -- handle current
-  let input = StateHandlerInput oi (() <$ st_changed) Ducking
+  let input = StateHandlerInput oi (() <$ st_changed) Standing
   shr_idle    <- idleHandler    -< input
   shr_walk    <- walkHandler    -< input
   shr_takeoff <- takeoffHandler -< input
   shr_jump    <- jumpHandler    -< input
   shr_fall    <- fallHandler    -< input
+  shr_fallSlice  <- fallSliceHandler  -< input
   shr_stab    <- stabHandler    -< input
   shr_startSlide   <- startSlideHandler   -< input
   shr_slide   <- slideHandler   -< input
@@ -131,6 +144,7 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
     PStateTakeoff -> shr_takeoff
     PStateJump -> shr_jump
     PStateFall -> shr_fall
+    PStateFallSlice -> shr_fallSlice
     PStateStab -> shr_stab
     PStateStartSlide -> shr_startSlide
     PStateSlide -> shr_slide
@@ -164,6 +178,7 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
               (PStateIdle,       _,         False,     _,          _,          _,            _,           _    ) -> PStateFall
               (PStateWalk,       _,         False,     _,          _,          _,            _,           _    ) -> PStateFall
               (PStateFall,       _,         True,      _,          _,          _,            _,           False) -> PStateIdle
+              (PStateFall,       _,         _,         _,          _,          True,         _,           False) -> PStateFallSlice
               (PStateIdle,       _,         _,         True,       _,          _,            _,           _    ) -> PStateWalk
               (PStateWalk,       _,         _,         False,      _,          _,            _,           _    ) -> PStateIdle
               (PStateIdle,       _,         _,         _,          _,          True,         _,           _    ) -> PStateStab
@@ -177,6 +192,8 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
               (PStateSlide,      True,      _,         _,          _,          _,            _,           _    ) -> PStateIdle
               (PStateIdle,       _,         _,         _,          True,       _,            _,           _    ) -> PStateTakeoff
               (PStateWalk,       _,         _,         _,          True,       _,            _,           _    ) -> PStateTakeoff
+              (PStateFallSlice,  _,         True,      _,          _,          _,            _,           _    ) -> PStateIdle
+              (PStateFallSlice,  True,      _,         _,          _,          _,            _,           _    ) -> PStateIdle
               (p,                _,         _,         _,          _,          _,            _,           _    ) -> p
 
   -- do hits
@@ -285,8 +302,9 @@ spawnMe ab
   $ unknown (T.pack $ show $ ab_type ab) (coerce $ r_pos $ ab_rect ab)
   $ OriginRect (r_size $ ab_rect ab) 0
 
-walkSpeed, runSpeed, slideSpeed, slideDur, jumpPower :: Double
+walkSpeed, airSpeed, runSpeed, slideSpeed, slideDur, jumpPower :: Double
 walkSpeed = 200
+airSpeed = 100
 runSpeed = 300
 slideSpeed = 300
 jumpPower = 200
