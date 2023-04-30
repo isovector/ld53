@@ -183,8 +183,8 @@ loadResources engine = do
 getPuppetAnim :: PuppetAnim -> CannedAnim
 getPuppetAnim BallerDribble     = CannedAnim BallerPuppet "baller" "Dribble" 0.25 1500 True
 getPuppetAnim BallerRun         = CannedAnim BallerPuppet "baller" "DribbleRun" 0.25 1500 True
-getPuppetAnim PlayerIdleNoSword = CannedAnim ManPuppet "man" "TemplateNoSword" 0.35 1500 True
-getPuppetAnim PlayerIdleSword   = CannedAnim ManPuppet "man" "Idle" 0.35 500 True
+getPuppetAnim PlayerIdleNoSword = CannedAnim ManPuppet "man" "TemplateNoSword" 0.35 1 True
+getPuppetAnim PlayerIdleSword   = CannedAnim ManPuppet "man" "Idle" 0.35 1 True
 getPuppetAnim PlayerGrabSword   = CannedAnim ManPuppet "man" "GrabSword" 0.35 2000 False
 getPuppetAnim PlayerStab        = CannedAnim ManPuppet "man" "Stab" 0.35 1000 False
 getPuppetAnim PlayerRun         = CannedAnim ManPuppet "man" "Run" 0.35 1000 True

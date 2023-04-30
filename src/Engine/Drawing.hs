@@ -25,7 +25,7 @@ import           Engine.Utils (originRectToRect)
 import           Foreign.C
 import           Game.Box (parseBox)
 import           Game.Resources (frameSound, frameCounts, getPuppetAnim)
-import           SDL
+import           SDL hiding (Event)
 import qualified Sound.ALUT as ALUT
 
 playSound :: Sound -> IO ()
@@ -141,7 +141,7 @@ mkAnim = proc (dsd, pos) -> do
       (dsd_flips dsd)
       cam
 
-mkPuppet :: SF (DrawSpriteDetails PuppetAnim, V2 WorldPos) ([AnimBox], Renderable)
+mkPuppet :: SF (DrawSpriteDetails PuppetAnim, V2 WorldPos) ([AnimBox], Event (), Renderable)
 mkPuppet = proc (dsd, pos) -> do
   let CannedAnim{..} = getPuppetAnim $ dsd_anim dsd
       ws = global_puppets ca_schema
@@ -159,13 +159,15 @@ mkPuppet = proc (dsd, pos) -> do
                 True -> fmod totalLength thisFrame
                 False -> totalLength - 1
 
+      is_over = thisFrame > totalLength && not _aRepeat
+
   returnA -< do
     case animate entity _aAnim frame of
       Nothing -> mempty
       Just rbs -> do
         let draw = foldMap (drawResultBone dsd (ws_textures ws) ca_scale pos) $ filter (not . isBone) rbs
             boxes = mapMaybe (getBox ca_scale pos) rbs
-         in (boxes, draw)
+         in (boxes, bool NoEvent (Event ()) is_over, draw)
 
 
 getBox :: Double -> V2 WorldPos -> ResultBone -> Maybe AnimBox
