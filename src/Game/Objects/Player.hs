@@ -5,7 +5,6 @@ module Game.Objects.Player where
 
 import GHC.Generics
 import           Control.Lens ((*~))
-import           Data.List (partition)
 import qualified Data.Set as S
 import           Engine.Collision
 import           Engine.Drawing
@@ -142,7 +141,7 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
   let on_ground = touchingGround (collision CollisionCheckGround) playerOre pos
 
   -- handle current
-  let input = StateHandlerInput oi (() <$ st_changed) Ducking on_ground dt
+  let input = StateHandlerInput oi (() <$ st_changed) Standing on_ground dt
   shr_idle       <- idleHandler                       -< input
   shr_walk       <- walkHandler PlayerRun 1           -< input
   -- TODO(sandy): don't love this one
@@ -249,16 +248,15 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
               (p,                _, _, _, _, _, _, _) -> p
 
   -- do hits
-  let (_hits, hurts) = partition ((== Hitbox) . ab_type) boxes
+  let (_hits, hurts) = splitAnimBoxes boxes
 
   returnA -< (, (vel', st')) $
     ObjectOutput
         { oo_events =
-            mempty
+            sendDamage PlayerTeam hurts
               & #oe_focus .~ mconcat
                   [ start
                   ]
-              & #oe_broadcast_message .~ Event (fmap (sendDamage PlayerTeam) hurts)
         , oo_state =
             oi_state oi
               & #os_pos .~ pos'

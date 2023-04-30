@@ -17,6 +17,7 @@ import           Data.Traversable (for)
 import           Engine.Importer (ldtkColorToColor)
 import           Engine.Types
 import           Engine.Utils (tileToPos)
+import           Game.Objects.Antagonist (antagonist)
 import           Game.Objects.Checkpoint (checkpoint)
 import           Game.Objects.DespawnTrigger (despawnTrigger)
 import           Game.Objects.ParticleSpawner (particleSpawner)
@@ -37,6 +38,7 @@ buildEntity
     -> Map Text Object
     -> Either Text Object
 buildEntity "Player" pos _ _ _ = pure $ player pos
+buildEntity "Antagonist" pos _ _ _ = pure $ antagonist pos
 buildEntity "Checkpoint" pos _ _ _ = pure $ checkpoint pos
 buildEntity "TutorialRegion" pos ore props _ =
   tutorialRegion pos ore

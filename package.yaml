@@ -41,6 +41,7 @@ dependencies:
 - JuicyPixels
 - generic-deriving
 - bones
+- random
 
 custom-setup:
   dependencies:
