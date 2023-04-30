@@ -20,11 +20,12 @@ data PlayerState
   | PStateWalk
   | PStateTakeoff
   | PStateJump
-  -- | PStateStab
+  | PStateFall
+  | PStateStab
   deriving stock (Eq, Ord, Show, Read, Generic, Enum, Bounded)
 
 
-type StateHandler = SF (ObjectInput) StateHandlerResult
+type StateHandler = SF (ObjectInput, Event ()) StateHandlerResult
 
 data StateHandlerResult = StateHandlerResult
   { shr_events :: ObjectEvents
@@ -37,26 +38,37 @@ mkDsd :: a -> DrawSpriteDetails a
 mkDsd a = DrawSpriteDetails a 0 $ pure False
 
 idleHandler :: StateHandler
-idleHandler = proc oi -> do
+idleHandler = proc _ -> do
   returnA -< StateHandlerResult mempty (mkDsd PlayerIdleSword) playerOre $ const 0
+
+stabHandler :: StateHandler
+stabHandler = proc _ -> do
+  returnA -< StateHandlerResult mempty (mkDsd PlayerStab) playerOre $ const 0
 
 
 walkHandler :: StateHandler
-walkHandler = proc oi -> do
+walkHandler = proc (oi, _) -> do
   let xdir = view _x $ c_dir $ controls oi
   returnA -< StateHandlerResult mempty (mkDsd PlayerRun) playerOre
            $ _x %~ clampAbs walkSpeed . (+ (fromIntegral xdir * walkSpeed))
 
 
 takeoffHandler :: StateHandler
-takeoffHandler = proc oi -> do
-  returnA -< StateHandlerResult mempty (mkDsd PlayerIdleNoSword) playerOre $ subtract $ V2 0 jumpPower
-
+takeoffHandler = proc _ -> do
+  returnA -<
+    StateHandlerResult mempty (mkDsd PlayerTakeoff) playerOre id
 
 jumpHandler :: StateHandler
-jumpHandler = proc oi -> do
+jumpHandler = proc _ -> do
+  returnA -<
+    StateHandlerResult mempty (mkDsd PlayerJump) playerOre $
+      subtract $ V2 0 jumpPower
+
+
+fallHandler :: StateHandler
+fallHandler = proc (oi, _) -> do
   let holding_jump = c_jump $ controls oi
-  returnA -< StateHandlerResult mempty (mkDsd PlayerIdleNoSword) playerOre $ \v ->
+  returnA -< StateHandlerResult mempty (mkDsd PlayerJump) playerOre $ \v ->
     updateVel False holding_jump (deltaTime oi) v 0
 
 
@@ -65,17 +77,24 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
   start <- nowish () -< ()
   let pos = event (os_pos $ oi_state oi) (const pos0) start
 
+  st_changed <- onChange -< st
+
   -- handle current
-  shr_idle    <- idleHandler    -< oi
-  shr_walk    <- walkHandler    -< oi
-  shr_takeoff <- takeoffHandler -< oi
-  shr_jump    <- jumpHandler    -< oi
+  let input = (oi, () <$ st_changed)
+  shr_idle    <- idleHandler    -< input
+  shr_walk    <- walkHandler    -< input
+  shr_takeoff <- takeoffHandler -< input
+  shr_jump    <- jumpHandler    -< input
+  shr_fall    <- fallHandler    -< input
+  shr_stab    <- stabHandler    -< input
 
   shr <- pick -< (st,) $ \case
     PStateIdle -> shr_idle
     PStateWalk -> shr_walk
     PStateTakeoff -> shr_takeoff
     PStateJump -> shr_jump
+    PStateFall -> shr_fall
+    PStateStab -> shr_stab
 
   let collision = getCollisionMap $ globalState oi
   let dt = deltaTime oi
@@ -97,19 +116,25 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
   let wants_walk = xdir /= 0
   let upwards_v = view _y vel < 0
 
-  let st' =
-        case (st,             on_ground, wants_walk, wants_jump, upwards_v, wants_slide, wants_attack) of
-              (PStateIdle,    False,     _,          _,          _,         _,           _) -> PStateJump
-              (PStateWalk,    False,     _,          _,          _,         _,           _) -> PStateJump
-              (PStateJump,    True,      _,          _,          False,     _,           _) -> PStateIdle
-              (PStateIdle,    _,         True,       _,          _,         _,           _) -> PStateWalk
-              (PStateWalk,    _,         False,      _,          _,         _,           _) -> PStateIdle
-              (PStateTakeoff, _,         _,          _,          _,         _,           _) -> PStateJump
-              (PStateIdle,    _,         _,          True,       _,         _,           _) -> PStateTakeoff
-              (PStateWalk,    _,         _,          True,       _,         _,           _) -> PStateTakeoff
-              (p,             _,         _,          _,          _,         _,           _) -> p
+  (boxes, anim_done_ev, drawn) <- mkPuppet -< (shr_dsd shr, pos)
 
-  (boxes, drawn) <- mkPuppet -< (shr_dsd shr, pos)
+  let anim_done = isEvent anim_done_ev
+
+  let st' =
+        case (st,             anim_done, on_ground, wants_walk, wants_jump, wants_attack, upwards_v) of
+              (PStateIdle,    _,         False,     _,          _,          _,            _    ) -> PStateFall
+              (PStateWalk,    _,         False,     _,          _,          _,            _    ) -> PStateFall
+              (PStateFall,    _,         True,      _,          _,          _,            False) -> PStateIdle
+              (PStateIdle,    _,         _,         True,       _,          _,            _    ) -> PStateWalk
+              (PStateWalk,    _,         _,         False,      _,          _,            _    ) -> PStateIdle
+              (PStateIdle,    _,         _,         _,          _,          True,         _    ) -> PStateStab
+              (PStateWalk,    _,         _,         _,          _,          True,         _    ) -> PStateStab
+              (PStateTakeoff, True,      _,         _,          _,          _,            _    ) -> PStateJump
+              (PStateJump,    _,         _,         _,          _,          _,            _    ) -> PStateFall
+              (PStateStab,    True,      _,         _,          _,          _,            _    ) -> PStateIdle
+              (PStateIdle,    _,         _,         _,          True,       _,            _    ) -> PStateTakeoff
+              (PStateWalk,    _,         _,         _,          True,       _,            _    ) -> PStateTakeoff
+              (p,             _,         _,         _,          _,          _,            _    ) -> p
 
   returnA -< (, (vel', st')) $
     ObjectOutput
@@ -185,7 +210,6 @@ player' pos0 = loopPre 0 $ proc (oi, vel) -> do
   wants_stab <- edge -< c_attack $ controls oi
   stabbing <- holdFor 0.5 -< const PlayerStab <$ wants_stab
 
-  (boxes, drawn) <- drawPlayer -< (dir, pos', ore, fromMaybe id stabbing)
   returnA -< (, vel'') $
     ObjectOutput
         { oo_events =
@@ -200,7 +224,7 @@ player' pos0 = loopPre 0 $ proc (oi, vel) -> do
               & #os_collision .~ Just ore
               & #os_tags %~ S.insert IsPlayer
               & #os_facing .~ dir
-        , oo_render = drawn
+        , oo_render = mempty
         }
 
 spawnMe :: AnimBox -> Object
@@ -280,24 +304,6 @@ dieAndRespawnHandler = proc (pos, on_die) -> do
      ) -< (on_die, pos)
 
 
-
-drawPlayer :: SF (Bool, V2 WorldPos, OriginRect Double, PuppetAnim -> PuppetAnim) ([AnimBox], Renderable)
-drawPlayer =
-  proc (dir, pos, ore, force_anim) -> do
-    -- We can fully animate the player as a function of the position!
-    V2 vx vy <- derivative -< pos
-    (boxes, r) <- mkPuppet
-        -<  ( DrawSpriteDetails
-                (force_anim $ bool PlayerIdleSword PlayerRun $ abs vx >= epsilon && abs vy < epsilon)
-                0
-                (V2 (not dir) False)
-            , pos
-            )
-    returnA -< (boxes,) $ r
-      -- mconcat
-      --   [ drawOriginRect (V4 0 255 0 255) ore pos
-      --   , r
-      --   ]
 
 
 
