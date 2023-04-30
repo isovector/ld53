@@ -15,6 +15,12 @@ import           Game.Objects.Unknown (unknown)
 import qualified SDL.Vect as SDL
 import Data.List (partition)
 
+data StandState = Standing | Ducking
+  deriving stock (Eq, Ord, Show, Read, Generic, Enum, Bounded)
+
+standing :: a -> a -> StandState -> a
+standing d _ Ducking = d
+standing _ s Standing = s
 
 data PlayerState
   = PStateIdle
@@ -23,10 +29,16 @@ data PlayerState
   | PStateJump
   | PStateFall
   | PStateStab
+  | PStateSlide
   deriving stock (Eq, Ord, Show, Read, Generic, Enum, Bounded)
 
+data StateHandlerInput = StateHandlerInput
+  { shi_oi :: ObjectInput
+  , shi_new :: Event ()
+  , shi_standing :: StandState
+  }
 
-type StateHandler = SF (ObjectInput, Event ()) StateHandlerResult
+type StateHandler = SF StateHandlerInput StateHandlerResult
 
 data StateHandlerResult = StateHandlerResult
   { shr_events :: ObjectEvents
@@ -39,38 +51,55 @@ mkDsd :: a -> DrawSpriteDetails a
 mkDsd a = DrawSpriteDetails a 0 $ pure False
 
 idleHandler :: StateHandler
-idleHandler = proc _ -> do
-  returnA -< StateHandlerResult mempty (mkDsd PlayerIdleSword) playerOre $ const 0
+idleHandler = proc shi -> do
+  let ss = shi_standing shi
+  returnA -<
+    StateHandlerResult
+        mempty
+        (mkDsd $ standing PlayerDucked PlayerIdleSword ss)
+        (standing duckingOre playerOre ss)
+      $ event (const 0) (const id)
+      $ shi_new shi
 
 stabHandler :: StateHandler
-stabHandler = proc _ -> do
-  returnA -< StateHandlerResult mempty (mkDsd PlayerStab) playerOre $ const 0
+stabHandler = proc shi -> do
+  let ss = shi_standing shi
+  returnA -<
+    StateHandlerResult mempty
+        (mkDsd $ standing PlayerDuckStab PlayerStab ss)
+        (standing duckingOre playerOre ss)
 
+      $ const 0
 
 walkHandler :: StateHandler
-walkHandler = proc (oi, _) -> do
-  let xdir = view _x $ c_dir $ controls oi
-  returnA -< StateHandlerResult mempty (mkDsd PlayerRun) playerOre
-           $ _x %~ clampAbs walkSpeed . (+ (fromIntegral xdir * walkSpeed))
-
+walkHandler = proc shi -> do
+  let xdir = view _x $ c_dir $ controls $ shi_oi shi
+  returnA -<
+    StateHandlerResult mempty (mkDsd PlayerRun) playerOre
+      $ _x %~ clampAbs walkSpeed . (+ (fromIntegral xdir * walkSpeed))
 
 takeoffHandler :: StateHandler
-takeoffHandler = proc _ -> do
+takeoffHandler = proc shi -> do
   returnA -<
     StateHandlerResult mempty (mkDsd PlayerTakeoff) playerOre id
 
 jumpHandler :: StateHandler
-jumpHandler = proc _ -> do
+jumpHandler = proc shi -> do
   returnA -<
     StateHandlerResult mempty (mkDsd PlayerJump) playerOre $
       subtract $ V2 0 jumpPower
 
 
 fallHandler :: StateHandler
-fallHandler = proc (oi, _) -> do
+fallHandler = proc shi -> do
+  let oi = shi_oi shi
   let holding_jump = c_jump $ controls oi
   returnA -< StateHandlerResult mempty (mkDsd PlayerFall) playerOre $ \v ->
     updateVel False holding_jump (deltaTime oi) v 0
+
+slideHandler :: StateHandler
+slideHandler = proc shi -> do
+  returnA -< StateHandlerResult mempty (mkDsd PlayerGrabSword) playerOre $ const $ V2 slideSpeed 0
 
 
 player :: V2 WorldPos -> Object
@@ -81,13 +110,14 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
   st_changed <- onChange -< st
 
   -- handle current
-  let input = (oi, () <$ st_changed)
+  let input = StateHandlerInput oi (() <$ st_changed) Ducking
   shr_idle    <- idleHandler    -< input
   shr_walk    <- walkHandler    -< input
   shr_takeoff <- takeoffHandler -< input
   shr_jump    <- jumpHandler    -< input
   shr_fall    <- fallHandler    -< input
   shr_stab    <- stabHandler    -< input
+  shr_slide   <- slideHandler   -< input
 
   shr <- pick -< (st,) $ \case
     PStateIdle -> shr_idle
@@ -96,6 +126,7 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
     PStateJump -> shr_jump
     PStateFall -> shr_fall
     PStateStab -> shr_stab
+    PStateSlide -> shr_slide
 
   let collision = getCollisionMap $ globalState oi
   let dt = deltaTime oi
@@ -122,20 +153,24 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
   let anim_done = isEvent anim_done_ev
 
   let st' =
-        case (st,             anim_done, on_ground, wants_walk, wants_jump, wants_attack, upwards_v) of
-              (PStateIdle,    _,         False,     _,          _,          _,            _    ) -> PStateFall
-              (PStateWalk,    _,         False,     _,          _,          _,            _    ) -> PStateFall
-              (PStateFall,    _,         True,      _,          _,          _,            False) -> PStateIdle
-              (PStateIdle,    _,         _,         True,       _,          _,            _    ) -> PStateWalk
-              (PStateWalk,    _,         _,         False,      _,          _,            _    ) -> PStateIdle
-              (PStateIdle,    _,         _,         _,          _,          True,         _    ) -> PStateStab
-              (PStateWalk,    _,         _,         _,          _,          True,         _    ) -> PStateStab
-              (PStateTakeoff, True,      _,         _,          _,          _,            _    ) -> PStateJump
-              (PStateJump,    _,         _,         _,          _,          _,            _    ) -> PStateFall
-              (PStateStab,    True,      _,         _,          _,          _,            _    ) -> PStateIdle
-              (PStateIdle,    _,         _,         _,          True,       _,            _    ) -> PStateTakeoff
-              (PStateWalk,    _,         _,         _,          True,       _,            _    ) -> PStateTakeoff
-              (p,             _,         _,         _,          _,          _,            _    ) -> p
+        case (st,             anim_done, on_ground, wants_walk, wants_jump, wants_attack, wants_slide, upwards_v) of
+              (PStateIdle,    _,         False,     _,          _,          _,            _,           _    ) -> PStateFall
+              (PStateWalk,    _,         False,     _,          _,          _,            _,           _    ) -> PStateFall
+              (PStateFall,    _,         True,      _,          _,          _,            _,           False) -> PStateIdle
+              (PStateIdle,    _,         _,         True,       _,          _,            _,           _    ) -> PStateWalk
+              (PStateWalk,    _,         _,         False,      _,          _,            _,           _    ) -> PStateIdle
+              (PStateIdle,    _,         _,         _,          _,          True,         _,           _    ) -> PStateStab
+              (PStateWalk,    _,         _,         _,          _,          True,         _,           _    ) -> PStateStab
+              (PStateIdle,    _,         _,         _,          _,          _,         True,           _    ) -> PStateSlide
+              (PStateWalk,    _,         _,         _,          _,          _,         True,           _    ) -> PStateSlide
+              (PStateTakeoff, True,      _,         _,          _,          _,            _,           _    ) -> PStateJump
+              (PStateJump,    _,         _,         _,          _,          _,            _,           _    ) -> PStateFall
+              (PStateStab,    True,      _,         _,          _,          _,            _,           _    ) -> PStateIdle
+              (PStateSlide,   True,      _,         _,          _,          _,            _,           _    ) -> PStateIdle
+              (PStateIdle,    _,         _,         _,          True,       _,            _,           _    ) -> PStateTakeoff
+              (PStateWalk,    _,         _,         _,          True,       _,            _,           _    ) -> PStateTakeoff
+              (PStateWalk,    _,         _,         _,          True,       _,            _,           _    ) -> PStateTakeoff
+              (p,             _,         _,         _,          _,          _,            _,           _    ) -> p
 
   -- do hits
   let (hits, hurts) = partition ((== Hitbox) . ab_type) boxes
@@ -297,17 +332,5 @@ clampAbs maxv val =
      else maxv * signum val
 
 
-respawnTime :: Time
-respawnTime = 1
 
-
-
-
-
-
-instance (Floating a, Eq a) => VectorSpace (V2 a) a where
-  zeroVector = 0
-  (*^) = (Game.Common.*^)
-  (^+^) = (+)
-  dot = SDL.dot
 
