@@ -1,12 +1,15 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -Wno-orphans   #-}
+{-# OPTIONS_GHC -Wno-unused-imports #-}
 
 module Game.Resources where
 
 import           Control.Lens (_head)
 import           Control.Monad ((<=<))
+import qualified Data.IntMap as IM
+import qualified Data.Map as M
 import           Data.Spriter.Skeleton (loadSchema)
-import           Data.Spriter.Types (schemaFolder, folderFile, _fileName)
+import           Data.Spriter.Types (schemaFolder, folderFile, _fileName, AnimationName)
 import           Data.Traversable (for)
 import           Engine.Resources
 import           Engine.Types
@@ -15,11 +18,9 @@ import           SDL (Texture, textureWidth, textureHeight)
 import           SDL.JuicyPixels (loadJuicyTexture)
 import           SDL.Video (queryTexture)
 import qualified Sound.ALUT as ALUT
-import           System.FilePath ((</>), (<.>), takeFileName, takeDirectory)
+import           System.FilePath ((</>), (<.>), takeDirectory)
 
 import {-# SOURCE #-} Engine.Importer (loadWorld)
-import qualified Data.Map as M
-import qualified Data.IntMap as IM
 
 newtype Char' = Char' { getChar' :: Char }
   deriving (Eq, Ord, Show, Enum)
@@ -113,10 +114,9 @@ instance IsResource GameTexture WrappedTexture where
   resourceName ArrowTexture = "green_arrow"
 
 instance IsResource PuppetName WrappedSchema where
-  load name e fp = do
+  load _ e fp = do
     schema <- fmap (either error id) $ loadSchema fp
     let dir = takeDirectory fp
-    rpath <- resourceRootPath
     textures <-
       for (schema ^. schemaFolder . _head . folderFile) $ \ff -> do
         let fn = _fileName ff
@@ -180,23 +180,28 @@ loadResources engine = do
     , r_glyphs   = glyphs . Char'
     }
 
+mkAnim :: PuppetName -> AnimationName -> Double -> Bool -> CannedAnim
+mkAnim BallerPuppet t = CannedAnim BallerPuppet "baller" t 0.25
+mkAnim ManPuppet t = CannedAnim ManPuppet "man" t 0.35
+
 getPuppetAnim :: PuppetAnim -> CannedAnim
-getPuppetAnim BallerDribble     = CannedAnim BallerPuppet "baller" "Dribble" 0.25 1500 True
-getPuppetAnim BallerRun         = CannedAnim BallerPuppet "baller" "DribbleRun" 0.25 1500 True
-getPuppetAnim PlayerIdleNoSword = CannedAnim ManPuppet "man" "TemplateNoSword" 0.35 1 True
-getPuppetAnim PlayerIdleSword   = CannedAnim ManPuppet "man" "Idle" 0.35 1 True
-getPuppetAnim PlayerGrabSword   = CannedAnim ManPuppet "man" "GrabSword" 0.35 2000 False
-getPuppetAnim PlayerStab        = CannedAnim ManPuppet "man" "Stab" 0.35 1000 False
-getPuppetAnim PlayerRun         = CannedAnim ManPuppet "man" "Run" 0.35 1000 True
-getPuppetAnim PlayerTakeoff     = CannedAnim ManPuppet "man" "Takeoff" 0.35 1000 False
-getPuppetAnim PlayerJump        = CannedAnim ManPuppet "man" "Jump" 0.35 1000 True
-getPuppetAnim PlayerJumpStab    = CannedAnim ManPuppet "man" "JumpStab" 0.35 1000 False
-getPuppetAnim PlayerFall        = CannedAnim ManPuppet "man" "Fall" 0.35 500 True
-getPuppetAnim PlayerFallSlice   = CannedAnim ManPuppet "man" "FallSlice" 0.35 1000 False
-getPuppetAnim PlayerDucking     = CannedAnim ManPuppet "man" "Ducking" 0.35 1000 False
-getPuppetAnim PlayerDucked      = CannedAnim ManPuppet "man" "Ducked" 0.35 500 True
-getPuppetAnim PlayerUnducking   = CannedAnim ManPuppet "man" "Unducking" 0.35 1000 False
-getPuppetAnim PlayerDuckStab    = CannedAnim ManPuppet "man" "DuckStab" 0.35 1000 False
-getPuppetAnim PlayerSlidePrep   = CannedAnim ManPuppet "man" "SlidePrep" 0.35 1000 False
-getPuppetAnim PlayerSlide       = CannedAnim ManPuppet "man" "Slide" 0.35 1000 False
+getPuppetAnim BallerDribble     = mkAnim BallerPuppet "Dribble"         1500 True
+getPuppetAnim BallerRun         = mkAnim BallerPuppet "DribbleRun"      1500 True
+getPuppetAnim PlayerIdleNoSword = mkAnim ManPuppet    "TemplateNoSword" 1    True
+getPuppetAnim PlayerIdleSword   = mkAnim ManPuppet    "Idle"            1    True
+getPuppetAnim PlayerGrabSword   = mkAnim ManPuppet    "GrabSword"       2000 False
+getPuppetAnim PlayerStab        = mkAnim ManPuppet    "Stab"            2000 False
+getPuppetAnim PlayerRun         = mkAnim ManPuppet    "Run"             1000 True
+getPuppetAnim PlayerTakeoff     = mkAnim ManPuppet    "Takeoff"         2000 False
+getPuppetAnim PlayerJump        = mkAnim ManPuppet    "Jump"            1000 True
+getPuppetAnim PlayerJumpStab    = mkAnim ManPuppet    "JumpStab"        2000 False
+getPuppetAnim PlayerFall        = mkAnim ManPuppet    "Fall"            500  True
+getPuppetAnim PlayerFallSlice   = mkAnim ManPuppet    "FallSlice"       2000 False
+getPuppetAnim PlayerDucking     = mkAnim ManPuppet    "Ducking"         1000 False
+getPuppetAnim PlayerDucked      = mkAnim ManPuppet    "Ducked"          500  True
+getPuppetAnim PlayerUnducking   = mkAnim ManPuppet    "Unducking"       1000 False
+getPuppetAnim PlayerDuckStab    = mkAnim ManPuppet    "DuckStab"        1000 False
+getPuppetAnim PlayerSlidePrep   = mkAnim ManPuppet    "SlidePrep"       1000 False
+getPuppetAnim PlayerSlide       = mkAnim ManPuppet    "Slide"           1000 False
+getPuppetAnim PlayerAirSlide    = mkAnim ManPuppet    "Slide"           1000 False
 

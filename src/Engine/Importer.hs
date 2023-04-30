@@ -8,7 +8,7 @@ import           Control.Monad.Except
 import           Data.Either (partitionEithers)
 import           Data.Generics.Labels ()
 import qualified Data.Map as M
-import           Data.Maybe (catMaybes, maybeToList)
+import           Data.Maybe (catMaybes)
 import           Data.Monoid
 import qualified Data.Set as S
 import qualified Data.Text as T
@@ -20,7 +20,6 @@ import           Engine.Resources
 import           Game.Resources (loadWrappedTexture)
 import qualified LDtk as LDtk
 import           System.FilePath
-import           Text.Read (readMaybe)
 
 import {-# SOURCE #-} Game.Objects
 
@@ -68,15 +67,13 @@ rectangularize (V2 x _)
 
 parseLayer
     :: V2 Tile
-    -> LevelLayer
-    -> Map Int (Map Int TileData)
     -> Map Text WrappedTexture
     -> LDtk.Layer
     -> ( CollisionPurpose -> V2 Tile -> Any
        , [Object]
        , Renderable
        )
-parseLayer offset ll !ts_extra !ts_cache l = do
+parseLayer offset !ts_cache l = do
   let !sz = (parseV2 Tile l #__cWid #__cHei)
       !col = force $ rectangularize (coerce sz) (l ^. #intGridCsv)
       {-# NOINLINE col #-}
@@ -88,17 +85,11 @@ parseLayer offset ll !ts_extra !ts_cache l = do
             }
 
       (objs, tilemap)
-        = buildTileMap
-            offset
-            ll
-            (fromMaybe mempty $
-              (l ^. #__tilesetDefUid) >>= flip M.lookup ts_extra
-            )
-            wt
+        = buildTileMap offset wt
         $ l ^. #autoLayerTiles
   (   cols
     , objs
-    , drawTileMap offset tilemap
+    , drawTileMap tilemap
     )
 {-# NOINLINE parseLayer #-}
 
@@ -143,12 +134,12 @@ buildMap =
     M.singleton (x ^. #__identifier) (x ^. #__value)
 
 
-drawTileMap :: V2 Tile -> Map (V2 Tile) Renderable -> Renderable
-drawTileMap offset tm cam =
-  foldMap (maybe mempty ($ cam) . flip M.lookup tm) $ getTilesOnScreen offset cam
+drawTileMap :: Map (V2 Tile) Renderable -> Renderable
+drawTileMap tm cam =
+  foldMap (maybe mempty ($ cam) . flip M.lookup tm) $ getTilesOnScreen cam
 
-getTilesOnScreen :: V2 Tile -> Camera -> [V2 Tile]
-getTilesOnScreen offset (Camera (negate -> posToTile -> cam)) = do
+getTilesOnScreen :: Camera -> [V2 Tile]
+getTilesOnScreen (Camera (negate -> posToTile -> cam)) = do
   let (V2 sx sy) = posToTile logicalSize
   -- Add a little bonus so we don't have weird culling on the edges
   let bonus = 5
@@ -171,16 +162,13 @@ getReferencedEntities e
 
 buildTileMap
     :: V2 Tile
-    -> LevelLayer
-    -> Map Int TileData
     -> WrappedTexture
     -> [LDtk.Tile]
     -> ([Object], Map (V2 Tile) Renderable)
-buildTileMap offset l extra wt ts =
+buildTileMap offset wt ts =
   bimap join (foldr (flip $ M.unionWith (<>)) mempty) $ unzip $ do
     t <- ts
-    let cd = (t ^. #t) >>= flip M.lookup extra
-        pos = fmap fromIntegral (pairToV2 $ t ^. #px) + tileToPos offset
+    let pos = fmap fromIntegral (pairToV2 $ t ^. #px) + tileToPos offset
         tpos = posToTile pos
         wt' = wt { wt_sourceRect = Just (Rectangle (P $ fmap fromIntegral $ pairToV2 $ t ^. #src) tileSize)
                 }
@@ -219,16 +207,6 @@ parseLevels e root
         $ catMaybes
         $ root ^.. #defs . #tilesets . traverse . #relPath
 
-    let ts_extra :: Map Int (Map Int TileData)
-        !ts_extra =
-          M.fromListWith (M.union) $ do
-            ts <- root ^. #defs . #tilesets
-            pure $ (ts ^. #uid,) $ M.fromList $ do
-              cd <- ts ^. #customData
-              let data' = T.unpack $ cd ^. #data'
-              td <- maybe (trace (mappend "[WARNING] unknown TileData: " data') []) pure $ readMaybe data'
-              pure $ (cd ^. #tileId, td)
-
     fmap (foldMap (uncurry M.singleton))
       $ for (root ^. #levels) $ \lev -> do
 
@@ -245,7 +223,7 @@ parseLevels e root
               . force
               . pure
               . fromMaybe (mempty, mempty, mempty)
-              . fmap (parseLayer offset ll ts_extra ts_cache)
+              . fmap (parseLayer offset ts_cache)
               . getLayerFromLevel ls
               $ ll
 
