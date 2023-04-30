@@ -1,15 +1,14 @@
 module Game.GameMessageHandler where
 
-import qualified Data.Set as S
+import Control.Lens (at)
+import Data.Maybe (fromMaybe)
+import Engine.Globals (global_worlds)
 import Engine.Types
 
-handleGameMessage :: GameMessage -> GameState -> GameState
-handleGameMessage AddCoin =
-  #gs_coins +~ 1
-handleGameMessage (AddInventory pt) =
-  #gs_inventory <>~ S.singleton pt
-handleGameMessage GameWon =
-  #gs_end .~ True
-handleGameMessage AddPlayerDeath =
-  #gs_deaths +~ 1
+handleGameMessage :: GameMessage -> GlobalState -> GlobalState
+handleGameMessage (ChangeLevel lvl) =
+  #gs_currentLevel .~
+    fromMaybe
+      (error "switched to bad level")
+      (global_worlds GameWorld ^. #w_levels . at lvl)
 

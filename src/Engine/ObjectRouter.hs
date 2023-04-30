@@ -175,7 +175,7 @@ route oid (oo_events -> ObjectEvents {..}) = mconcat $
   , Endo <$> oe_omnipotence
   , foldMap (Endo . uncurry (sendMsg oid)) <$> oe_send_message
   , foldMap (Endo . broadcast oid) <$> oe_broadcast_message
-  , foldMap (Endo . over (#objm_globalState . #gs_gameState) . handleGameMessage)
+  , foldMap (Endo . over (#objm_globalState) . handleGameMessage)
       <$> oe_game_message
     -- NOTE(sandy): looks stupid but necessary to flush the pipes
   , Event (Endo id)

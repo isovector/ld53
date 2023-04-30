@@ -3,13 +3,13 @@ module Game.World where
 import Data.Set (Set)
 import Engine.Types
 
-drawWorld :: Set LevelLayer -> World -> Renderable
-drawWorld layers = foldMap (drawLevel layers) . toList . w_levels
+drawWorld :: World -> Renderable
+drawWorld = foldMap drawLevel . toList . w_levels
 
-drawLevel :: Set LevelLayer -> Level -> Renderable
-drawLevel layers lv = mconcat
+drawLevel :: Level -> Renderable
+drawLevel lv = mconcat
   [ -- drawBackgroundColor $ l_bgcolor lv
-    flip foldMap layers $ \l -> l_tiles lv l
+    flip foldMap (enumFromTo minBound maxBound) $ \l -> l_tiles lv l
   ]
 
 tilesOf :: Rect Tile -> [V2 Tile]

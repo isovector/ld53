@@ -1,25 +1,19 @@
 {-# LANGUAGE DeriveAnyClass #-}
 module Game.Types where
 
-import Data.Set (Set)
 import Engine.CoreTypes
 import GHC.Generics (Generic)
 import Generics.Deriving.Enum
+import Data.Text (Text)
 
 
 data GameState = GameState
-  { gs_coins :: Int
-  , gs_inventory :: Set PowerupType
-  , gs_end :: Bool
-  , gs_deaths :: Int
+  {
   }
   deriving stock Generic
 
 data GameMessage
-  = AddCoin
-  | AddInventory PowerupType
-  | GameWon
-  | AddPlayerDeath
+  = ChangeLevel Text
   deriving stock (Eq, Ord, Show, Read, Generic)
 
 ------------------------------------------------------------------------------

@@ -33,7 +33,7 @@ game gs0 =
                 $ l_bounds
                 $ gs_currentLevel gs
 
-    bg <- arr $ uncurry drawLevel -< (gs_layerset gs, gs_currentLevel gs)
+    bg <- arr drawLevel -< gs_currentLevel gs
     t <- localTime -< ()
     reset <- edge -< c_full_restart $ controls rfi
 
@@ -66,7 +66,6 @@ initialGlobalState :: WorldName -> GlobalState
 initialGlobalState w
   = GlobalState
       (w_levels (global_worlds w) M.! "AutoLayer")
-      (S.fromList [Layer3])
-      (GameState 0 mempty False 0)
+      GameState
 
 #endif

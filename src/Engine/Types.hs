@@ -62,6 +62,7 @@ data Rect a = Rect
 data World = World
   { w_levels :: Map Text Level
   }
+  deriving Generic
 
 data CollisionPurpose
   = CollisionWall
@@ -168,7 +169,6 @@ instance Monoid ObjectInEvents where
 
 data GlobalState = GlobalState
   { gs_currentLevel :: ~Level
-  , gs_layerset :: Set LevelLayer
   , gs_gameState :: GameState
   }
   deriving stock Generic

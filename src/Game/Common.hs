@@ -12,6 +12,7 @@ import           Engine.Prelude
 import Control.Monad (guard)
 import Engine.Geometry (intersects)
 
+
 withLifetime :: Double -> Object -> Object
 withLifetime dur sf = proc oi -> do
   ev <- nowish () -< ()
@@ -59,7 +60,7 @@ playerHitRectObj msg ore r pos =
 getCollisionMap :: GlobalState -> CollisionPurpose -> V2 WorldPos -> Bool
 getCollisionMap gs = do
   let lev = gs_currentLevel gs
-      layers = gs_layerset gs
+      layers = enumFromTo minBound maxBound
 
   \purpose -> getAny
             . foldMap ((fmap Any .) . l_hitmap lev) layers purpose
@@ -80,18 +81,6 @@ charging dur while = proc oi -> do
               ]
 
   returnA -< (prog , done)
-
-
-getCoinResponse :: SF (Event a) ObjectEvents
-getCoinResponse = response #oe_game_message $ const [AddCoin]
-
-
-addInventoryResponse :: PowerupType -> SF (Event a) ObjectEvents
-addInventoryResponse
-  = response #oe_game_message
-  . const
-  . pure
-  . AddInventory
 
 data RateLimited a = RateLimited
   { rl_cooldown_left :: Maybe Time
@@ -153,4 +142,10 @@ checkDamage t hits evs = mkEvent $ do
 mkEvent :: [a] -> Event [a]
 mkEvent [] = NoEvent
 mkEvent a = Event a
+
+
+changeLevel :: Text -> ObjectEvents
+changeLevel lvl = mempty
+  & #oe_game_message .~ Event [ChangeLevel lvl]
+  -- & #oe_omnipotence .~
 
