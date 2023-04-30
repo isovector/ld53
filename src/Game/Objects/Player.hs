@@ -284,8 +284,8 @@ walkSpeed, airSpeed, runSpeed, slideSpeed, slideDur, jumpPower :: Double
 walkSpeed = 200
 airSpeed = 100
 runSpeed = 300
-slideSpeed = 500
-jumpPower = 200
+slideSpeed = 300
+jumpPower = 250
 slideDur = 0.5
 
 antigravity :: Bool -> V2 Double
