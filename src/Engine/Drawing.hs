@@ -166,12 +166,12 @@ mkPuppet = proc (dsd, pos) -> do
       Nothing -> mempty
       Just rbs -> do
         let draw = foldMap (drawResultBone dsd (ws_textures ws) ca_scale pos) $ filter (not . isBone) rbs
-            boxes = mapMaybe (getBox ca_scale pos) rbs
+            boxes = mapMaybe (getBox (dsd_flips dsd) ca_scale pos) rbs
          in (boxes, bool NoEvent (Event ()) is_over, draw)
 
 
-getBox :: Double -> V2 WorldPos -> ResultBone -> Maybe AnimBox
-getBox sz pos rb = do
+getBox :: V2 Bool -> Double -> V2 WorldPos -> ResultBone -> Maybe AnimBox
+getBox (fmap (bool id negate) -> flips) sz pos rb = do
   oi <- _rbObjInfo rb
   guard $ _objInfoType oi == SpriterBox
   let dpos = sz *^ V2 (_rbX rb) (_rbY rb)
@@ -179,7 +179,7 @@ getBox sz pos rb = do
       scale = V2 (_rbScaleX rb) (_rbScaleY rb)
   box <- parseBox $ T.unpack $ _objInfoName oi
   pure $ AnimBox box
-       $ Rect (coerce pos + (dpos & _y %~ negate))
+       $ Rect (coerce pos + (flips <*> (dpos & _y %~ negate)))
        $ sz *^ (orig_sz * scale)
 
 
@@ -202,12 +202,13 @@ drawResultBone dsd wts sz pos ResultBone{..}
   = let wt = wts IM.! (_boneObjFile $ fromJust _rbObj)
         sz' = sz *^ V2 _rbScaleX _rbScaleY
         wtsz = (fmap fromIntegral $ wt_size wt) * sz'
-        ore = OriginRect wtsz (wtsz & _y .~ 0)
+        wtsz_y0 = wtsz & _y .~ 0
+        ore = OriginRect wtsz wtsz_y0
      in
     drawTextureOriginRect
       wt
       ore
-      (pos + coerce (sz *^ (V2 (fromIntegral $ view _x $ wt_size wt) 0 - (V2  _rbX $ _rbY))))
+      (pos - coerce wtsz_y0 + coerce (sz *^ (V2 (fromIntegral $ view _x $ wt_size wt) 0 - (V2  _rbX $ _rbY))))
       (dsd_rotation dsd + (_rbAngle * 180 / pi))
       (dsd_flips dsd)
       --
