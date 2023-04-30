@@ -64,8 +64,10 @@ player pos0 = loopPre 0 $ proc (oi, vel) -> do
 
   t <- localTime -< ()
 
+  wants_stab <- edge -< c_attack $ controls oi
+  stabbing <- holdFor 0.5 -< const PlayerStab <$ wants_stab
 
-  (boxes, drawn) <- drawPlayer -< (dir, pos', ore, False)
+  (boxes, drawn) <- drawPlayer -< (dir, pos', ore, fromMaybe id stabbing)
   returnA -< (, vel'') $
     ObjectOutput
         { oo_events =
@@ -73,7 +75,7 @@ player pos0 = loopPre 0 $ proc (oi, vel) -> do
               & #oe_focus .~ mconcat
                   [ start
                   ]
-              & #oe_spawn .~ Event (fmap spawnMe boxes)
+              -- & #oe_spawn .~ Event (fmap spawnMe boxes)
         , oo_state =
             oi_state oi
               & #os_pos .~ pos'
@@ -117,10 +119,10 @@ duckingOre :: OriginRect Double
 duckingOre = OriginRect ducksz $ ducksz & _x *~ 0.5
 
 sz :: Num a => V2 a
-sz = V2 24 60
+sz = V2 16 68
 
 ducksz :: Num a => V2 a
-ducksz = V2 24 30
+ducksz = V2 16 34
 
 
 touchingGround :: (V2 WorldPos -> Bool) -> OriginRect Double -> V2 WorldPos -> Bool
@@ -161,23 +163,23 @@ dieAndRespawnHandler = proc (pos, on_die) -> do
 
 
 
-drawPlayer :: SF (Bool, V2 WorldPos, OriginRect Double, Bool) ([AnimBox], Renderable)
+drawPlayer :: SF (Bool, V2 WorldPos, OriginRect Double, PuppetAnim -> PuppetAnim) ([AnimBox], Renderable)
 drawPlayer =
-  proc (dir, pos, ore, is_totsugeku) -> do
+  proc (dir, pos, ore, force_anim) -> do
     -- We can fully animate the player as a function of the position!
     V2 vx vy <- derivative -< pos
     (boxes, r) <- mkPuppet
         -<  ( DrawSpriteDetails
-                (bool BallerDribble BallerRun $ abs vx >= epsilon && abs vy < epsilon)
+                (force_anim $ bool PlayerIdleNoSword PlayerIdleSword $ abs vx >= epsilon && abs vy < epsilon)
                 0
                 (V2 (not dir) False)
             , pos
             )
-    returnA -< (boxes,) $
-      mconcat
-        [ drawOriginRect (V4 0 255 0 255) ore pos
-        , r
-        ]
+    returnA -< (boxes,) $ r
+      -- mconcat
+      --   [ drawOriginRect (V4 0 255 0 255) ore pos
+      --   , r
+      --   ]
 
 
 

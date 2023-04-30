@@ -15,7 +15,7 @@ import           SDL (Texture, textureWidth, textureHeight)
 import           SDL.JuicyPixels (loadJuicyTexture)
 import           SDL.Video (queryTexture)
 import qualified Sound.ALUT as ALUT
-import           System.FilePath ((</>), (<.>), takeFileName)
+import           System.FilePath ((</>), (<.>), takeFileName, takeDirectory)
 
 import {-# SOURCE #-} Engine.Importer (loadWorld)
 import qualified Data.Map as M
@@ -115,11 +115,12 @@ instance IsResource GameTexture WrappedTexture where
 instance IsResource PuppetName WrappedSchema where
   load name e fp = do
     schema <- fmap (either error id) $ loadSchema fp
+    let dir = takeDirectory fp
     rpath <- resourceRootPath
     textures <-
       for (schema ^. schemaFolder . _head . folderFile) $ \ff -> do
         let fn = _fileName ff
-        loadWrappedTexture e $ rpath </> "puppets" </> fn
+        loadWrappedTexture e $ dir </> fn
     pure $ WrappedSchema schema $ IM.fromList $ zip [0..] textures
   resourceFolder = "puppets"
   resourceExt    = "scon"
@@ -180,6 +181,10 @@ loadResources engine = do
     }
 
 getPuppetAnim :: PuppetAnim -> CannedAnim
-getPuppetAnim BallerDribble = CannedAnim BallerPuppet "baller" "Dribble" 0.25 1500 True
-getPuppetAnim BallerRun = CannedAnim BallerPuppet "baller" "DribbleRun" 0.25 1500 True
+getPuppetAnim BallerDribble     = CannedAnim BallerPuppet "baller" "Dribble" 0.25 1500 True
+getPuppetAnim BallerRun         = CannedAnim BallerPuppet "baller" "DribbleRun" 0.25 1500 True
+getPuppetAnim PlayerIdleNoSword = CannedAnim ManPuppet "man" "TemplateNoSword" 0.35 1500 True
+getPuppetAnim PlayerIdleSword   = CannedAnim ManPuppet "man" "Template" 0.35 1500 True
+getPuppetAnim PlayerGrabSword   = CannedAnim ManPuppet "man" "GrabSword" 0.35 2000 False
+getPuppetAnim PlayerStab        = CannedAnim ManPuppet "man" "Stab" 0.35 1000 False
 
