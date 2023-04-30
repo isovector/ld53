@@ -2,6 +2,7 @@
 
 module Game.Objects.Player where
 
+import GHC.Generics
 import           Control.Lens ((*~))
 import           Data.List (partition)
 import qualified Data.Set as S
@@ -34,7 +35,9 @@ data PlayerState
 data StateHandlerInput = StateHandlerInput
   { shi_oi :: ObjectInput
   , shi_new :: Event ()
-  , shi_standing :: StandState
+  , shi_standstate :: StandState
+  , shi_on_ground :: Bool
+  , shi_dt :: Time
   }
 
 type StateHandler = SF StateHandlerInput StateHandlerResult
@@ -55,7 +58,7 @@ mkSHR a ore f = StateHandlerResult mempty (mkDsd a) ore id f
 
 idleHandler :: StateHandler
 idleHandler = proc shi -> do
-  let ss = shi_standing shi
+  let ss = shi_standstate shi
   returnA -<
     mkSHR (standing PlayerDucked PlayerIdleSword ss)
           (standing duckingOre playerOre ss)
@@ -63,7 +66,7 @@ idleHandler = proc shi -> do
 
 stabHandler :: StateHandler
 stabHandler = proc shi -> do
-  let ss = shi_standing shi
+  let ss = shi_standstate shi
   returnA -<
     mkSHR (standing PlayerDuckStab PlayerStab ss)
           (standing duckingOre playerOre ss)
@@ -80,7 +83,8 @@ walkHandler anim mult = proc shi -> do
         (mkDsd anim)
         playerOre
         (bool id (const facing) $ xdir /= 0)
-      $ _x %~ clampAbs speed . (+ (fromIntegral xdir * speed))
+      $ (_x %~ clampAbs speed . (+ (fromIntegral xdir * speed)))
+      . (_y .~ 0)
 
 takeoffHandler :: StateHandler
 takeoffHandler = proc _ -> do
@@ -103,7 +107,12 @@ airControlHandler anim = proc shi -> do
 slideHandler :: PuppetAnim -> StateHandler
 slideHandler anim = proc shi -> do
   let xspeed = bool negate id (os_facing $ oi_state $ shi_oi shi) slideSpeed
-  returnA -< mkSHR anim playerOre $ const $ V2 xspeed 0
+  returnA -< mkSHR anim playerOre $ \v ->
+    bool (applyGravity $ shi_dt shi) id (shi_on_ground shi) $
+      v & _x .~ xspeed
+
+applyGravity :: Double -> V2 Double -> V2 Double
+applyGravity dt v = v + gravity ^* dt
 
 
 player :: V2 WorldPos -> Object
@@ -113,8 +122,12 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
 
   st_changed <- onChange -< st
 
+  let collision = getCollisionMap $ globalState oi
+  let dt = deltaTime oi
+  let on_ground = touchingGround (collision CollisionCheckGround) playerOre pos
+
   -- handle current
-  let input = StateHandlerInput oi (() <$ st_changed) Standing
+  let input = StateHandlerInput oi (() <$ st_changed) Standing on_ground dt
   shr_idle       <- idleHandler                       -< input
   shr_walk       <- walkHandler PlayerRun 1           -< input
   -- TODO(sandy): don't love this one
@@ -143,9 +156,6 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
     PStateStartSlide -> shr_startSlide
     PStateSlide -> shr_slide
 
-  let collision = getCollisionMap $ globalState oi
-  let dt = deltaTime oi
-  let on_ground = touchingGround (collision CollisionCheckGround) playerOre pos
   let xdir = view _x $ c_dir $ controls oi
 
   let ore = shr_ore shr
