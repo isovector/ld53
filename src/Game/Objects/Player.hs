@@ -50,7 +50,7 @@ data StateHandlerResult = StateHandlerResult
   }
 
 mkDsd :: a -> DrawSpriteDetails a
-mkDsd a = DrawSpriteDetails a 0 $ pure False
+mkDsd a = DrawSpriteDetails a 0 $ V2 True False
 
 idleHandler :: StateHandler
 idleHandler = proc shi -> do

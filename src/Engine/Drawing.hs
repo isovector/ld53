@@ -190,13 +190,28 @@ drawResultBone
     -> V2 WorldPos
     -> ResultBone
     -> Renderable
-drawResultBone dsd wts sz pos ResultBone{..} =
-  drawSpriteStretched
-    (wts IM.! (_boneObjFile $ fromJust _rbObj))
-    (pos + coerce (sz *^ (V2  _rbX $ negate _rbY)))
-    (dsd_rotation dsd - (_rbAngle * 180 / pi))
-    (dsd_flips dsd)
-    (sz *^ V2 _rbScaleX _rbScaleY)
+drawResultBone dsd wts sz pos ResultBone{..}
+  | dsd_flips dsd == V2 False False
+  = drawSpriteStretched
+      (wts IM.! (_boneObjFile $ fromJust _rbObj))
+      (pos + coerce (sz *^ (V2  _rbX $ negate _rbY)))
+      (dsd_rotation dsd - (_rbAngle * 180 / pi))
+      (dsd_flips dsd)
+      (sz *^ V2 _rbScaleX _rbScaleY)
+  | dsd_flips dsd == V2 True False
+  = let wt = wts IM.! (_boneObjFile $ fromJust _rbObj)
+        sz' = sz *^ V2 _rbScaleX _rbScaleY
+        wtsz = (fmap fromIntegral $ wt_size wt) * sz'
+        ore = OriginRect wtsz (wtsz & _y .~ 0)
+     in
+    drawTextureOriginRect
+      wt
+      ore
+      (pos + coerce (sz *^ (V2 (fromIntegral $ view _x $ wt_size wt) 0 - (V2  _rbX $ _rbY))))
+      (dsd_rotation dsd + (_rbAngle * 180 / pi))
+      (dsd_flips dsd)
+      --
+  | otherwise = error "NO YOU MUSTNT"
 
 
 atScreenPos :: Renderable -> Renderable
