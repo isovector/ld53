@@ -110,11 +110,13 @@ fallSliceHandler = proc shi -> do
 
 startSlideHandler :: StateHandler
 startSlideHandler = proc shi -> do
-  returnA -< mkSHR PlayerSlidePrep playerOre $ const $ V2 slideSpeed 0
+  let xspeed = bool negate id (os_facing $ oi_state $ shi_oi shi) slideSpeed
+  returnA -< mkSHR PlayerSlidePrep playerOre $ const $ V2 xspeed 0
 
 slideHandler :: StateHandler
 slideHandler = proc shi -> do
-  returnA -< mkSHR PlayerSlide playerOre $ const $ V2 slideSpeed 0
+  let xspeed = bool negate id (os_facing $ oi_state $ shi_oi shi) slideSpeed
+  returnA -< mkSHR PlayerSlide playerOre $ const $ V2 xspeed 0
 
 
 player :: V2 WorldPos -> Object
