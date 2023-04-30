@@ -157,6 +157,7 @@ data TileData
 
 data PuppetName
   = BallerPuppet
+  | ManPuppet
   deriving stock (Eq, Ord, Show, Read, Generic, Enum, Bounded)
 
 data PuppetAnim

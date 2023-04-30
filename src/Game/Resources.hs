@@ -118,12 +118,13 @@ instance IsResource PuppetName WrappedSchema where
     rpath <- resourceRootPath
     textures <-
       for (schema ^. schemaFolder . _head . folderFile) $ \ff -> do
-        let fn = takeFileName $ _fileName ff
+        let fn = _fileName ff
         loadWrappedTexture e $ rpath </> "puppets" </> fn
     pure $ WrappedSchema schema $ IM.fromList $ zip [0..] textures
   resourceFolder = "puppets"
   resourceExt    = "scon"
-  resourceName _ = "baller"
+  resourceName BallerPuppet = "baller"
+  resourceName ManPuppet = "man/man"
 
 -- instance IsResource Song ALUT.Source where
 --   load _ _ fileName = do
