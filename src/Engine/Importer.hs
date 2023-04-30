@@ -104,28 +104,28 @@ parseLayer offset ll !ts_extra !ts_cache l = do
 
 
 
-parseEntities :: LDtk.Layer -> ([Text], Map Text Object)
-parseEntities l = do
+parseEntities :: V2 Tile -> LDtk.Layer -> ([Text], Map Text Object)
+parseEntities offset l = do
   let es = l ^. #entityInstances
       refset = foldMap getReferencedEntities es
       ref_es = filter (flip S.member refset . view #iid) es
       unref_es = filter (not . flip S.member refset . view #iid) es
-      (ref_errs, refs) = partitionEithers $ buildEntities refmap ref_es
+      (ref_errs, refs) = partitionEithers $ buildEntities offset refmap ref_es
       refmap = M.fromList refs
 
-      (unref_errs, unrefs) = partitionEithers $ buildEntities refmap unref_es
+      (unref_errs, unrefs) = partitionEithers $ buildEntities offset refmap unref_es
   (ref_errs <> unref_errs, M.fromList unrefs)
 
 
-buildEntities :: Map Text Object -> [LDtk.Entity] -> [Either Text (Text, Object)]
-buildEntities refmap es =  do
+buildEntities :: V2 Tile -> Map Text Object -> [LDtk.Entity] -> [Either Text (Text, Object)]
+buildEntities (tileToPos -> offset) refmap es =  do
     e <- es
     let iid = e ^. #iid
     pure $ fmap (iid, ) $
       buildEntity
         -- (traceFX "spawning: " id $ e ^. #__identifier)
         (e ^. #__identifier)
-        (fmap (WorldPos . fromIntegral) $ pairToV2 $ e ^. #px)
+        ((+ offset) . fmap (WorldPos . fromIntegral) $ pairToV2 $ e ^. #px)
         (mkPivotOriginRect
           (parseV2 fromIntegral e #width #height)
           (fmap realToFrac $ pairToV2 $ e ^. #__pivot))
@@ -238,13 +238,14 @@ parseLevels e root
 
 
         let ls = lev ^. #layerInstances
-            (errs, ents) = foldMap parseEntities ls
+            offset = posToTile $ parseV2 (fromIntegral) lev #worldX #worldY
+            (errs, ents) = foldMap (parseEntities offset) ls
             make_layer ll
               = except
               . force
               . pure
               . fromMaybe (mempty, mempty, mempty)
-              . fmap (parseLayer (posToTile $ parseV2 (fromIntegral) lev #worldX #worldY) ll ts_extra ts_cache)
+              . fmap (parseLayer offset ll ts_extra ts_cache)
               . getLayerFromLevel ls
               $ ll
 

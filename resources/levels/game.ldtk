@@ -3273,7 +3273,22 @@
 					"seed": 9103564,
 					"overrideTilesetUid": null,
 					"gridTiles": [],
-					"entityInstances": []
+					"entityInstances": [
+						{
+							"__identifier": "Sandbag",
+							"__grid": [19,15],
+							"__pivot": [0.5,1],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#FFF3F2",
+							"iid": "c53af410-c640-11ed-a750-03d8411eccf0",
+							"width": 32,
+							"height": 64,
+							"defUid": 231,
+							"px": [156,128],
+							"fieldInstances": []
+						}
+					]
 				},
 				{
 					"__identifier": "Layer3",
