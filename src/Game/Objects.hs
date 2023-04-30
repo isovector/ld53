@@ -23,9 +23,7 @@ import           Game.Objects.ParticleSpawner (particleSpawner)
 import           Game.Objects.Player (player)
 import           Game.Objects.Sandbag (sandbag)
 import           Game.Objects.SpawnTrigger (spawnTrigger)
-import           Game.Objects.Test
 import           Game.Objects.TextBillboard (textBillboard)
-import           Game.Objects.ToggleRegion (toggleRegion)
 import           Game.Objects.TutorialRegion (tutorialRegion)
 import           Game.Objects.Unknown (unknown)
 import qualified LDtk.Types as LDtk
@@ -47,11 +45,6 @@ buildEntity "TutorialRegion" pos ore props _ =
 buildEntity "Sandbag" pos ore _ _ =
   sandbag pos
     <$> pure ore
-buildEntity "ToggleLayer" pos ore props _ =
-  toggleRegion pos
-    <$> pure ore
-    <*> asEnum "Toggle" "layer" props
-    <*> asBool "Toggle" "toggle" props
 buildEntity "Text" pos _ props _ =
   textBillboard
     <$> optional (asDouble "Text" "duration" props)
@@ -59,9 +52,6 @@ buildEntity "Text" pos _ props _ =
     <*> asColor "Text" "color" props
     <*> asText "Text" "text" props
     <*> pure pos
-buildEntity "Grenade" pos _ props _ = do
-  life <- asFloat "Grenade" "Lifetime" props
-  pure $ grenade pos $ realToFrac life
 buildEntity "ParticleSpawner" pos _ props _ = do
   pt <- asEnum "ParticleSpawner" "type" props
   pure $ particleSpawner pos pt
