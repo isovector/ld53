@@ -45,66 +45,68 @@ data StateHandlerResult = StateHandlerResult
   { shr_events :: ObjectEvents
   , shr_dsd    :: DrawSpriteDetails PuppetAnim
   , shr_ore    :: OriginRect Double
+  , shr_dir    :: Bool -> Bool
   , shr_vel    :: V2 Double -> V2 Double
   }
 
 mkDsd :: a -> DrawSpriteDetails a
 mkDsd a = DrawSpriteDetails a 0 $ V2 True False
 
+mkSHR :: PuppetAnim -> OriginRect Double -> (V2 Double -> V2 Double) -> StateHandlerResult
+mkSHR a ore f = StateHandlerResult mempty (mkDsd a) ore id f
+
 idleHandler :: StateHandler
 idleHandler = proc shi -> do
   let ss = shi_standing shi
   returnA -<
-    StateHandlerResult
-        mempty
-        (mkDsd $ standing PlayerDucked PlayerIdleSword ss)
-        (standing duckingOre playerOre ss)
-      $ event (const 0) (const id)
-      $ shi_new shi
+    mkSHR (standing PlayerDucked PlayerIdleSword ss)
+          (standing duckingOre playerOre ss)
+      $ event (const 0) (const id) $ shi_new shi
 
 stabHandler :: StateHandler
 stabHandler = proc shi -> do
   let ss = shi_standing shi
   returnA -<
-    StateHandlerResult mempty
-        (mkDsd $ standing PlayerDuckStab PlayerStab ss)
-        (standing duckingOre playerOre ss)
-
+    mkSHR (standing PlayerDuckStab PlayerStab ss)
+          (standing duckingOre playerOre ss)
       $ const 0
 
 walkHandler :: StateHandler
 walkHandler = proc shi -> do
   let xdir = view _x $ c_dir $ controls $ shi_oi shi
+      facing = xdir > 0
   returnA -<
-    StateHandlerResult mempty (mkDsd PlayerRun) playerOre
+    StateHandlerResult
+        mempty
+        (mkDsd PlayerRun)
+        playerOre
+        (bool id (const facing) $ xdir /= 0)
       $ _x %~ clampAbs walkSpeed . (+ (fromIntegral xdir * walkSpeed))
 
 takeoffHandler :: StateHandler
 takeoffHandler = proc shi -> do
-  returnA -<
-    StateHandlerResult mempty (mkDsd PlayerTakeoff) playerOre id
+  returnA -< mkSHR PlayerTakeoff playerOre id
 
 jumpHandler :: StateHandler
 jumpHandler = proc shi -> do
   returnA -<
-    StateHandlerResult mempty (mkDsd PlayerJump) playerOre $
-      subtract $ V2 0 jumpPower
+    mkSHR PlayerJump playerOre $ subtract $ V2 0 jumpPower
 
 
 fallHandler :: StateHandler
 fallHandler = proc shi -> do
   let oi = shi_oi shi
   let holding_jump = c_jump $ controls oi
-  returnA -< StateHandlerResult mempty (mkDsd PlayerFall) playerOre $ \v ->
+  returnA -< mkSHR PlayerFall playerOre $ \v ->
     updateVel False holding_jump (deltaTime oi) v 0
 
 startSlideHandler :: StateHandler
 startSlideHandler = proc shi -> do
-  returnA -< StateHandlerResult mempty (mkDsd PlayerSlidePrep) playerOre $ const $ V2 slideSpeed 0
+  returnA -< mkSHR PlayerSlidePrep playerOre $ const $ V2 slideSpeed 0
 
 slideHandler :: StateHandler
 slideHandler = proc shi -> do
-  returnA -< StateHandlerResult mempty (mkDsd PlayerSlide) playerOre $ const $ V2 slideSpeed 0
+  returnA -< mkSHR PlayerSlide playerOre $ const $ V2 slideSpeed 0
 
 
 player :: V2 WorldPos -> Object
@@ -155,7 +157,14 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
   let wants_walk = xdir /= 0
   let upwards_v = view _y vel < 0
 
-  (boxes, anim_done_ev, drawn) <- mkPuppet -< (shr_dsd shr, pos)
+  -- update the world
+  let facing' = shr_dir shr $ os_facing $ oi_state oi
+
+  (boxes, anim_done_ev, drawn)
+    <- mkPuppet
+    -< ( shr_dsd shr & #dsd_flips . _x .~ not facing'
+       , pos
+       )
 
   let anim_done = isEvent anim_done_ev
 
@@ -195,7 +204,7 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
               & #os_pos .~ pos'
               & #os_collision .~ Just ore
               & #os_tags %~ S.insert IsPlayer
-              & #os_facing .~ True
+              & #os_facing .~ facing'
         , oo_render = mconcat
             [ drawn
             -- , flip foldMap hits $ \(ab_rect -> Rect abpos absz) ->
