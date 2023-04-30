@@ -64,8 +64,10 @@ player pos0 = loopPre 0 $ proc (oi, vel) -> do
 
   t <- localTime -< ()
 
+  wants_stab <- edge -< c_attack $ controls oi
+  stabbing <- holdFor 0.5 -< const PlayerStab <$ wants_stab
 
-  (boxes, drawn) <- drawPlayer -< (dir, pos', ore, False)
+  (boxes, drawn) <- drawPlayer -< (dir, pos', ore, fromMaybe id stabbing)
   returnA -< (, vel'') $
     ObjectOutput
         { oo_events =
@@ -73,7 +75,7 @@ player pos0 = loopPre 0 $ proc (oi, vel) -> do
               & #oe_focus .~ mconcat
                   [ start
                   ]
-              & #oe_spawn .~ Event (fmap spawnMe boxes)
+              -- & #oe_spawn .~ Event (fmap spawnMe boxes)
         , oo_state =
             oi_state oi
               & #os_pos .~ pos'
@@ -161,14 +163,14 @@ dieAndRespawnHandler = proc (pos, on_die) -> do
 
 
 
-drawPlayer :: SF (Bool, V2 WorldPos, OriginRect Double, Bool) ([AnimBox], Renderable)
+drawPlayer :: SF (Bool, V2 WorldPos, OriginRect Double, PuppetAnim -> PuppetAnim) ([AnimBox], Renderable)
 drawPlayer =
-  proc (dir, pos, ore, is_totsugeku) -> do
+  proc (dir, pos, ore, force_anim) -> do
     -- We can fully animate the player as a function of the position!
     V2 vx vy <- derivative -< pos
     (boxes, r) <- mkPuppet
         -<  ( DrawSpriteDetails
-                (bool PlayerIdleNoSword PlayerIdleSword $ abs vx >= epsilon && abs vy < epsilon)
+                (force_anim $ bool PlayerIdleNoSword PlayerIdleSword $ abs vx >= epsilon && abs vy < epsilon)
                 0
                 (V2 (not dir) False)
             , pos
