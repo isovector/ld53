@@ -198,5 +198,5 @@ getPuppetAnim PlayerDucked      = CannedAnim ManPuppet "man" "Ducked" 0.35 500 T
 getPuppetAnim PlayerUnducking   = CannedAnim ManPuppet "man" "Unducking" 0.35 1000 False
 getPuppetAnim PlayerDuckStab    = CannedAnim ManPuppet "man" "DuckStab" 0.35 1000 False
 getPuppetAnim PlayerSlidePrep   = CannedAnim ManPuppet "man" "SlidePrep" 0.35 1000 False
-getPuppetAnim PlayerSlide       = CannedAnim ManPuppet "man" "Slide" 0.35 1000 True
+getPuppetAnim PlayerSlide       = CannedAnim ManPuppet "man" "Slide" 0.35 1000 False
 
