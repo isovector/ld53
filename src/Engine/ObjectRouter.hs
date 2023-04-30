@@ -33,7 +33,9 @@ renderObjects
 renderObjects gs0 cam0 objs0 = proc fi -> do
   objs <- router gs0 objs0 -< fi
   let focuson = M.lookup (objm_camera_focus objs) $ objm_map objs
-  focus <- camera cam0 -< (fi, maybe 0 (getCameraFocus . oo_state) focuson)
+  focus <- camera cam0 -< ( fi & #fi_global .~ objm_globalState objs
+                          , maybe 0 (getCameraFocus . oo_state) focuson
+                          )
   let dat = toList $ objm_map objs
   returnA -<
     ( focus
