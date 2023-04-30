@@ -191,10 +191,12 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
               (PStateIdle,       _,         _,         _,          _,          _,            True,        _    ) -> PStateStartSlide
               (PStateWalk,       _,         _,         _,          _,          _,            True,        _    ) -> PStateStartSlide
               (PStateStartSlide, True,      _,         _,          _,          _,            _,           _    ) -> PStateSlide
+              (PStateStartSlide, _,      True,         _,          True,       _,            _,           _    ) -> PStateJump
               (PStateTakeoff,    True,      _,         _,          _,          _,            _,           _    ) -> PStateJump
               (PStateJump,       _,         _,         _,          _,          _,            _,           _    ) -> PStateFall
               (PStateStab,       True,      _,         _,          _,          _,            _,           _    ) -> PStateIdle
               (PStateSlide,      True,      _,         _,          _,          _,            _,           _    ) -> PStateIdle
+              (PStateSlide,      _,      True,         _,          True,       _,            _,           _    ) -> PStateJump
               (PStateIdle,       _,         _,         _,          True,       _,            _,           _    ) -> PStateTakeoff
               (PStateWalk,       _,         _,         _,          True,       _,            _,           _    ) -> PStateTakeoff
               (PStateFallSlice,  _,         True,      _,          _,          _,            _,           _    ) -> PStateIdle
