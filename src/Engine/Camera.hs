@@ -4,9 +4,11 @@ module Engine.Camera
   , getCameraFocus
   ) where
 
+import Data.List (find)
+import Engine.Geometry (rectContains)
 import Engine.Types
-import FRP.Yampa
 import Engine.Utils (posToTile)
+import FRP.Yampa
 
 
 getCameraFocus :: ObjectState -> V2 WorldPos
@@ -19,16 +21,22 @@ camera
 camera = flip loopPre $ arr $ \((fi, focus), pos) -> do
   let dt = fi_dt fi
       pos' = pos + (focus - pos) ^* coerce dt * cameraSpeed
+      bounds_to_world = fmap (fromIntegral . getPixel) . l_bounds
+
   let desired =
         case focus == pos || distance focus pos <= cameraDeadzone of
           True -> pos
           False -> pos'
+      level = find (flip rectContains desired . rectToRect . bounds_to_world) $  gs_loaded_levels $ fi_global fi
       actual = centerScreen
-             $ keepInRect (fmap (fromIntegral . getPixel) . l_bounds . head . gs_loaded_levels $ fi_global fi)
+             $ maybe id (keepInRect . bounds_to_world) level
              $ desired
   ( Camera actual
     , desired
     )
+
+rectToRect :: Rect WorldPos -> Rectangle WorldPos
+rectToRect (Rect v2 v2') = Rectangle (P v2) v2'
 
 keepInRect :: Rect WorldPos -> V2 WorldPos -> V2 WorldPos
 keepInRect (Rect (V2 l t) (V2 w h)) (V2 x y) =
