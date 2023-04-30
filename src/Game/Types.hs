@@ -168,6 +168,8 @@ data PuppetAnim
   | PlayerGrabSword
   | PlayerStab
   | PlayerRun
+  | PlayerTakeoff
+  | PlayerJump
   deriving stock (Eq, Ord, Show, Read, Generic, Enum, Bounded)
 
 data BoxType
