@@ -190,6 +190,7 @@ getPuppetAnim PlayerStab        = CannedAnim ManPuppet "man" "Stab" 0.35 1000 Fa
 getPuppetAnim PlayerRun         = CannedAnim ManPuppet "man" "Run" 0.35 1000 True
 getPuppetAnim PlayerTakeoff     = CannedAnim ManPuppet "man" "Takeoff" 0.35 1000 False
 getPuppetAnim PlayerJump        = CannedAnim ManPuppet "man" "Jump" 0.35 1000 True
+getPuppetAnim PlayerFall        = CannedAnim ManPuppet "man" "Fall" 0.35 500 True
 getPuppetAnim PlayerDucking     = CannedAnim ManPuppet "man" "Ducking" 0.35 1000 True
 getPuppetAnim PlayerDucked      = CannedAnim ManPuppet "man" "Ducked" 0.35 500 True
 getPuppetAnim PlayerUnducking   = CannedAnim ManPuppet "man" "Unducking" 0.35 1000 True

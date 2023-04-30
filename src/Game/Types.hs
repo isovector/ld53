@@ -170,6 +170,7 @@ data PuppetAnim
   | PlayerRun
   | PlayerTakeoff
   | PlayerJump
+  | PlayerFall
   | PlayerDucking
   | PlayerDucked
   | PlayerUnducking
