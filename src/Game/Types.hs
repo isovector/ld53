@@ -137,13 +137,13 @@ data Anim
   deriving anyclass (GEnum)
 
 data Message
-  = TeleportTo (V2 WorldPos)
-  | TeleportOpportunity (V2 WorldPos)
-  | SetCheckpoint (V2 WorldPos)
-  | OnTrampoline Double
-  | PlayerDeath
-  | Die
+  = SetCheckpoint (V2 WorldPos)
   | CurrentCheckpoint ObjectId
+  | Die
+  | DamageSource Team Int (V2 WorldPos) (V2 Double)
+  deriving stock (Eq, Ord, Show, Read, Generic)
+
+data Team = PlayerTeam | OtherTeam
   deriving stock (Eq, Ord, Show, Read, Generic)
 
 data ParticleType

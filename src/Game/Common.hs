@@ -134,3 +134,7 @@ holdFor dur = proc ev -> do
   e <- hold (error "holdFor") -< ev
   let isHeld = t < startTime + dur
   returnA -< bool Nothing (Just e) isHeld
+
+sendDamage :: Team -> AnimBox -> Message
+sendDamage t (ab_rect -> Rect pos sz) = DamageSource t 1 (coerce pos) sz
+

@@ -147,7 +147,7 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
               & #oe_focus .~ mconcat
                   [ start
                   ]
-              -- & #oe_broadcast_message .~ Event (fmap _ boxes)
+              & #oe_broadcast_message .~ Event (fmap (sendDamage PlayerTeam) hits)
         , oo_state =
             oi_state oi
               & #os_pos .~ pos'
@@ -300,18 +300,6 @@ clampAbs maxv val =
 respawnTime :: Time
 respawnTime = 1
 
-
-dieAndRespawnHandler :: SF (V2 WorldPos, Event a) (RateLimited ObjectEvents)
-dieAndRespawnHandler = proc (pos, on_die) -> do
-  rateLimit respawnTime
-     (arr $ \(ev, pos) ->
-        mempty
-          & #oe_spawn .~ (gore pos <$ ev)
-          & #oe_play_sound .~ ([] <$ ev)
-          & #oe_broadcast_message .~ ([PlayerDeath] <$ ev)
-          & #oe_game_message .~ ([AddPlayerDeath] <$ ev)
-          & #oe_focus .~ void ev
-     ) -< (on_die, pos)
 
 
 
