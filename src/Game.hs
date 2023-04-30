@@ -4,7 +4,6 @@
 module Game where
 
 import qualified Data.Map as M
-import           Data.Maybe (catMaybes)
 import           Engine.Globals
 import           Engine.ObjectRouter
 import           Engine.Prelude
@@ -64,13 +63,6 @@ lpad n c s
 
 initialGlobalState :: WorldName -> GlobalState
 initialGlobalState w
-  = GlobalState
-      ( catMaybes
-          [ M.lookup "Start" $ w_levels $ global_worlds w
-          , M.lookup "Other" $ w_levels $ global_worlds w
-          , M.lookup "World_Level_3" $ w_levels $ global_worlds w
-          ]
-      )
-      GameState
+  = GlobalState ( toList $ w_levels $ global_worlds w) GameState
 
 #endif
