@@ -10,6 +10,7 @@ import           Engine.ObjectRouter
 import           Engine.Prelude
 import           Game.World (drawLevel)
 import           Numeric (showFFloat)
+import Data.Maybe (catMaybes)
 
 
 #ifndef __HLINT__
@@ -65,9 +66,12 @@ lpad n c s
 initialGlobalState :: WorldName -> GlobalState
 initialGlobalState w
   = GlobalState
-      [ w_levels (global_worlds w) M.! "Start"
-      , w_levels (global_worlds w) M.! "Other"
-      ]
+      ( catMaybes
+          [ M.lookup "Start" $ w_levels $ global_worlds w
+          , M.lookup "Other" $ w_levels $ global_worlds w
+          , M.lookup "World_Level_3" $ w_levels $ global_worlds w
+          ]
+      )
       GameState
 
 #endif
