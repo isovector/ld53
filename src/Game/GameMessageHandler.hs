@@ -7,8 +7,9 @@ import Engine.Types
 
 handleGameMessage :: GameMessage -> GlobalState -> GlobalState
 handleGameMessage (ChangeLevel lvl) =
-  #gs_currentLevel .~
+  #gs_loaded_levels <>~ [
     fromMaybe
       (error "switched to bad level")
       (global_worlds GameWorld ^. #w_levels . at lvl)
+                       ]
 

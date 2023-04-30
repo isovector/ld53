@@ -59,11 +59,11 @@ playerHitRectObj msg ore r pos =
 
 getCollisionMap :: GlobalState -> CollisionPurpose -> V2 WorldPos -> Bool
 getCollisionMap gs = do
-  let lev = gs_currentLevel gs
+  let levels = fmap l_hitmap $ gs_loaded_levels gs
       layers = enumFromTo minBound maxBound
 
   \purpose -> getAny
-            . foldMap ((fmap Any .) . l_hitmap lev) layers purpose
+            . foldMap (fmap Any .) (($) <$> levels <*> layers)  purpose
             . posToTile
 
 

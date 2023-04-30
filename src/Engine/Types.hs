@@ -168,7 +168,7 @@ instance Monoid ObjectInEvents where
   mempty = ObjectInEvents {oie_hit = mempty, oie_receive = mempty}
 
 data GlobalState = GlobalState
-  { gs_currentLevel :: ~Level
+  { gs_loaded_levels :: [Level]
   , gs_gameState :: GameState
   }
   deriving stock Generic
@@ -243,6 +243,7 @@ data OriginRect aff = OriginRect
   deriving (Eq, Ord, Show, Functor, Generic)
 
 newtype Camera = Camera (V2 WorldPos)
+  deriving newtype Num
 
 instance Semigroup Camera where
   (Camera v2) <> (Camera v2') = Camera $ v2 + v2'

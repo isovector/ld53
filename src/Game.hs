@@ -18,7 +18,7 @@ initialObjs :: GlobalState -> ObjectMap ObjSF
 initialObjs gs
   = foldr (uncurry addStaticObject) (ObjectMap (DynamicId 0) mempty gs mempty)
   $ M.toList
-  $ l_defaultObjs $ gs_currentLevel gs
+  $ foldMap l_defaultObjs $ gs_loaded_levels gs
 
 
 game :: GlobalState -> SF RawFrameInfo ((Camera, Renderable), Event ())
@@ -31,10 +31,10 @@ game gs0 =
         levelsz = fmap (fromIntegral . getPixel)
                 $ r_size
                 $ l_bounds
-                $ gs_currentLevel gs
+                $ head
+                $ gs_loaded_levels gs
 
-    bg <- arr drawLevel -< gs_currentLevel gs
-    t <- localTime -< ()
+    bgs <- arr $ foldMap drawLevel -< gs_loaded_levels gs
     reset <- edge -< c_full_restart $ controls rfi
 
     returnA -< (, reset) $
@@ -44,7 +44,7 @@ game gs0 =
           , drawParallax levelsz Parallax0 3
           , drawParallax levelsz Parallax1 4
           , drawParallax levelsz Parallax2 5
-          , bg
+          , bgs
           , to_draw
           ]
         )
@@ -65,7 +65,9 @@ lpad n c s
 initialGlobalState :: WorldName -> GlobalState
 initialGlobalState w
   = GlobalState
-      (w_levels (global_worlds w) M.! "AutoLayer")
+      [ w_levels (global_worlds w) M.! "Start"
+      , w_levels (global_worlds w) M.! "Other"
+      ]
       GameState
 
 #endif

@@ -34,8 +34,8 @@ loadWorld e fp = do
     Left err -> error err
     Right root -> World <$> parseLevels e root
 
-buildCollisionMap :: V2 Tile -> V.Vector (V.Vector Int) -> CollisionPurpose -> V2 Tile -> Any
-buildCollisionMap sz col = \purpose (coerce -> V2 x y) ->
+buildCollisionMap :: V2 Tile -> V2 Tile -> V.Vector (V.Vector Int) -> CollisionPurpose -> V2 Tile -> Any
+buildCollisionMap offset sz col = \purpose (coerce -> subtract offset -> V2 x y) ->
     if x < 0 || y < 0 || x >= sz ^. _x || y >= sz ^. _y
       then Any False
       else Any $ checkPurpose purpose $ col V.! getTile y V.! getTile x
@@ -67,7 +67,8 @@ rectangularize (V2 x _)
   . chunksOf x
 
 parseLayer
-    :: LevelLayer
+    :: V2 Tile
+    -> LevelLayer
     -> Map Int (Map Int TileData)
     -> Map Text WrappedTexture
     -> LDtk.Layer
@@ -75,11 +76,11 @@ parseLayer
        , [Object]
        , Renderable
        )
-parseLayer ll !ts_extra !ts_cache l = do
+parseLayer offset ll !ts_extra !ts_cache l = do
   let !sz = (parseV2 Tile l #__cWid #__cHei)
       !col = force $ rectangularize (coerce sz) (l ^. #intGridCsv)
       {-# NOINLINE col #-}
-      !cols = force $ buildCollisionMap sz col
+      !cols = force $ buildCollisionMap offset sz col
       {-# NOINLINE cols #-}
 
       !wt = (ts_cache M.! (l ^. #__tilesetRelPath ^. _Just))
@@ -88,6 +89,7 @@ parseLayer ll !ts_extra !ts_cache l = do
 
       (objs, tilemap)
         = buildTileMap
+            offset
             ll
             (fromMaybe mempty $
               (l ^. #__tilesetDefUid) >>= flip M.lookup ts_extra
@@ -96,7 +98,7 @@ parseLayer ll !ts_extra !ts_cache l = do
         $ l ^. #autoLayerTiles
   (   cols
     , objs
-    , drawTileMap tilemap
+    , drawTileMap offset tilemap
     )
 {-# NOINLINE parseLayer #-}
 
@@ -141,12 +143,12 @@ buildMap =
     M.singleton (x ^. #__identifier) (x ^. #__value)
 
 
-drawTileMap :: Map (V2 Tile) Renderable -> Renderable
-drawTileMap tm cam =
-  foldMap (maybe mempty ($ cam) . flip M.lookup tm) $ getTilesOnScreen cam
+drawTileMap :: V2 Tile -> Map (V2 Tile) Renderable -> Renderable
+drawTileMap offset tm cam =
+  foldMap (maybe mempty ($ cam) . flip M.lookup tm) $ getTilesOnScreen offset cam
 
-getTilesOnScreen :: Camera -> [V2 Tile]
-getTilesOnScreen (Camera (negate -> posToTile -> cam)) = do
+getTilesOnScreen :: V2 Tile -> Camera -> [V2 Tile]
+getTilesOnScreen offset (Camera (negate -> posToTile -> cam)) = do
   let (V2 sx sy) = posToTile logicalSize
   -- Add a little bonus so we don't have weird culling on the edges
   let bonus = 5
@@ -168,16 +170,17 @@ getReferencedEntities e
 
 
 buildTileMap
-    :: LevelLayer
+    :: V2 Tile
+    -> LevelLayer
     -> Map Int TileData
     -> WrappedTexture
     -> [LDtk.Tile]
     -> ([Object], Map (V2 Tile) Renderable)
-buildTileMap l extra wt ts =
+buildTileMap offset l extra wt ts =
   bimap join (foldr (flip $ M.unionWith (<>)) mempty) $ unzip $ do
     t <- ts
     let cd = (t ^. #t) >>= flip M.lookup extra
-        pos = fmap fromIntegral $ pairToV2 $ t ^. #px
+        pos = fmap fromIntegral (pairToV2 $ t ^. #px) + tileToPos offset
         tpos = posToTile pos
         wt' = wt { wt_sourceRect = Just (Rectangle (P $ fmap fromIntegral $ pairToV2 $ t ^. #src) tileSize)
                 }
@@ -186,7 +189,7 @@ buildTileMap l extra wt ts =
     pure
       $ ([], )
       $ M.singleton tpos
-      $ drawSprite wt' pos  0 flips
+      $ drawSprite wt' pos 0 flips
 
 
 flipToMirrors :: LDtk.Flip -> V2 Bool
@@ -241,7 +244,7 @@ parseLevels e root
               . force
               . pure
               . fromMaybe (mempty, mempty, mempty)
-              . fmap (parseLayer ll ts_extra ts_cache)
+              . fmap (parseLayer (posToTile $ parseV2 (fromIntegral) lev #worldX #worldY) ll ts_extra ts_cache)
               . getLayerFromLevel ls
               $ ll
 
