@@ -179,6 +179,7 @@ data PuppetAnim
   | PlayerDuckStab
   | PlayerSlidePrep
   | PlayerSlide
+  | PlayerAirSlide
   deriving stock (Eq, Ord, Show, Read, Generic, Enum, Bounded)
 
 data BoxType

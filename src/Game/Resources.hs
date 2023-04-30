@@ -203,4 +203,5 @@ getPuppetAnim PlayerUnducking   = mkAnim ManPuppet    "Unducking"       1000 Fal
 getPuppetAnim PlayerDuckStab    = mkAnim ManPuppet    "DuckStab"        1000 False
 getPuppetAnim PlayerSlidePrep   = mkAnim ManPuppet    "SlidePrep"       1000 False
 getPuppetAnim PlayerSlide       = mkAnim ManPuppet    "Slide"           1000 False
+getPuppetAnim PlayerAirSlide    = mkAnim ManPuppet    "Slide"           1000 False
 
