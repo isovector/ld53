@@ -170,10 +170,13 @@ data PuppetAnim
   | PlayerRun
   | PlayerTakeoff
   | PlayerJump
+  | PlayerJumpStab
   | PlayerFall
+  | PlayerFallSlice
   | PlayerDucking
   | PlayerDucked
   | PlayerUnducking
+  | PlayerDuckStab
   deriving stock (Eq, Ord, Show, Read, Generic, Enum, Bounded)
 
 data BoxType
