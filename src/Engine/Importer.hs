@@ -231,8 +231,9 @@ parseLevels e root
         !(c1, e1, d1) <- make_layer Layer1
         !(c2, e2, d2) <- make_layer Layer2
         !(c3, e3, d3) <- make_layer Layer3
+        !(c4, e4, d4) <- make_layer City
 
-        let !layer_ents = e1 <> e2 <> e3
+        let !layer_ents = e1 <> e2 <> e3 <> e4
             !insertable = foldMap (uncurry M.singleton) $ zip (fmap (T.pack . mappend "ent" . show @Int) [0..]) layer_ents
 
         traceM $ unlines $ fmap (T.unpack . mappend "[WARNING] level: ") errs
@@ -247,11 +248,13 @@ parseLevels e root
                 Layer1 -> d1
                 Layer2 -> d2
                 Layer3 -> d3
+                City -> d4
               )
               (coerce . \case
                 Layer1 -> c1
                 Layer2 -> c2
                 Layer3 -> c3
+                City -> c4
               )
               (ents <> insertable)
           )
