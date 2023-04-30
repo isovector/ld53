@@ -11,6 +11,7 @@ import           Engine.Common
 import           Engine.Prelude
 import Control.Monad (guard)
 import Engine.Geometry (intersects)
+import Data.List (partition)
 
 
 withLifetime :: Double -> Object -> Object
@@ -127,9 +128,11 @@ holdFor dur = proc ev -> do
   returnA -< bool Nothing (Just e) isHeld
 
 
-sendDamage :: Team -> AnimBox -> Message
-sendDamage t (ab_rect -> Rect pos sz) = DamageSource (Damage t 1) (coerce pos) sz
-
+sendDamage :: Team -> [AnimBox] -> ObjectEvents
+sendDamage team boxes =
+  let (_, hurts) = splitAnimBoxes boxes
+      send t (ab_rect -> Rect pos sz) = DamageSource (Damage t 1) (coerce pos) sz
+   in mempty & #oe_broadcast_message .~ Event (fmap (send team) hurts)
 
 checkDamage :: Team -> [Rect Double] -> ObjectInEvents -> Event [Damage]
 checkDamage t hits evs = mkEvent $ do
@@ -138,14 +141,16 @@ checkDamage t hits evs = mkEvent $ do
   guard $ any (\(Rect p s) -> intersects (Rectangle (coerce pos) sz) $ Rectangle (P p) s) hits
   pure d
 
+checkDamage' :: Team -> [AnimBox] -> ObjectInEvents -> Event [Damage]
+checkDamage' t boxes =
+  let (hits, _) = splitAnimBoxes boxes
+   in checkDamage t $ fmap ab_rect hits
+
 
 mkEvent :: [a] -> Event [a]
 mkEvent [] = NoEvent
 mkEvent a = Event a
 
-
-changeLevel :: Text -> ObjectEvents
-changeLevel lvl = mempty
-  & #oe_game_message .~ Event [ChangeLevel lvl]
-  -- & #oe_omnipotence .~
+splitAnimBoxes :: [AnimBox] -> ([AnimBox], [AnimBox])
+splitAnimBoxes = partition ((== Hitbox) . ab_type)
 
