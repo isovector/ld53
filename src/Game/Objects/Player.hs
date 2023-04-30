@@ -117,10 +117,10 @@ duckingOre :: OriginRect Double
 duckingOre = OriginRect ducksz $ ducksz & _x *~ 0.5
 
 sz :: Num a => V2 a
-sz = V2 24 60
+sz = V2 16 68
 
 ducksz :: Num a => V2 a
-ducksz = V2 24 30
+ducksz = V2 16 34
 
 
 touchingGround :: (V2 WorldPos -> Bool) -> OriginRect Double -> V2 WorldPos -> Bool
@@ -168,16 +168,16 @@ drawPlayer =
     V2 vx vy <- derivative -< pos
     (boxes, r) <- mkPuppet
         -<  ( DrawSpriteDetails
-                (bool BallerDribble BallerRun $ abs vx >= epsilon && abs vy < epsilon)
+                (bool PlayerIdleNoSword PlayerIdleSword $ abs vx >= epsilon && abs vy < epsilon)
                 0
                 (V2 (not dir) False)
             , pos
             )
-    returnA -< (boxes,) $
-      mconcat
-        [ drawOriginRect (V4 0 255 0 255) ore pos
-        , r
-        ]
+    returnA -< (boxes,) $ r
+      -- mconcat
+      --   [ drawOriginRect (V4 0 255 0 255) ore pos
+      --   , r
+      --   ]
 
 
 

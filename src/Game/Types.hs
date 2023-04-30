@@ -163,6 +163,10 @@ data PuppetName
 data PuppetAnim
   = BallerDribble
   | BallerRun
+  | PlayerIdleNoSword
+  | PlayerIdleSword
+  | PlayerGrabSword
+  | PlayerStab
   deriving stock (Eq, Ord, Show, Read, Generic, Enum, Bounded)
 
 data BoxType
