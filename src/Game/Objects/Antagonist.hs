@@ -38,5 +38,6 @@ antagonist pos = loopPre PlayerIdleSword $ proc (oi, anim) -> do
       }
 
 dmgIndicator :: V2 WorldPos -> Int -> Object
-dmgIndicator pos dmg = particle pos (V2 0 (-100)) (OriginRect (pure $ fromIntegral $ dmg * 10) 0) (V4 255 0 0 255) 0 3
+dmgIndicator pos dmg =
+  particle pos (V2 0 (-100)) (OriginRect (pure $ fromIntegral $ dmg * 10) 0) (V4 255 0 0 255) 0 3
 
