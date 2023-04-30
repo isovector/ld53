@@ -191,8 +191,8 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
               & #os_facing .~ True
         , oo_render = mconcat
             [ drawn
-            , flip foldMap hits $ \(ab_rect -> Rect abpos absz) ->
-                drawOriginRect (V4 0 255 0 92) (OriginRect absz 0) $ coerce abpos
+            -- , flip foldMap hits $ \(ab_rect -> Rect abpos absz) ->
+            --     drawOriginRect (V4 0 255 0 92) (OriginRect absz 0) $ coerce abpos
             , flip foldMap hurts $ \(ab_rect -> Rect abpos absz) ->
                 drawOriginRect (V4 255 0 0 92) (OriginRect absz 0) $ coerce abpos
             ]
