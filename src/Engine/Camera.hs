@@ -27,7 +27,7 @@ camera = flip loopPre $ arr $ \((fi, focus), pos) -> do
         case focus == pos || distance focus pos <= cameraDeadzone of
           True -> pos
           False -> pos'
-      level = find (flip rectContains desired . rectToRect . bounds_to_world) $  gs_loaded_levels $ fi_global fi
+      level = find (flip rectContains focus . rectToRect . bounds_to_world) $  gs_loaded_levels $ fi_global fi
       actual = centerScreen
              $ maybe id (keepInRect . bounds_to_world) level
              $ desired
