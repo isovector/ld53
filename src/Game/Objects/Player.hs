@@ -215,7 +215,7 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
               & #oe_focus .~ mconcat
                   [ start
                   ]
-              & #oe_broadcast_message .~ Event (fmap (sendDamage PlayerTeam) hits)
+              & #oe_broadcast_message .~ Event (fmap (sendDamage PlayerTeam) hurts)
         , oo_state =
             oi_state oi
               & #os_pos .~ pos'
@@ -234,82 +234,6 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
 pick :: SF (a, a -> b) b
 pick = arr $ uncurry $ flip ($)
 
-
-player' :: V2 WorldPos -> Object
-player' pos0 = loopPre 0 $ proc (oi, vel) -> do
-  -- TODO(sandy): this is a bad pattern; object constructor should take an
-  -- initial pos
-  start <- nowish () -< ()
-  let pos = event (os_pos $ oi_state oi) (const pos0) start
-
-  let collision = getCollisionMap $ globalState oi
-
-  let dt = deltaTime oi
-
-  let onGround = touchingGround (collision CollisionCheckGround) playerOre pos
-
-  let arrows = c_dir $ controls oi
-
-  let is_ducking = view _y arrows == 1
-  let dir = not is_ducking
-
-  let holding_jump = c_jump $ controls oi
-  jump_changed <- onChange -< holding_jump
-  let wants_to_jump = jump_changed == Event True
-
-  let holding_slide = c_slide $ controls oi
-  slide_press <- edge -< holding_slide
-  let wants_to_start_slide = bool NoEvent slide_press $ onGround
-
-  maybeSlide <- holdFor slideDur -< (bool (-1) 1 dir) * slideSpeed <$ wants_to_start_slide
-  let slide = fromMaybe 0 maybeSlide
-
-  let vel'0 = fmap fromIntegral arrows ^* walkSpeed
-            & _y .~ bool 0 (- jumpPower) (wants_to_jump && onGround)
-            & _x %~ (+ slide)
-
-
-  let vel' = updateVel onGround holding_jump dt vel vel'0
-
-  let ore = bool playerOre duckingOre is_ducking
-
-  let dpos = vel' ^* dt
-  let desiredPos = pos + coerce dpos
-  let pos' = fromMaybe pos $ move collision (coerce ore) pos $ dpos
-
-  let vel''
-        = (\want have res -> bool 0 res $ abs(want - have) <= epsilon )
-            <$> desiredPos
-            <*> pos'
-            <*> vel'
-
-  t <- localTime -< ()
-
-  wants_stab <- edge -< c_attack $ controls oi
-  stabbing <- holdFor 0.5 -< const PlayerStab <$ wants_stab
-
-  returnA -< (, vel'') $
-    ObjectOutput
-        { oo_events =
-            mempty
-              & #oe_focus .~ mconcat
-                  [ start
-                  ]
-              -- & #oe_spawn .~ Event (fmap spawnMe boxes)
-        , oo_state =
-            oi_state oi
-              & #os_pos .~ pos'
-              & #os_collision .~ Just ore
-              & #os_tags %~ S.insert IsPlayer
-              & #os_facing .~ dir
-        , oo_render = mempty
-        }
-
-spawnMe :: AnimBox -> Object
-spawnMe ab
-  = withLifetime 0
-  $ unknown (T.pack $ show $ ab_type ab) (coerce $ r_pos $ ab_rect ab)
-  $ OriginRect (r_size $ ab_rect ab) 0
 
 walkSpeed, airSpeed, runSpeed, slideSpeed, slideDur, jumpPower :: Double
 walkSpeed = 200

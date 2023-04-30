@@ -140,7 +140,13 @@ data Message
   = SetCheckpoint (V2 WorldPos)
   | CurrentCheckpoint ObjectId
   | Die
-  | DamageSource Team Int (V2 WorldPos) (V2 Double)
+  | DamageSource Damage (V2 WorldPos) (V2 Double)
+  deriving stock (Eq, Ord, Show, Read, Generic)
+
+data Damage = Damage
+  { d_team :: Team
+  , d_damage :: Int
+  }
   deriving stock (Eq, Ord, Show, Read, Generic)
 
 data Team = PlayerTeam | OtherTeam

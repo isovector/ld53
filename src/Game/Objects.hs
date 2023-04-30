@@ -21,6 +21,7 @@ import           Game.Objects.Checkpoint (checkpoint)
 import           Game.Objects.DespawnTrigger (despawnTrigger)
 import           Game.Objects.ParticleSpawner (particleSpawner)
 import           Game.Objects.Player (player)
+import           Game.Objects.Sandbag (sandbag)
 import           Game.Objects.SpawnTrigger (spawnTrigger)
 import           Game.Objects.Test
 import           Game.Objects.TextBillboard (textBillboard)
@@ -43,6 +44,9 @@ buildEntity "TutorialRegion" pos ore props _ =
   tutorialRegion pos ore
     <$> asText "TutorialRegion" "key" props
     <*> fmap fromIntegral (asInt "TutorialRegion" "timer" props)
+buildEntity "Sandbag" pos ore _ _ =
+  sandbag pos
+    <$> pure ore
 buildEntity "ToggleLayer" pos ore props _ =
   toggleRegion pos
     <$> pure ore
