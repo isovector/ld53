@@ -176,9 +176,3 @@ data BoxType
   deriving stock (Eq, Ord, Show, Read, Generic)
 
 
-
-data PlayerState
-  = PStateIdle
-  | PStateStab
-  deriving stock (Eq, Ord, Show, Read, Generic, Enum, Bounded)
-

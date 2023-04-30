@@ -14,8 +14,126 @@ import           Game.Objects.Particle (gore)
 import           Game.Objects.Unknown (unknown)
 import qualified SDL.Vect as SDL
 
+
+data PlayerState
+  = PStateIdle
+  | PStateWalk
+  | PStateTakeoff
+  | PStateJump
+  -- | PStateStab
+  deriving stock (Eq, Ord, Show, Read, Generic, Enum, Bounded)
+
+
+type StateHandler = SF (ObjectInput) StateHandlerResult
+
+data StateHandlerResult = StateHandlerResult
+  { shr_events :: ObjectEvents
+  , shr_dsd    :: DrawSpriteDetails PuppetAnim
+  , shr_ore    :: OriginRect Double
+  , shr_vel    :: V2 Double -> V2 Double
+  }
+
+mkDsd :: a -> DrawSpriteDetails a
+mkDsd a = DrawSpriteDetails a 0 $ pure False
+
+idleHandler :: StateHandler
+idleHandler = proc oi -> do
+  returnA -< StateHandlerResult mempty (mkDsd PlayerIdleSword) playerOre $ const 0
+
+
+walkHandler :: StateHandler
+walkHandler = proc oi -> do
+  let xdir = view _x $ c_dir $ controls oi
+  returnA -< StateHandlerResult mempty (mkDsd PlayerRun) playerOre
+           $ _x %~ clampAbs walkSpeed . (+ (fromIntegral xdir * walkSpeed))
+
+
+takeoffHandler :: StateHandler
+takeoffHandler = proc oi -> do
+  returnA -< StateHandlerResult mempty (mkDsd PlayerIdleNoSword) playerOre $ subtract $ V2 0 jumpPower
+
+
+jumpHandler :: StateHandler
+jumpHandler = proc oi -> do
+  let holding_jump = c_jump $ controls oi
+  returnA -< StateHandlerResult mempty (mkDsd PlayerIdleNoSword) playerOre $ \v ->
+    updateVel False holding_jump (deltaTime oi) v 0
+
+
 player :: V2 WorldPos -> Object
-player pos0 = loopPre 0 $ proc (oi, vel) -> do
+player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
+  start <- nowish () -< ()
+  let pos = event (os_pos $ oi_state oi) (const pos0) start
+
+  -- handle current
+  shr_idle    <- idleHandler    -< oi
+  shr_walk    <- walkHandler    -< oi
+  shr_takeoff <- takeoffHandler -< oi
+  shr_jump    <- jumpHandler    -< oi
+
+  shr <- pick -< (st,) $ \case
+    PStateIdle -> shr_idle
+    PStateWalk -> shr_walk
+    PStateTakeoff -> shr_takeoff
+    PStateJump -> shr_jump
+
+  let collision = getCollisionMap $ globalState oi
+  let dt = deltaTime oi
+  let on_ground = touchingGround (collision CollisionCheckGround) playerOre pos
+  let xdir = view _x $ c_dir $ controls oi
+
+  let ore = shr_ore shr
+
+  let vel' = shr_vel shr vel
+  let dpos = vel' ^* dt
+  let desiredPos = pos + coerce dpos
+  let pos' = fromMaybe pos $ move collision ore pos dpos
+
+  -- transition out
+
+  wants_jump   <- fmap isEvent edge -< c_jump   $ controls oi
+  wants_slide  <- fmap isEvent edge -< c_slide  $ controls oi
+  wants_attack <- fmap isEvent edge -< c_attack $ controls oi
+  let wants_walk = xdir /= 0
+  let upwards_v = view _y vel < 0
+
+  let st' =
+        case (st,             on_ground, wants_walk, wants_jump, upwards_v, wants_slide, wants_attack) of
+              (PStateIdle,    False,     _,          _,          _,         _,           _) -> PStateJump
+              (PStateWalk,    False,     _,          _,          _,         _,           _) -> PStateJump
+              (PStateJump,    True,      _,          _,          False,     _,           _) -> PStateIdle
+              (PStateIdle,    _,         True,       _,          _,         _,           _) -> PStateWalk
+              (PStateWalk,    _,         False,      _,          _,         _,           _) -> PStateIdle
+              (PStateTakeoff, _,         _,          _,          _,         _,           _) -> PStateJump
+              (PStateIdle,    _,         _,          True,       _,         _,           _) -> PStateTakeoff
+              (PStateWalk,    _,         _,          True,       _,         _,           _) -> PStateTakeoff
+              (p,             _,         _,          _,          _,         _,           _) -> p
+
+  (boxes, drawn) <- mkPuppet -< (shr_dsd shr, pos)
+
+  returnA -< (, (vel', st')) $
+    ObjectOutput
+        { oo_events =
+            mempty
+              & #oe_focus .~ mconcat
+                  [ start
+                  ]
+              -- & #oe_spawn .~ Event (fmap spawnMe boxes)
+        , oo_state =
+            oi_state oi
+              & #os_pos .~ pos'
+              & #os_collision .~ Just ore
+              & #os_tags %~ S.insert IsPlayer
+              & #os_facing .~ True
+        , oo_render = drawn
+        }
+
+pick :: SF (a, a -> b) b
+pick = arr $ uncurry $ flip ($)
+
+
+player' :: V2 WorldPos -> Object
+player' pos0 = loopPre 0 $ proc (oi, vel) -> do
   -- TODO(sandy): this is a bad pattern; object constructor should take an
   -- initial pos
   start <- nowish () -< ()
