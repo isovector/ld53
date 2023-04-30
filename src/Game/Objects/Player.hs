@@ -5,11 +5,9 @@ module Game.Objects.Player where
 import           Control.Lens ((*~))
 import           Data.List (partition)
 import qualified Data.Set as S
-import qualified Data.Text as T
 import           Engine.Collision
 import           Engine.Drawing
 import           Game.Common
-import           Game.Objects.Unknown (unknown)
 
 data StandState = Standing | Ducking
   deriving stock (Eq, Ord, Show, Read, Generic, Enum, Bounded)
@@ -71,85 +69,41 @@ stabHandler = proc shi -> do
           (standing duckingOre playerOre ss)
       $ const 0
 
-walkHandler :: StateHandler
-walkHandler = proc shi -> do
+walkHandler :: PuppetAnim -> Double -> StateHandler
+walkHandler anim mult = proc shi -> do
   let xdir = view _x $ c_dir $ controls $ shi_oi shi
       facing = xdir > 0
+      speed = walkSpeed * mult
   returnA -<
     StateHandlerResult
         mempty
-        (mkDsd PlayerRun)
+        (mkDsd anim)
         playerOre
         (bool id (const facing) $ xdir /= 0)
-      $ _x %~ clampAbs walkSpeed . (+ (fromIntegral xdir * walkSpeed))
-
-walkStabHandler :: StateHandler
-walkStabHandler = proc shi -> do
-  let xdir = view _x $ c_dir $ controls $ shi_oi shi
-      facing = xdir > 0
-  let stabbingWalkSpeed = walkSpeed * 0.5
-  returnA -<
-    StateHandlerResult
-        mempty
-        (mkDsd PlayerStab)
-        playerOre
-        (bool id (const facing) $ xdir /= 0)
-      $ _x %~ clampAbs stabbingWalkSpeed . (+ (fromIntegral xdir * stabbingWalkSpeed))
+      $ _x %~ clampAbs speed . (+ (fromIntegral xdir * speed))
 
 takeoffHandler :: StateHandler
-takeoffHandler = proc shi -> do
+takeoffHandler = proc _ -> do
   returnA -< mkSHR PlayerTakeoff playerOre id
 
 jumpHandler :: StateHandler
-jumpHandler = proc shi -> do
+jumpHandler = proc _ -> do
   returnA -<
     mkSHR PlayerJump playerOre $ \v -> v & _y .~ -jumpPower
 
-riseHandler :: StateHandler
-riseHandler = proc shi -> do
+airControlHandler :: PuppetAnim -> StateHandler
+airControlHandler anim = proc shi -> do
   let oi = shi_oi shi
   let holding_jump = c_jump $ controls oi
   let xdir = view _x $ c_dir $ controls $ shi_oi shi
   let airVel = V2 (fromIntegral xdir * airSpeed) 0
-  returnA -< mkSHR PlayerJump playerOre $ \v ->
+  returnA -< mkSHR anim playerOre $ \v ->
     updateVel False holding_jump (deltaTime oi) v airVel
 
-riseStabHandler :: StateHandler
-riseStabHandler = proc shi -> do
-  let oi = shi_oi shi
-  let holding_jump = c_jump $ controls oi
-  let xdir = view _x $ c_dir $ controls $ shi_oi shi
-  let airVel = V2 (fromIntegral xdir * airSpeed) 0
-  returnA -< mkSHR PlayerJumpStab playerOre $ \v ->
-    updateVel False holding_jump (deltaTime oi) v airVel
-
-fallHandler :: StateHandler
-fallHandler = proc shi -> do
-  let oi = shi_oi shi
-  let holding_jump = c_jump $ controls oi
-  let xdir = view _x $ c_dir $ controls $ shi_oi shi
-  let airVel = V2 (fromIntegral xdir * airSpeed) 0
-  returnA -< mkSHR PlayerFall playerOre $ \v ->
-    updateVel False holding_jump (deltaTime oi) v airVel
-
-fallSliceHandler :: StateHandler
-fallSliceHandler = proc shi -> do
-  let oi = shi_oi shi
-  let holding_jump = c_jump $ controls oi
-  let xdir = view _x $ c_dir $ controls $ shi_oi shi
-  let airVel = V2 (fromIntegral xdir * airSpeed) 0
-  returnA -< mkSHR PlayerFallSlice playerOre $ \v ->
-    updateVel False holding_jump (deltaTime oi) v airVel
-
-startSlideHandler :: StateHandler
-startSlideHandler = proc shi -> do
+slideHandler :: PuppetAnim -> StateHandler
+slideHandler anim = proc shi -> do
   let xspeed = bool negate id (os_facing $ oi_state $ shi_oi shi) slideSpeed
-  returnA -< mkSHR PlayerSlidePrep playerOre $ const $ V2 xspeed 0
-
-slideHandler :: StateHandler
-slideHandler = proc shi -> do
-  let xspeed = bool negate id (os_facing $ oi_state $ shi_oi shi) slideSpeed
-  returnA -< mkSHR PlayerSlide playerOre $ const $ V2 xspeed 0
+  returnA -< mkSHR anim playerOre $ const $ V2 xspeed 0
 
 
 player :: V2 WorldPos -> Object
@@ -161,18 +115,19 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
 
   -- handle current
   let input = StateHandlerInput oi (() <$ st_changed) Standing
-  shr_idle    <- idleHandler    -< input
-  shr_walk    <- walkHandler    -< input
-  shr_walkStab  <- walkStabHandler  -< input
-  shr_takeoff <- takeoffHandler -< input
-  shr_jump    <- jumpHandler    -< input
-  shr_rise    <- riseHandler    -< input
-  shr_riseStab   <- riseStabHandler    -< input
-  shr_fall    <- fallHandler    -< input
-  shr_fallSlice  <- fallSliceHandler  -< input
-  shr_stab    <- stabHandler    -< input
-  shr_startSlide   <- startSlideHandler   -< input
-  shr_slide   <- slideHandler   -< input
+  shr_idle       <- idleHandler                       -< input
+  shr_walk       <- walkHandler PlayerRun 1           -< input
+  -- TODO(sandy): don't love this one
+  shr_walkStab   <- walkHandler PlayerStab 0.5        -< input
+  shr_takeoff    <- takeoffHandler                    -< input
+  shr_jump       <- jumpHandler                       -< input
+  shr_rise       <- airControlHandler PlayerJump      -< input
+  shr_riseStab   <- airControlHandler PlayerJumpStab  -< input
+  shr_fall       <- airControlHandler PlayerFall      -< input
+  shr_fallSlice  <- airControlHandler PlayerFallSlice -< input
+  shr_stab       <- stabHandler                       -< input
+  shr_startSlide <- slideHandler PlayerSlidePrep      -< input
+  shr_slide      <- slideHandler PlayerSlide          -< input
 
   shr <- pick -< (st,) $ \case
     PStateIdle -> shr_idle
@@ -197,7 +152,7 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
 
   let vel' = shr_vel shr vel
   let dpos = vel' ^* dt
-  let desiredPos = pos + coerce dpos
+  let _desiredPos = pos + coerce dpos
   let pos' = fromMaybe pos $ move collision ore pos dpos
 
   -- transition out
@@ -267,7 +222,7 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
               (p,                _,         _,         _,          _,          _,            _,           _    ) -> p
 
   -- do hits
-  let (hits, hurts) = partition ((== Hitbox) . ab_type) boxes
+  let (_hits, hurts) = partition ((== Hitbox) . ab_type) boxes
 
   returnA -< (, (vel', st')) $
     ObjectOutput
@@ -313,7 +268,7 @@ airDampening :: Double
 airDampening = 0.025
 
 updateVel :: Bool -> Bool -> Time -> V2 Double -> V2 Double -> V2 Double
-updateVel True holding_jump dt old_v dv =
+updateVel True _ _ old_v dv =
     (old_v & _x .~ 0) + dv
 updateVel False holding_jump dt old_v dv =
   (old_v + (dv & _x *~ airDampening) + (gravity + antigravity holding_jump) ^* dt)

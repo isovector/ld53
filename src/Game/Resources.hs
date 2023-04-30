@@ -1,5 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -Wno-orphans   #-}
+{-# OPTIONS_GHC -Wno-unused-imports #-}
 
 module Game.Resources where
 
@@ -17,7 +18,7 @@ import           SDL (Texture, textureWidth, textureHeight)
 import           SDL.JuicyPixels (loadJuicyTexture)
 import           SDL.Video (queryTexture)
 import qualified Sound.ALUT as ALUT
-import           System.FilePath ((</>), (<.>), takeFileName, takeDirectory)
+import           System.FilePath ((</>), (<.>), takeDirectory)
 
 import {-# SOURCE #-} Engine.Importer (loadWorld)
 
@@ -113,10 +114,9 @@ instance IsResource GameTexture WrappedTexture where
   resourceName ArrowTexture = "green_arrow"
 
 instance IsResource PuppetName WrappedSchema where
-  load name e fp = do
+  load _ e fp = do
     schema <- fmap (either error id) $ loadSchema fp
     let dir = takeDirectory fp
-    rpath <- resourceRootPath
     textures <-
       for (schema ^. schemaFolder . _head . folderFile) $ \ff -> do
         let fn = _fileName ff

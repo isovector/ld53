@@ -7,7 +7,6 @@ module Engine.Camera
 import Data.List (find)
 import Engine.Geometry (rectContains)
 import Engine.Types
-import Engine.Utils (posToTile)
 import FRP.Yampa
 
 

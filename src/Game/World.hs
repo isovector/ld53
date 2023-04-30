@@ -1,6 +1,5 @@
 module Game.World where
 
-import Data.Set (Set)
 import Engine.Types
 
 drawWorld :: World -> Renderable

@@ -4,13 +4,12 @@
 module Game where
 
 import qualified Data.Map as M
-import qualified Data.Set as S
+import           Data.Maybe (catMaybes)
 import           Engine.Globals
 import           Engine.ObjectRouter
 import           Engine.Prelude
 import           Game.World (drawLevel)
 import           Numeric (showFFloat)
-import Data.Maybe (catMaybes)
 
 
 #ifndef __HLINT__
