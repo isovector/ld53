@@ -48,7 +48,7 @@ data Song
   deriving (Eq, Ord, Show, Read)
 
 data LevelLayer
-  = Layer1 | Layer2 | Layer3 | City
+  = Layer1 | Layer2 | City | Layer3
   deriving (Eq, Ord, Show, Read, Enum, Bounded)
 
 ------------------------------------------------------------------------------
