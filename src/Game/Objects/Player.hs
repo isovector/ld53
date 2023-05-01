@@ -197,9 +197,15 @@ player pos0 starting_pus = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
 
   let vel' = shr_vel shr vel
   let dpos = vel' ^* dt
-  let _desiredPos = pos + coerce dpos
+  let desiredPos = pos + coerce dpos
 
   let pos' = fromMaybe pos $ move collision ore pos dpos
+
+  let vel''
+        = (\want have res -> bool 0 res $ abs(want - have) <= epsilon )
+            <$> desiredPos
+            <*> pos'
+            <*> vel'
 
   -- transition out
 
@@ -207,7 +213,7 @@ player pos0 starting_pus = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
   wants_slide  <- fmap isEvent edge -< c_slide  $ controls oi
   wants_attack <- fmap isEvent edge -< c_attack $ controls oi
   let wants_walk = xdir /= 0
-  let upwards_v = view _y vel < 0
+  let upwards_v = view _y vel'' < 0
 
   let can_jump   = hasItem oi PowerupJump
   let can_slide  = hasItem oi PowerupSlide
@@ -283,7 +289,7 @@ player pos0 starting_pus = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
   -- do hits
   let (_hits, hurts) = splitAnimBoxes boxes
 
-  returnA -< (, (vel', st')) $
+  returnA -< (, (vel'', st')) $
     ObjectOutput
         { oo_events =
             dmg_oe
