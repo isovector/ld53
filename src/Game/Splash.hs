@@ -16,8 +16,13 @@ splashScreen :: Swont RawFrameInfo (Camera, Renderable) ()
 splashScreen = do
   swont (liftIntoGame mainMenu) >>= \case
     Start -> do
-      swont $ game (initialGlobalState GameWorld)
-      splashScreen
+      end <- swont $ game (initialGlobalState GameWorld)
+      case end of
+        GORReset -> splashScreen
+        GORDeath -> do
+          swont $ liftIntoGame gameOverScreen
+          splashScreen
+
     Fullscreen -> do
       momentary $ (Camera 0, const $ do
         let e = r_engine global_resources
@@ -30,6 +35,7 @@ splashScreen = do
     Credits -> do
       swont $ liftIntoGame credits
       splashScreen
+
 
 liftIntoGame :: SF RawFrameInfo (IO (), Event a) -> SF RawFrameInfo ((Camera, Renderable), Event a)
 liftIntoGame sf = sf >>> arr (first $ (Camera 0,) . const)
@@ -134,6 +140,19 @@ drawMenuItem sel mi ix =
       if sel == mi
          then V3 255 255 255
          else V3 120 120 120
+
+
+gameOverScreen :: SF RawFrameInfo (IO (), Event ())
+gameOverScreen = proc rfi -> do
+  press <- edge -< anyKey $ fi_controls rfi
+
+  returnA -<
+    ( mconcat
+        [ drawBackgroundColor (V4 0 0 0 255) (Camera 0)
+        , drawText 20 (V3 255 0 0) "GAME OVER" (V2 130 70) (Camera 0)
+        ]
+    , press
+    )
 
 
 credits :: SF RawFrameInfo (IO (), Event ())

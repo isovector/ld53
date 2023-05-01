@@ -20,7 +20,7 @@ initialObjs gs
   $ foldMap l_defaultObjs $ gs_loaded_levels gs
 
 
-game :: GlobalState -> SF RawFrameInfo ((Camera, Renderable), Event ())
+game :: GlobalState -> SF RawFrameInfo ((Camera, Renderable), Event GameOverReason)
 game gs0 =
   proc rfi -> do
     (cam, objs, to_draw) <-
@@ -35,8 +35,12 @@ game gs0 =
 
     bgs <- arr $ foldMap drawLevel -< gs_loaded_levels gs
     reset <- edge -< c_full_restart $ controls rfi
+    on_die <- edge -< gs_game_over $ gs_gameState gs
 
-    returnA -< (, reset) $
+    returnA -< (, mergeEvents
+                    [ GORReset <$ reset
+                    , GORDeath <$ on_die
+                    ]) $
       ( cam
       , mconcat
           [ drawBackgroundColor (V4 46 90 137 255)
@@ -63,6 +67,7 @@ lpad n c s
 
 initialGlobalState :: WorldName -> GlobalState
 initialGlobalState w
-  = GlobalState (toList $ w_levels $ global_worlds w) $ GameState mempty mempty 0 mempty
+  = GlobalState (toList $ w_levels $ global_worlds w)
+  $ GameState mempty mempty 0 mempty False
 
 #endif

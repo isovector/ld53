@@ -16,4 +16,6 @@ handleGameMessage (SetPlayerLocation loc) =
   #gs_gameState . #gs_player_loc .~ loc
 handleGameMessage (SendDamageSource ds) =
   #gs_gameState . #gs_damage_set %~ (ds :)
+handleGameMessage GameOver =
+  #gs_gameState . #gs_game_over .~ True
 
