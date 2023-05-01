@@ -3,8 +3,6 @@
 
 module Game.Objects.Player where
 
-import GHC.Generics
-import GHC.Generics
 import           Control.Lens ((*~))
 import qualified Data.Set as S
 import           Engine.Collision

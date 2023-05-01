@@ -172,6 +172,6 @@ damageHandler team = proc (oi, boxes) -> do
 
 dmgIndicator :: V2 WorldPos -> Int -> Object
 dmgIndicator pos dmg =
-  particle pos (V2 0 (-100)) (arr $ drawText 5 (V3 255 0 0) $ '-' : show dmg) (V4 255 0 0 255) 0 3
+  particle pos (V2 0 (-100)) (arr $ drawText 5 (V3 255 0 0) $ '-' : show dmg) 0 3
 
 
