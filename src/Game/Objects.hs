@@ -22,6 +22,7 @@ import           Game.Objects.Antagonist (antagonist)
 import           Game.Objects.BreakableWall (breakableWall)
 import           Game.Objects.Checkpoint (checkpoint)
 import           Game.Objects.DespawnTrigger (despawnTrigger)
+import           Game.Objects.Elevator (elevator)
 import           Game.Objects.ParticleSpawner (particleSpawner)
 import           Game.Objects.Player (player)
 import           Game.Objects.Sandbag (sandbag)
@@ -51,6 +52,8 @@ buildEntity "TutorialRegion" pos ore props _ =
     <*> fmap fromIntegral (asInt "TutorialRegion" "timer" props)
 buildEntity "BreakableWall" pos ore _ _ =
   pure $ breakableWall pos ore
+buildEntity "Elevator" pos ore _ _ =
+  pure $ elevator pos ore
 buildEntity "Sandbag" pos ore _ _ =
   sandbag pos
     <$> pure ore
