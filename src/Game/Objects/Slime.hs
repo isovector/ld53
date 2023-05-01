@@ -1,7 +1,6 @@
 module Game.Objects.Slime where
 
 import Game.Common
-import Game.Objects.Player (playerOre)
 import System.Random (mkStdGen)
 import Data.Hashable (hash)
 

@@ -151,7 +151,7 @@ data ObjectInEvents = ObjectInEvents
   { oie_hit :: Event [HitEvent]
   , oie_receive :: Event [(ObjectId, Message)]
   }
-  deriving stock Generic
+  deriving stock (Show, Generic)
 
 instance Semigroup ObjectInEvents where
   (ObjectInEvents ev ev') <> (ObjectInEvents ev2 ev3)

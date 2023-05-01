@@ -27,6 +27,7 @@ breakableWall pos0 ore = proc oi -> do
                 <>~ ([RegisterDynCollision obj_id allPurposes $ originRectToRect (coerce ore) pos] <$ on_start)
             & #oe_game_message
                 <>~ ([UnregisterDynCollision obj_id] <$ on_die)
+            & #oe_die <>~ on_die
       , oo_render = drawOriginRect (V4 0 255 0 128) ore pos
       , oo_state =
           os & #os_hp %~ hp'
