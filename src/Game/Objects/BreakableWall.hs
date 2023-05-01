@@ -7,7 +7,7 @@ allPurposes :: Set CollisionPurpose
 allPurposes = S.fromList [minBound .. maxBound]
 
 breakableWall :: V2 WorldPos -> OriginRect Double -> Object
-breakableWall pos0 ore = proc oi -> do
+breakableWall pos0 ore = pauseWhenOffscreen $ proc oi -> do
   on_start <- nowish () -< ()
   let def = (noObjectState pos0) { os_hp = 5, os_collision = Just ore }
   let os = event (oi_state oi) (const def) on_start

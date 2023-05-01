@@ -7,7 +7,7 @@ import Game.Objects.Projectile (projectile)
 
 
 thrower :: V2 WorldPos -> OriginRect Double -> Maybe (V2 WorldPos) -> Double -> Object
-thrower pos0 ore mgoal cooldown = proc (oi) -> do
+thrower pos0 ore mgoal cooldown = pauseWhenOffscreen $ proc oi -> do
   on_start <- nowish () -< ()
   let def = (noObjectState pos0) { os_hp = 5 }
   let os = event (oi_state oi) (const def) on_start

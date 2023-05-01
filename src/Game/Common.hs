@@ -11,7 +11,7 @@ import           Data.List (partition)
 import           Data.Maybe (isNothing)
 import qualified Data.Set as S
 import           Engine.Common
-import           Engine.Geometry (intersects)
+import           Engine.Geometry (intersects, rectContains)
 import           Engine.Prelude
 import           Game.Objects.Particle (particle)
 
@@ -205,5 +205,17 @@ mkHurtBox pos ore =
   let rect = originRectToRect2 ore $ coerce pos
    in [ AnimBox Hurtbox rect
       ]
+
+pauseWhenOffscreen :: Object -> Object
+pauseWhenOffscreen obj = proc oi -> do
+  pause (ObjectOutput mempty mempty $ noObjectState 0)
+    ( proc oi -> do
+        t <- time -< ()
+        on_start <- lessNowish () -< ()
+        start_time <- hold 100 -< t <$ on_start
+        let pos = os_pos $ oi_state oi
+        let should_run = t < start_time || rectContains (fi_active_level $ frameInfo oi) pos
+        returnA -< not should_run
+    ) obj -< oi
 
 

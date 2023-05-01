@@ -30,8 +30,18 @@ renderObjects
     -> V2 WorldPos
     -> ObjectMap ObjSF
     -> SF RawFrameInfo (Camera, ObjectMap ObjectOutput, Renderable)
-renderObjects gs0 cam0 objs0 = proc fi -> do
+renderObjects gs0 cam0 objs0 = loopPre (0, []) $ proc (fi, (last_focus, last_levels)) -> do
   objs <- router gs0 objs0 -< fi
+            & #fi_active_level .~ (
+                fromMaybe
+                  (Rectangle 0 0)
+                  $ find (flip rectContains last_focus)
+                  $ fmap ( rectToRect
+                         . fmap (fromIntegral . getPixel)
+                         . l_bounds
+                         )
+                  $ last_levels
+                                  )
   focuson
     <- hold (V2 0 0)
     -< maybe NoEvent (Event . getCameraFocus . oo_state)
@@ -41,20 +51,10 @@ renderObjects gs0 cam0 objs0 = proc fi -> do
   focus
     <- camera cam0
     -< ( fi & #fi_global .~ gs
-            & #fi_active_level .~ (
-                fromMaybe
-                  (Rectangle 0 0)
-                  $ find (flip rectContains focuson)
-                  $ fmap ( rectToRect
-                         . fmap (fromIntegral . getPixel)
-                         . l_bounds
-                         )
-                  $gs_loaded_levels gs
-                                  )
         , focuson
         )
   let dat = toList $ objm_map objs
-  returnA -<
+  returnA -< (, (focuson, gs_loaded_levels gs)) $
     ( focus
     , objs
     , flip foldMap dat $ mconcat

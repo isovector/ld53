@@ -6,7 +6,7 @@ import System.Random (mkStdGen)
 
 
 antagonist :: V2 WorldPos -> Object
-antagonist pos = loopPre PlayerIdleSword $ proc (oi, anim) -> do
+antagonist pos = pauseWhenOffscreen $ loopPre PlayerIdleSword $ proc (oi, anim) -> do
   slash <- occasionally (mkStdGen $ hash pos) 2 () -< ()
 
   on_start <- nowish () -< ()

@@ -5,7 +5,7 @@ import System.Random (mkStdGen)
 
 
 slime :: V2 WorldPos -> OriginRect Double -> Maybe (V2 WorldPos) -> Object
-slime pos0 ore mgoal = proc (oi) -> do
+slime pos0 ore mgoal = pauseWhenOffscreen $ proc oi -> do
   on_start <- nowish () -< ()
   let def = (noObjectState pos0) { os_hp = 5 }
   let os = event (oi_state oi) (const def) on_start
