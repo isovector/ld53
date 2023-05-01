@@ -29,7 +29,7 @@ import           Game.Objects.TutorialRegion (tutorialRegion)
 import           Game.Objects.Unknown (unknown)
 import qualified LDtk.Types as LDtk
 import Game.Objects.Slime (slime)
-import Data.Maybe (mapMaybe)
+import Data.Maybe (mapMaybe, fromMaybe)
 
 
 buildEntity
@@ -41,7 +41,7 @@ buildEntity
     -> Either Text Object
 buildEntity "Player" pos _ props _ =
   player pos
-    <$> asEnumArray "Player" "powerups" props
+    <$> fmap (fromMaybe []) (optional $ asEnumArray "Player" "powerups" props)
 buildEntity "Antagonist" pos _ _ _ = pure $ antagonist pos
 buildEntity "Checkpoint" pos _ _ _ = pure $ checkpoint pos
 buildEntity "TutorialRegion" pos ore props _ =
