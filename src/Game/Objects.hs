@@ -55,8 +55,8 @@ buildEntity "PowerUp" pos _ props _ =
     <$> asEnum "PowerUp" "power" props
 buildEntity "Antagonist" pos _ _ _ = pure $ antagonist pos
 buildEntity "Dracula" pos _ _ _ = pure $ dracula pos
-buildEntity "Thrower" pos ore props _ =
-  thrower pos ore
+buildEntity "Thrower" pos _ props _ =
+  thrower pos
     <$> asEnum "Thrower" "projectile" props
     <*> optional (asPos "Thrower" "path" props)
     <*> asDouble "Thrower" "cooldown" props
