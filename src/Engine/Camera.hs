@@ -2,6 +2,7 @@ module Engine.Camera
   ( camera
   , viaCamera
   , getCameraFocus
+  , rectToRect
   ) where
 
 import Data.List (find)

@@ -109,6 +109,7 @@ data FrameInfo' a = FrameInfo
   { fi_controls :: Controls
   , fi_dt :: Double
   , fi_global :: ~a
+  , fi_active_level :: Rectangle WorldPos
   }
   deriving stock Generic
 
@@ -235,7 +236,7 @@ data OriginRect aff = OriginRect
   }
   deriving (Eq, Ord, Show, Functor, Generic)
 
-newtype Camera = Camera (V2 WorldPos)
+newtype Camera = Camera { unCamera :: V2 WorldPos }
   deriving newtype Num
 
 instance Semigroup Camera where

@@ -230,7 +230,7 @@ player pos0 starting_pus = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
   let ore = shr_ore shr
 
   let vel' = shr_vel shr vel
-  let dpos = vel' ^* traceShowId dt
+  let dpos = vel' ^* dt
   let desiredPos = pos + coerce dpos
 
   let pos' = fromMaybe pos $ move collision ore pos dpos

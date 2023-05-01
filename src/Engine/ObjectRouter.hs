@@ -12,11 +12,11 @@ import           Control.Lens.Lens
 import           Data.Foldable (find)
 import           Data.Map (Map)
 import qualified Data.Map as M
-import           Data.Maybe (maybeToList)
+import           Data.Maybe (maybeToList, fromMaybe)
 import           Data.Monoid
 import qualified Data.Set as S
 import           Data.Text (Text)
-import           Engine.Camera (camera, getCameraFocus)
+import           Engine.Camera (camera, getCameraFocus, rectToRect)
 import           Engine.Drawing (playSound)
 import           Engine.FRP
 import           Engine.Geometry (intersects, rectContains)
@@ -32,10 +32,27 @@ renderObjects
     -> SF RawFrameInfo (Camera, ObjectMap ObjectOutput, Renderable)
 renderObjects gs0 cam0 objs0 = proc fi -> do
   objs <- router gs0 objs0 -< fi
-  let focuson = M.lookup (objm_camera_focus objs) $ objm_map objs
-  focus <- camera cam0 -< ( fi & #fi_global .~ objm_globalState objs
-                          , maybe 0 (getCameraFocus . oo_state) focuson
-                          )
+  focuson
+    <- hold (V2 0 0)
+    -< maybe NoEvent (Event . getCameraFocus . oo_state)
+          $ M.lookup (objm_camera_focus objs)
+          $ objm_map objs
+  let gs = objm_globalState objs
+  focus
+    <- camera cam0
+    -< ( fi & #fi_global .~ gs
+            & #fi_active_level .~ (
+                fromMaybe
+                  (Rectangle 0 0)
+                  $ find (flip rectContains focuson)
+                  $ fmap ( rectToRect
+                         . fmap (fromIntegral . getPixel)
+                         . l_bounds
+                         )
+                  $gs_loaded_levels gs
+                                  )
+        , focuson
+        )
   let dat = toList $ objm_map objs
   returnA -<
     ( focus
