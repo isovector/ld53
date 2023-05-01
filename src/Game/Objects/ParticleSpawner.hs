@@ -14,5 +14,4 @@ particleSpawner pos pt
 
 particleType :: ParticleType -> V2 WorldPos -> [Object]
 particleType Gore = gore
-particleType Firework = firework
 

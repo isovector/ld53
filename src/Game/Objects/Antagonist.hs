@@ -16,12 +16,12 @@ antagonist pos = loopPre PlayerIdleSword $ proc (oi, anim) -> do
   let def =
         (noObjectState pos)
           { os_collision = Just playerOre
+          , os_hp = 5
           }
   let os = event (oi_state oi) (const def) on_start
 
-  (boxes, done, d) <- mkPuppet -< (DrawSpriteDetails anim 0 $ V2 True False, pos)
-  let dmg_ev = fmap (sum . fmap d_damage) $ checkDamage' OtherTeam boxes $ oi_events oi
-  let dmg = event 0 id dmg_ev
+  (boxes, done, d) <- mkPuppet -< (DrawSpriteDetails anim 0 $ V2 False False, pos)
+  (dmg_oe, hp') <- damageHandler OtherTeam -< (oi, boxes)
 
   new_anim <- hold PlayerIdleSword -< mergeEvents
     [ PlayerIdleSword <$ done
@@ -30,14 +30,8 @@ antagonist pos = loopPre PlayerIdleSword $ proc (oi, anim) -> do
 
   returnA -< (, new_anim) $
     ObjectOutput
-      { oo_events = sendDamage OtherTeam boxes
-          & #oe_spawn .~ (fmap (pure . dmgIndicator pos) dmg_ev)
+      { oo_events = dmg_oe
       , oo_render = d
-      , oo_state = os
-          & #os_hp -~ dmg
+      , oo_state = os & #os_hp %~ hp'
       }
-
-dmgIndicator :: V2 WorldPos -> Int -> Object
-dmgIndicator pos dmg =
-  particle pos (V2 0 (-100)) (OriginRect (pure $ fromIntegral $ dmg * 10) 0) (V4 255 0 0 255) 0 3
 

@@ -3,6 +3,7 @@ module Engine.Utils where
 import Engine.FRP
 import Engine.Geometry (orTopLeft)
 import Engine.Types
+import Data.Monoid
 
 nowish :: a -> SF x (Engine.Types.Event a)
 nowish a = after 0.001 a
