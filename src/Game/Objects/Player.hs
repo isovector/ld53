@@ -199,7 +199,7 @@ player pos0 starting_pus = loopPre (0, PStateIdle, Standing) $ proc (oi, (vel, s
   let def =
         (noObjectState pos)
           { os_collision = Just playerOre
-          , os_hp = 1
+          , os_hp = 50
           }
   let os = event (oi_state oi) (const def) on_start
       hp = os_hp os

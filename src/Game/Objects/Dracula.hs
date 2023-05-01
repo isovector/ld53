@@ -19,7 +19,7 @@ data DraculaInput = DraculaInput
   }
   deriving stock (Generic)
 
-type DraculaHandler = SF DraculaInput (Event (), ObjectState, ObjectEvents)
+type DraculaHandler = SF DraculaInput (Event (), Anim, ObjectState, ObjectEvents)
 
 noAttackHandler :: DraculaHandler
 noAttackHandler = proc dh -> do
@@ -30,7 +30,7 @@ noAttackHandler = proc dh -> do
   let dur = t - start
   done <- edge -< dur >= 2
 
-  returnA -< (done, os, mempty)
+  returnA -< (done, DraculaIdle, os, mempty)
 
 
 buffer = 32
@@ -51,7 +51,7 @@ lightningHandler = proc dh -> do
   let dur = t - start
   done <- edge -< dur >= 2
 
-  returnA -< (done, os,) $ mempty
+  returnA -< (done, DraculaActive, os,) $ mempty
     & #oe_spawn .~ ([ lightning offset new_x1
                     , lightning offset new_x2
                     , lightning offset new_x3
@@ -93,7 +93,7 @@ homerHandler = proc dh -> do
   let dur = t - start
   done <- edge -< dur >= 3
 
-  returnA -< (done, os, mempty & #oe_spawn .~ ([dracHome pos] <$ done))
+  returnA -< (done, bool DraculaIdle DraculaActive $ dur >= 2.5, os, mempty & #oe_spawn .~ ([dracHome pos] <$ done))
 
 bulletHellHandler :: DraculaHandler
 bulletHellHandler = proc dh -> do
@@ -109,7 +109,7 @@ bulletHellHandler = proc dh -> do
   let theta = dur * 15
       vel = V2 (cos theta) (sin theta) * 150
 
-  returnA -< (done, os, ) $
+  returnA -< (done, DraculaActive, os, ) $
     mempty
       & #oe_spawn <>~ ([dracBullet pos $ coerce vel] <$ shoot)
 
@@ -128,9 +128,9 @@ teleportHandler = proc dh -> do
   new_x <- fmap coerce $ noiseR (buffer, getWorldPos (view _x logicalSize) - buffer) (mkStdGen 1337) -<  ()
   new_y <- fmap coerce $ noiseR (buffer, getWorldPos (view _y logicalSize) - buffer) (mkStdGen 1337) -<  ()
 
-  let pos' = event id (const $ const $ traceShowId $ offset + V2 new_x new_y) done
+  let pos' = event id (const $ const $ offset + V2 new_x new_y) done
 
-  returnA -< (done, os & #os_pos %~ pos', mempty)
+  returnA -< (done, bool DraculaIdle DraculaActive $ dur >= 0.8,  os & #os_pos %~ pos', mempty)
 
 
 dracBullet :: V2 WorldPos -> V2 WorldPos -> Object
@@ -175,11 +175,12 @@ dracHome pos0 = withLifetime 8 $ proc oi -> do
       }
 
 
-dracula :: V2 WorldPos -> OriginRect Double -> Object
-dracula pos0 ore = pauseWhenOffscreen $ loopPre NoAttack $ proc (oi, attack) -> do
+dracula :: V2 WorldPos -> Object
+dracula pos0 = pauseWhenOffscreen $ loopPre NoAttack $ proc (oi, attack) -> do
   on_start <- nowish () -< ()
   let def = (noObjectState pos0) { os_hp = 100 }
   let os = event (oi_state oi) (const def) on_start
+      ore = mkGroundOriginRect $ V2 55 80
       pos = os_pos os
 
   new_attack <- onChange -< attack
@@ -191,7 +192,7 @@ dracula pos0 ore = pauseWhenOffscreen $ loopPre NoAttack $ proc (oi, attack) -> 
   atk_home <- homerHandler -< input
   atk_lightning <- lightningHandler -< input
 
-  (done, os', evs) <- pick -< (attack,) $ \case
+  (done, anim, os', evs) <- pick -< (attack,) $ \case
      NoAttack -> atk_none
      BulletHell -> atk_bullet
      Teleport -> atk_teleport
@@ -203,13 +204,15 @@ dracula pos0 ore = pauseWhenOffscreen $ loopPre NoAttack $ proc (oi, attack) -> 
 
   (dmg_oe, _, on_die, hp') <- damageHandler 0.5 OtherTeam -< (oi, ore, mkHurtHitBox pos ore)
 
+  d <- mkAnim -< (DrawSpriteDetails anim Just 0 $ pure False, pos)
+
   returnA -< (, attack') $
     ObjectOutput
       { oo_events =
           (evs <> dmg_oe)
             & #oe_die <>~ on_die
             -- & #oe_spawn <>~ ([dracBullet arc flipped $ pos - coerce (orect_size ore / 2)] <$ throw)
-      , oo_render = drawOriginRect (V4 255 255 255 128) ore pos
+      , oo_render = d
       , oo_state =
         os' & #os_hp %~ hp'
       }
