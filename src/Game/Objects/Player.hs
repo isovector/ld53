@@ -97,7 +97,9 @@ walkHandler mult = proc shi -> do
   let ss = shi_standstate shi
   let V2 xdir _ = c_dir $ controls $ shi_oi shi
       facing = xdir > 0
-      speed = walkSpeed * mult
+      speed = mult * case ss of
+         Standing -> walkSpeed
+         Ducking -> crawlSpeed
   returnA -<
     StateHandlerResult
         mempty
@@ -414,8 +416,9 @@ pick :: SF (a, a -> b) b
 pick = arr $ uncurry $ flip ($)
 
 
-walkSpeed, airSpeed, runSpeed, slideSpeed, slideDur, jumpPower :: Double
+walkSpeed, crawlSpeed, airSpeed, runSpeed, slideSpeed, slideDur, jumpPower :: Double
 walkSpeed = 200
+crawlSpeed = 80
 airSpeed = 150
 runSpeed = 300
 slideSpeed = 300
