@@ -8,3 +8,4 @@ dist-newstyle/
 result
 releases/
 *.scml
+*/backups/*
