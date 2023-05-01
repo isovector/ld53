@@ -416,7 +416,7 @@ pick = arr $ uncurry $ flip ($)
 
 walkSpeed, airSpeed, runSpeed, slideSpeed, slideDur, jumpPower :: Double
 walkSpeed = 200
-airSpeed = 100
+airSpeed = 150
 runSpeed = 300
 slideSpeed = 300
 jumpPower = 250
