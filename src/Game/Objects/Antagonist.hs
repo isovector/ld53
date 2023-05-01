@@ -3,13 +3,10 @@ module Game.Objects.Antagonist where
 import Game.Common
 import Game.Objects.Player (playerOre)
 import System.Random (mkStdGen)
-import Game.Objects.Particle (particle)
 
 
 antagonist :: V2 WorldPos -> Object
 antagonist pos = loopPre PlayerIdleSword $ proc (oi, anim) -> do
-  let OriginRect sz off = playerOre
-
   slash <- occasionally (mkStdGen 0) 2 () -< ()
 
   on_start <- nowish () -< ()

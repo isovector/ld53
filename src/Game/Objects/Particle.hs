@@ -15,11 +15,10 @@ particle
     :: V2 WorldPos
     -> V2 Double
     -> SF (V2 WorldPos) Renderable
-    -> Color
     -> V2 Double
     -> Time
     -> Object
-particle pos0 vel0 sf col grav life = loopPre vel0 $ proc (oi, vel) -> do
+particle pos0 vel0 sf grav life = loopPre vel0 $ proc (oi, vel) -> do
   start <- nowish () -< ()
   die <- after life () -< ()
 
