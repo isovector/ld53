@@ -128,19 +128,19 @@ onlyOncePer dur = proc ev -> do
 sendDamage :: Team -> V2 WorldPos -> [AnimBox] -> ObjectEvents
 sendDamage team src boxes =
   let (_, hurts) = splitAnimBoxes boxes
-      send t (ab_rect -> Rect pos sz) = DamageSource src (Damage t 1) (coerce pos) sz
-   in mempty & #oe_broadcast_message .~ Event (fmap (send team) hurts)
+      send t (ab_rect -> Rect pos sz) = SendDamageSource $ DamageSource src (Damage t 1) (coerce pos) sz
+   in mempty & #oe_game_message .~ Event (fmap (send team) hurts)
 
 
-checkDamage :: Team -> V2 WorldPos -> [Rect Double] -> ObjectInEvents -> Event (V2 Double, [Damage])
-checkDamage t me hits evs = coerce $ fmap sequence $ mkEvent $ do
-  (_, DamageSource src d pos sz) <- fromEvent mempty $ oie_receive evs
+checkDamage :: Team -> V2 WorldPos -> [Rect Double] -> ObjectInput -> Event (V2 Double, [Damage])
+checkDamage t me hits oi = coerce $ fmap sequence $ mkEvent $ do
+  DamageSource src d pos sz <- gs_damage_set $ gameState oi
   guard $ t /= d_team d
   guard $ any (\(Rect p s) -> intersects (Rectangle (coerce pos) sz) $ Rectangle (P p) s) hits
   pure (normalize $ me - src, d)
 
 
-checkDamage' :: Team -> V2 WorldPos -> [AnimBox] -> ObjectInEvents -> Event (V2 Double, [Damage])
+checkDamage' :: Team -> V2 WorldPos -> [AnimBox] -> ObjectInput -> Event (V2 Double, [Damage])
 checkDamage' t me boxes =
   let (hits, _) = splitAnimBoxes boxes
    in checkDamage t me $ fmap ab_rect hits
@@ -164,7 +164,7 @@ damageHandler team = proc (oi, ore, boxes) -> do
       OriginRect sz _ = ore
       pos = os_pos os
 
-  let dmg_in_ev = fmap (second $ sum . fmap d_damage) $ checkDamage' team pos boxes $ oi_events oi
+  let dmg_in_ev = fmap (second $ sum . fmap d_damage) $ checkDamage' team pos boxes oi
   both <- onlyOncePer 0.1 -< dmg_in_ev
   let dmg_ev = fmap snd both
       dir = eventToMaybe $ fmap (normalize . fst) both

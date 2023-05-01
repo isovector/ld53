@@ -88,7 +88,8 @@ router' objs0 =
      >>> notYet
     )
     -- NOTE(sandy): this only gets called on a new event!!!
-    (\new f -> router' $ appEndo f $ new & #objm_undeliveredMsgs .~ mempty)
+    (\new f -> router' $ appEndo f $ new & #objm_undeliveredMsgs .~ mempty
+                                         & #objm_globalState . #gs_gameState . #gs_damage_set .~ [])
 
 
 routeHits :: RawFrameInfo -> ObjectMap ObjectOutput -> ObjectMap sf -> ObjectMap (ObjectInput, sf)

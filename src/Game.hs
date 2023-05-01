@@ -63,6 +63,6 @@ lpad n c s
 
 initialGlobalState :: WorldName -> GlobalState
 initialGlobalState w
-  = GlobalState (toList $ w_levels $ global_worlds w) $ GameState mempty mempty 0
+  = GlobalState (toList $ w_levels $ global_worlds w) $ GameState mempty mempty 0 mempty
 
 #endif
