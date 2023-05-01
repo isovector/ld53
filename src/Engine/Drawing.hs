@@ -142,8 +142,8 @@ mkAnim = proc (dsd, pos) -> do
       (dsd_flips dsd)
       cam
 
-mkPuppet :: SF (DrawSpriteDetails PuppetAnim, V2 WorldPos) ([AnimBox], Event (), Renderable)
-mkPuppet = proc (dsd, pos) -> do
+mkPuppet :: Double -> SF (DrawSpriteDetails PuppetAnim, V2 WorldPos) ([AnimBox], Event (), Renderable)
+mkPuppet scale = proc (dsd, pos) -> do
   let CannedAnim{..} = getPuppetAnim $ dsd_anim dsd
       ws = global_puppets ca_schema
   global_tick <- localTime -< ()
@@ -166,8 +166,8 @@ mkPuppet = proc (dsd, pos) -> do
     case animate entity _aAnim frame of
       Nothing -> mempty
       Just rbs -> do
-        let draw = foldMap (drawResultBone dsd ws ca_scale pos) $ filter (not . isBone) rbs
-            boxes = mapMaybe (getBox (dsd_flips dsd) ca_scale pos) rbs
+        let draw = foldMap (drawResultBone dsd ws (scale * ca_scale) pos) $ filter (not . isBone) rbs
+            boxes = mapMaybe (getBox (dsd_flips dsd) (scale * ca_scale) pos) rbs
          in (boxes, bool NoEvent (Event ()) is_over, draw)
 
 

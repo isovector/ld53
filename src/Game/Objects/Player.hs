@@ -289,7 +289,7 @@ player pos0 starting_pus = loopPre (0, PStateIdle, Standing) $ proc (oi, (vel, s
   let facing' = shr_dir shr $ os_facing $ oi_state oi
 
   (boxes, anim_done_ev, drawn)
-    <- mkPuppet
+    <- mkPuppet 1
     -< ( shr_dsd shr & #dsd_flips . _x .~ not facing'
                      & #dsd_remap .~ remapSword has_sword
        , pos
