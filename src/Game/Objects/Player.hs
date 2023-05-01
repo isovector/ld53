@@ -9,6 +9,7 @@ import qualified Data.Set as S
 import           Engine.Collision
 import           Engine.Drawing
 import           Game.Common
+import Game.Objects.Particle (gore)
 
 data StandState = Standing | Ducking
   deriving stock (Eq, Ord, Show, Read, Generic, Enum, Bounded)
@@ -198,7 +199,7 @@ player pos0 starting_pus = loopPre (0, PStateIdle, Standing) $ proc (oi, (vel, s
   let def =
         (noObjectState pos)
           { os_collision = Just playerOre
-          , os_hp = 50
+          , os_hp = 1
           }
   let os = event (oi_state oi) (const def) on_start
       hp = os_hp os
@@ -381,22 +382,27 @@ player pos0 starting_pus = loopPre (0, PStateIdle, Standing) $ proc (oi, (vel, s
   let (_hits, hurts) = splitAnimBoxes boxes
   let hp'' = change_hp hp'
 
+  dead <- hold False -< True <$ on_die
+  end_game <- delay 2 NoEvent -< on_die
+
   returnA -< (, (vel'', st', shr_setduck shr stand)) $
     ObjectOutput
         { oo_events =
             dmg_oe
               & #oe_focus .~ on_start
+              & #oe_spawn .~ (gore pos <$ on_die)
               & #oe_game_message <>~ (fmap AddInventory starting_pus <$ on_start)
               & #oe_game_message <>~ Event [SetPlayerLocation pos']
-              & #oe_die <>~ on_die
+              & #oe_game_message <>~ ([GameOver] <$ end_game)
+              -- & #oe_die <>~ on_die
         , oo_state =
             os
-              & #os_pos .~ pos'
+              & #os_pos .~ bool pos' pos dead
               & #os_collision .~ Just ore
               & #os_tags %~ S.insert IsPlayer
               & #os_facing .~ facing'
               & #os_hp .~ hp''
-        , oo_render = mconcat
+        , oo_render = bool id (const mempty) dead $ mconcat
             [ drawOriginRect (V4 255 255 255 92) ore pos
             , drawn
             -- , flip foldMap hits $ \(ab_rect -> Rect abpos absz) ->
