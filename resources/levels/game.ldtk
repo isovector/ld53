@@ -11,7 +11,7 @@
 	"iid": "a22d35f0-7820-11ed-b6fd-213e885f30da",
 	"jsonVersion": "1.2.3",
 	"appBuildId": 464726,
-	"nextUid": 296,
+	"nextUid": 297,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "GridVania",
 	"worldGridWidth": 480,
@@ -1570,7 +1570,7 @@
 			"fillOpacity": 1,
 			"lineOpacity": 1,
 			"hollow": false,
-			"color": "#F6757A",
+			"color": "#E90D6D",
 			"renderMode": "Rectangle",
 			"showName": true,
 			"tilesetId": null,
@@ -2477,6 +2477,33 @@
 					"tilesetUid": null
 				}
 			]
+		},
+		{
+			"identifier": "BreakableWall",
+			"uid": 296,
+			"tags": [],
+			"width": 16,
+			"height": 16,
+			"resizableX": true,
+			"resizableY": true,
+			"keepAspectRatio": false,
+			"tileOpacity": 1,
+			"fillOpacity": 1,
+			"lineOpacity": 1,
+			"hollow": false,
+			"color": "#5A6988",
+			"renderMode": "Rectangle",
+			"showName": true,
+			"tilesetId": null,
+			"tileRenderMode": "FitInside",
+			"tileRect": null,
+			"nineSliceBorders": [],
+			"maxCount": 0,
+			"limitScope": "PerLevel",
+			"limitBehavior": "MoveLastOne",
+			"pivotX": 0,
+			"pivotY": 0,
+			"fieldDefs": []
 		}
 	], "tilesets": [
 		{
@@ -16318,7 +16345,56 @@
 					"seed": 776837,
 					"overrideTilesetUid": null,
 					"gridTiles": [],
-					"entityInstances": []
+					"entityInstances": [
+						{
+							"__identifier": "Player",
+							"__grid": [4,105],
+							"__pivot": [0.5,1],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#E90D6D",
+							"iid": "1cc00200-c640-11ed-8182-f767485a0637",
+							"width": 24,
+							"height": 68,
+							"defUid": 121,
+							"px": [36,848],
+							"fieldInstances": [{ "__identifier": "powerups", "__value": [ "PowerupJump", "PowerupSword" ], "__type": "Array<LocalEnum.Power>", "__tile": null, "defUid": 295, "realEditorValues": [ {
+								"id": "V_String",
+								"params": ["PowerupJump"]
+							}, {
+								"id": "V_String",
+								"params": ["PowerupSword"]
+							} ] }]
+						},
+						{
+							"__identifier": "BreakableWall",
+							"__grid": [10,92],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#5A6988",
+							"iid": "4be3e100-c640-11ed-8182-35cabc295214",
+							"width": 16,
+							"height": 112,
+							"defUid": 296,
+							"px": [80,736],
+							"fieldInstances": []
+						},
+						{
+							"__identifier": "BreakableWall",
+							"__grid": [1,92],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#5A6988",
+							"iid": "4e3990d0-c640-11ed-8182-2396d496bae6",
+							"width": 72,
+							"height": 16,
+							"defUid": 296,
+							"px": [8,736],
+							"fieldInstances": []
+						}
+					]
 				},
 				{
 					"__identifier": "City",
@@ -19639,28 +19715,7 @@
 					"seed": 2622446,
 					"overrideTilesetUid": null,
 					"gridTiles": [],
-					"entityInstances": [
-						{
-							"__identifier": "Player",
-							"__grid": [40,29],
-							"__pivot": [0.5,1],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#F6757A",
-							"iid": "5f8c8fc0-c640-11ed-8182-a1b6a3c9873c",
-							"width": 24,
-							"height": 68,
-							"defUid": 121,
-							"px": [324,240],
-							"fieldInstances": [{ "__identifier": "powerups", "__value": [ "PowerupSlide", "PowerupJump" ], "__type": "Array<LocalEnum.Power>", "__tile": null, "defUid": 295, "realEditorValues": [ {
-								"id": "V_String",
-								"params": ["PowerupSlide"]
-							}, {
-								"id": "V_String",
-								"params": ["PowerupJump"]
-							} ] }]
-						}
-					]
+					"entityInstances": []
 				},
 				{
 					"__identifier": "City",
