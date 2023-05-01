@@ -109,18 +109,18 @@ parseEntities offset l = do
 
 
 buildEntities :: V2 Tile -> Map Text Object -> [LDtk.Entity] -> [Either Text (Text, Object)]
-buildEntities (tileToPos -> offset) refmap es =  do
+buildEntities (offset) refmap es =  do
     e <- es
     let iid = e ^. #iid
     pure $ fmap (iid, ) $
       buildEntity
         -- (traceFX "spawning: " id $ e ^. #__identifier)
         (e ^. #__identifier)
-        ((+ offset) . fmap (WorldPos . fromIntegral) $ pairToV2 $ e ^. #px)
+        ((+ tileToPos offset) . fmap (WorldPos . fromIntegral) $ pairToV2 $ e ^. #px)
         (mkPivotOriginRect
           (parseV2 fromIntegral e #width #height)
           (fmap realToFrac $ pairToV2 $ e ^. #__pivot))
-        (buildMap $ e ^. #fieldInstances)
+        (buildMap offset $ e ^. #fieldInstances)
         refmap
 
 
@@ -128,10 +128,16 @@ mkPivotOriginRect :: V2 Double -> V2 Double -> OriginRect Double
 mkPivotOriginRect sz off = OriginRect sz $ off * sz
 
 
-buildMap :: [LDtk.Field] -> M.Map Text LDtk.FieldValue
-buildMap =
+buildMap :: V2 Tile -> [LDtk.Field] -> M.Map Text LDtk.FieldValue
+buildMap (coerce -> V2 dx dy) =
   foldMap $ \x ->
-    M.singleton (x ^. #__identifier) (x ^. #__value)
+    M.singleton (x ^. #__identifier)
+      ((x ^. #__value)
+        -- TODO(sandy): EXTREME HACK -- see gridToWorld
+        & #_PointValue . #cx +~ dx * 2
+        & #_PointValue . #cy +~ dy * 2
+      )
+
 
 
 drawTileMap :: Map (V2 Tile) Renderable -> Renderable

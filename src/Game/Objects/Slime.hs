@@ -21,7 +21,10 @@ slime pos0 ore mgoal = pauseWhenOffscreen $ proc oi -> do
       { oo_events =
           dmg_oe
             & #oe_die <>~ on_die
-      , oo_render = drawOriginRect (V4 0 255 0 128) ore pos
+      , oo_render = mconcat
+          [ drawOriginRect (V4 0 255 0 128) ore pos
+          -- , maybe mempty (drawOriginRect (V4 255 255 255 255) (mkCenterdOriginRect 5)) goal
+          ]
       , oo_state =
         os & #os_hp %~ hp'
            & #os_pos .~ pos'
