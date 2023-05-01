@@ -25,13 +25,13 @@ global_puppets :: PuppetName -> WrappedSchema
 global_glyphs :: Char -> Texture
 
 Resources
-  { r_textures   = global_textures
-  , r_sounds     = global_sounds
-  , r_worlds     = global_worlds
-  , r_anims      = global_anims
-  , r_glyphs     = global_glyphs
-  , r_songs      = global_songs
-  , r_puppets = global_puppets
+  { r_textures = global_textures
+  , r_sounds   = global_sounds
+  , r_worlds   = global_worlds
+  , r_anims    = global_anims
+  , r_glyphs   = global_glyphs
+  , r_songs    = global_songs
+  , r_puppets  = global_puppets
   } = global_resources
 
 

@@ -64,13 +64,6 @@ data World = World
   }
   deriving Generic
 
-data CollisionPurpose
-  = CollisionWall
-  | CollisionGround
-  | CollisionCeiling
-  | CollisionCheckGround
-  deriving (Eq, Ord, Show, Enum, Bounded, Read, Generic)
-
 data Level = Level
   { l_bgcolor :: Color
   , l_tilebounds :: Rect Tile
@@ -158,7 +151,7 @@ data ObjectInEvents = ObjectInEvents
   { oie_hit :: Event [HitEvent]
   , oie_receive :: Event [(ObjectId, Message)]
   }
-  deriving stock Generic
+  deriving stock (Show, Generic)
 
 instance Semigroup ObjectInEvents where
   (ObjectInEvents ev ev') <> (ObjectInEvents ev2 ev3)

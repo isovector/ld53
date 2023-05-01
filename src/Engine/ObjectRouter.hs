@@ -186,7 +186,8 @@ route oid (oo_events -> ObjectEvents {..}) = mconcat $
 broadcast :: ObjectId -> Message -> ObjectMap ObjSF -> ObjectMap ObjSF
 broadcast from m om =
   om
-    & #objm_undeliveredMsgs <>~ foldMap (flip M.singleton [(from, m)]) (M.keys $ objm_map om)
+    & #objm_undeliveredMsgs
+        %~ M.unionWith (<>) (foldMap (flip M.singleton [(from, m)]) (M.keys $ objm_map om))
 
 sendMsg :: ObjectId -> ObjectId -> Message -> ObjectMap ObjSF -> ObjectMap ObjSF
 sendMsg from oid m = #objm_undeliveredMsgs . at oid . non mempty <>~ [(from, m)]
