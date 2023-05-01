@@ -5,13 +5,13 @@ module Game.Common
   ) where
 
 import           Data.Maybe (isNothing)
-import           Data.Monoid
 import qualified Data.Set as S
 import           Engine.Common
 import           Engine.Prelude
 import Control.Monad (guard)
 import Engine.Geometry (intersects)
 import Data.List (partition)
+import Game.Objects.Particle (particle)
 
 
 withLifetime :: Double -> Object -> Object
@@ -57,16 +57,6 @@ playerHitRectObj msg ore r pos =
           { os_collision = Just $ coerce ore
           }
       }
-
-getCollisionMap :: GlobalState -> CollisionPurpose -> V2 WorldPos -> Bool
-getCollisionMap gs = do
-  let levels = fmap l_hitmap $ gs_loaded_levels gs
-      layers = enumFromTo minBound maxBound
-
-  \purpose -> getAny
-            . foldMap (fmap Any .) (($) <$> levels <*> layers)  purpose
-            . posToTile
-
 
 charging :: Time -> SF ObjectInput Bool -> SF ObjectInput (Double, Event Double)
 charging dur while = proc oi -> do
@@ -128,6 +118,11 @@ holdFor dur = proc ev -> do
   returnA -< bool Nothing (Just e) isHeld
 
 
+onlyOncePer :: Time -> SF (Event a) (Event a)
+onlyOncePer dur = proc ev -> do
+  fmap rl_data $ rateLimit dur (arr fst) -< (ev, ())
+
+
 sendDamage :: Team -> [AnimBox] -> ObjectEvents
 sendDamage team boxes =
   let (_, hurts) = splitAnimBoxes boxes
@@ -153,4 +148,30 @@ mkEvent a = Event a
 
 splitAnimBoxes :: [AnimBox] -> ([AnimBox], [AnimBox])
 splitAnimBoxes = partition ((== Hitbox) . ab_type)
+
+
+damageHandler :: Team -> SF (ObjectInput, [AnimBox]) (ObjectEvents, Int -> Int)
+damageHandler team = proc (oi, boxes) -> do
+  let os = oi_state oi
+      OriginRect sz _ = fromMaybe (OriginRect 0 0) $ os_collision os
+
+  let dmg_in_ev = fmap (sum . fmap d_damage) $ checkDamage' team boxes $ oi_events oi
+  dmg_ev <- onlyOncePer 0.1 -< dmg_in_ev
+
+  let dmg = event 0 id dmg_ev
+  let hp' = os_hp os - dmg
+  die <- edge -< hp' <= 0
+
+  returnA -<
+    ( sendDamage team boxes
+          & #oe_spawn .~ (fmap (pure . dmgIndicator (os_pos os - V2 0 20 - (coerce sz & _x .~ 0))) dmg_ev)
+          & #oe_die .~ die
+    , event id subtract dmg_ev
+    )
+
+
+dmgIndicator :: V2 WorldPos -> Int -> Object
+dmgIndicator pos dmg =
+  particle pos (V2 0 (-100)) (arr $ drawText 5 (V3 255 0 0) $ '-' : show dmg) (V4 255 0 0 255) 0 3
+
 

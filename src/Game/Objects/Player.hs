@@ -4,6 +4,7 @@
 module Game.Objects.Player where
 
 import GHC.Generics
+import GHC.Generics
 import           Control.Lens ((*~))
 import qualified Data.Set as S
 import           Engine.Collision
@@ -131,8 +132,15 @@ pattern F = False
 
 player :: V2 WorldPos -> Object
 player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
-  start <- nowish () -< ()
-  let pos = event (os_pos $ oi_state oi) (const pos0) start
+  on_start <- nowish () -< ()
+  let pos = event (os_pos $ oi_state oi) (const pos0) on_start
+
+  let def =
+        (noObjectState pos)
+          { os_collision = Just playerOre
+          , os_hp = 5
+          }
+  let os = event (oi_state oi) (const def) on_start
 
   st_changed <- onChange -< st
 
@@ -247,22 +255,23 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
               (PStateRise,       _, _, _, _, _, _, F) -> PStateFall
               (p,                _, _, _, _, _, _, _) -> p
 
+  (dmg_oe, hp') <- damageHandler PlayerTeam -< (oi, boxes)
+
   -- do hits
   let (_hits, hurts) = splitAnimBoxes boxes
 
   returnA -< (, (vel', st')) $
     ObjectOutput
         { oo_events =
-            sendDamage PlayerTeam hurts
-              & #oe_focus .~ mconcat
-                  [ start
-                  ]
+            dmg_oe
+              & #oe_focus .~ on_start
         , oo_state =
-            oi_state oi
+            os
               & #os_pos .~ pos'
               & #os_collision .~ Just ore
               & #os_tags %~ S.insert IsPlayer
               & #os_facing .~ facing'
+              & #os_hp %~ hp'
         , oo_render = mconcat
             [ drawOriginRect (V4 255 255 255 92) ore pos
             , drawn

@@ -1,18 +1,25 @@
 module Game.Objects.Particle where
 
-import Engine.Collision (move)
 import Data.Hashable (hash)
-import Game.Common
+import Data.Maybe (fromMaybe)
+import Engine.Collision (move)
+import Engine.Common
+import Engine.Drawing
+import Engine.Types
+import Engine.Utils (nowish, noObjectState, mkCenterdOriginRect)
+import FRP.Yampa hiding ((*^))
+import SDL (quadrance)
+
 
 particle
     :: V2 WorldPos
     -> V2 Double
-    -> OriginRect Double
+    -> SF (V2 WorldPos) Renderable
     -> Color
     -> V2 Double
     -> Time
     -> Object
-particle pos0 vel0 ore col grav life = loopPre vel0 $ proc (oi, vel) -> do
+particle pos0 vel0 sf col grav life = loopPre vel0 $ proc (oi, vel) -> do
   start <- nowish () -< ()
   die <- after life () -< ()
 
@@ -23,9 +30,11 @@ particle pos0 vel0 ore col grav life = loopPre vel0 $ proc (oi, vel) -> do
   let pos' = pos + coerce (vel ^* dt)
       vel' = vel + grav ^* dt
 
+  r <- sf -< pos'
+
   returnA -< (, vel') $ ObjectOutput
     { oo_events = mempty { oe_die = die }
-    , oo_render = drawOriginRect col (coerce ore) pos'
+    , oo_render = r
     , oo_state = (noObjectState pos')
     }
 
@@ -90,55 +99,18 @@ gore pos = do
     $ physicalParticle (pos - V2 0 8) vel (mkCenterdOriginRect sz) (V4 r 0 0 trans) (V2 0 150)
     $ fromIntegral dur
 
-teleportColor :: Color
-teleportColor = V4 0 192 255 255
-
-teleportIn :: Time -> Double -> V2 WorldPos -> [Object]
-teleportIn dur dist pos = do
-  let n = 12
-  i <- [id @Int 0 .. n]
-  let j = fromIntegral i * (2 * pi / fromIntegral n)
-      vel = V2 (cos j) (sin j) ^* coerce dist
-  pure
-    $ particle (pos + vel ^* coerce dur) (negate $ coerce vel) (mkCenterdOriginRect 2) teleportColor 0
-    $ dur
-
-teleportOut :: Time -> Double -> V2 WorldPos -> [Object]
-teleportOut dur dist pos = do
-  let n = 12
-  i <- [id @Int 0 .. n]
-  let j = fromIntegral i * (2 * pi / fromIntegral n)
-      vel = V2 (cos j) (sin j) ^* coerce dist
-  pure
-    $ particle pos (negate vel) (mkCenterdOriginRect 2) teleportColor 0
-    $ dur
-
-
-teleportDie :: V2 WorldPos -> [Object]
-teleportDie pos = do
-  let n = 6
-  i <- [id @Int 0 .. n]
-  let seed = hash pos * hash i
-      j = fromIntegral i * (2 * pi / fromIntegral n)
-      speed = 25 + mod (seed * 17) 75
-      dur = 4 + mod (seed * 9) 6
-      vel = V2 (cos j) (sin j) * fromIntegral speed
-  pure
-    $ particle pos vel (mkCenterdOriginRect 2) (V4 192 0 192 200) (V2 0 30)
-    $ fromIntegral dur
-
-firework :: V2 WorldPos -> [Object]
-firework pos = do
-  let n = 128
-  i <- [id @Int 0 .. n]
-  let seed = hash pos * hash i
-      j = fromIntegral i * (2 * pi / fromIntegral n)
-      speed = 25 + mod (seed * 17) 75
-      dur = 4 + mod (seed * 9) 6
-      vel = V2 (cos j) (sin j) * fromIntegral speed
-      r = fromIntegral $ 128 * (mod (seed * 31) 3) - 1
-      g = fromIntegral $ 128 * (mod (seed * 11) 3) - 1
-      b = fromIntegral $ 128 * (mod (seed * 13) 3) - 1
-  pure
-    $ particle pos vel (mkCenterdOriginRect 2) (V4 r g b 192) (V2 0 30)
-    $ fromIntegral dur
+-- firework :: V2 WorldPos -> [Object]
+-- firework pos = do
+--   let n = 128
+--   i <- [id @Int 0 .. n]
+--   let seed = hash pos * hash i
+--       j = fromIntegral i * (2 * pi / fromIntegral n)
+--       speed = 25 + mod (seed * 17) 75
+--       dur = 4 + mod (seed * 9) 6
+--       vel = V2 (cos j) (sin j) * fromIntegral speed
+--       r = fromIntegral $ 128 * (mod (seed * 31) 3) - 1
+--       g = fromIntegral $ 128 * (mod (seed * 11) 3) - 1
+--       b = fromIntegral $ 128 * (mod (seed * 13) 3) - 1
+--   pure
+--     $ particle pos vel (mkCenterdOriginRect 2) (V4 r g b 192) (V2 0 30)
+--     $ fromIntegral dur

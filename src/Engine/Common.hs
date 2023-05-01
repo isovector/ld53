@@ -1,6 +1,7 @@
 module Engine.Common where
 
 import           Control.Lens (Lens')
+import           Data.Monoid
 import qualified Data.Set as S
 import           Engine.Prelude
 
@@ -133,4 +134,14 @@ staticObject pos tags r = constant $
 
 respondWith :: Message -> SF (Event [ObjectId]) ObjectEvents
 respondWith msg = response #oe_send_message $ fmap (, msg)
+
+
+getCollisionMap :: GlobalState -> CollisionPurpose -> V2 WorldPos -> Bool
+getCollisionMap gs = do
+  let levels = fmap l_hitmap $ gs_loaded_levels gs
+      layers = enumFromTo minBound maxBound
+
+  \purpose -> getAny
+            . foldMap (fmap Any .) (($) <$> levels <*> layers)  purpose
+            . posToTile
 

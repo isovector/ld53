@@ -148,7 +148,6 @@ data Team = PlayerTeam | OtherTeam
 
 data ParticleType
   = Gore
-  | Firework
   deriving stock (Eq, Ord, Show, Read, Generic, Enum, Bounded)
 
 data TileData
