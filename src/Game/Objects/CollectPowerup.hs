@@ -21,14 +21,14 @@ collectPowerup pos pt
 
 drawPowerup :: PowerupType -> OriginRect Double -> V2 WorldPos -> Renderable
 drawPowerup pt ore pos = mconcat
-  [ drawGameTextureOriginRect (AuraTexture) (mkCenterdOriginRect $ orect_size ore * 3) pos 0 $ pure False
-  , drawGameTextureOriginRect (powerupRenderable pt) ore pos 0 $ pure False
+  [ --drawGameTextureOriginRect (AuraTexture) (mkCenterdOriginRect $ orect_size ore * 3) pos 0 $ pure False
+  drawGameTextureOriginRect (powerupRenderable pt) (mkCenterdOriginRect $ orect_size ore * 3) pos 0 $ pure False
   ]
 
 
 powerupRenderable :: PowerupType -> GameTexture
-powerupRenderable PowerupJump = ChickenTexture
-powerupRenderable PowerupDoubleJump = ChickenTexture
-powerupRenderable PowerupSlide = ChickenTexture
-powerupRenderable PowerupSword = ChickenTexture
+powerupRenderable PowerupJump = JumpMedalTexture
+powerupRenderable PowerupDoubleJump = DoubleJumpMedalTexture
+powerupRenderable PowerupSlide = SlideMedalTexture
+powerupRenderable PowerupSword = SwordMedalTexture
 
