@@ -175,7 +175,9 @@ damageHandler team = proc (oi, ore, boxes) -> do
 
   returnA -<
     ( sendDamage team pos boxes
-          & #oe_spawn .~ (fmap (pure . dmgIndicator (pos - V2 0 20 - (coerce sz & _x .~ 0))) dmg_ev)
+          & #oe_spawn .~ fmap
+              (pure . dmgIndicator (pos - V2 0 20 - (coerce sz & _x .~ 0)))
+              dmg_ev
     , dir
     , die
     , event id subtract dmg_ev
@@ -217,5 +219,12 @@ pauseWhenOffscreen obj = proc oi -> do
         let should_run = t < start_time || rectContains (fi_active_level $ frameInfo oi) pos
         returnA -< not should_run
     ) obj -< oi
+
+spawnTime :: SF a Time
+spawnTime = proc _ -> do
+  on_start <- nowish () -< ()
+  t <- time -< ()
+  start <- hold 0 -< t <$ on_start
+  returnA -< t - start
 
 
