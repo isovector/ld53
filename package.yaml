@@ -42,6 +42,7 @@ dependencies:
 - generic-deriving
 - bones
 - random
+- linear
 
 custom-setup:
   dependencies:

@@ -7,6 +7,9 @@ import Engine.Types
 nowish :: a -> SF x (Engine.Types.Event a)
 nowish a = after 0.001 a
 
+lessNowish :: a -> SF x (Engine.Types.Event a)
+lessNowish a = after 0.005 a
+
 posToTile :: V2 WorldPos -> V2 Tile
 posToTile = fmap $ Tile . floor . (/ tileSize) . getWorldPos
 

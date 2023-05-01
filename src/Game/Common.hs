@@ -2,14 +2,16 @@ module Game.Common
   ( module Engine.Prelude
   , module Game.Common
   , module Engine.Common
+  , hash
   ) where
 
 import           Control.Monad (guard)
+import           Data.Hashable (hash)
 import           Data.List (partition)
 import           Data.Maybe (isNothing)
 import qualified Data.Set as S
 import           Engine.Common
-import           Engine.Geometry (intersects)
+import           Engine.Geometry (intersects, rectContains)
 import           Engine.Prelude
 import           Game.Objects.Particle (particle)
 
@@ -123,48 +125,60 @@ onlyOncePer dur = proc ev -> do
   fmap rl_data $ rateLimit dur (arr fst) -< (ev, ())
 
 
-sendDamage :: Team -> [AnimBox] -> ObjectEvents
-sendDamage team boxes =
+sendDamage :: Team -> V2 WorldPos -> [AnimBox] -> ObjectEvents
+sendDamage team src boxes =
   let (_, hurts) = splitAnimBoxes boxes
-      send t (ab_rect -> Rect pos sz) = DamageSource (Damage t 1) (coerce pos) sz
-   in mempty & #oe_broadcast_message .~ Event (fmap (send team) hurts)
+      send t (ab_rect -> Rect pos sz) = SendDamageSource $ DamageSource src (Damage t 1) (coerce pos) sz
+   in mempty & #oe_game_message .~ Event (fmap (send team) hurts)
 
-checkDamage :: Team -> [Rect Double] -> ObjectInEvents -> Event [Damage]
-checkDamage t hits evs = mkEvent $ do
-  (_, DamageSource d pos sz) <- fromEvent mempty $ oie_receive evs
+
+checkDamage :: Team -> V2 WorldPos -> [Rect Double] -> ObjectInput -> Event (V2 Double, [Damage])
+checkDamage t me hits oi = coerce $ fmap sequence $ mkEvent $ do
+  DamageSource src d pos sz <- gs_damage_set $ gameState oi
   guard $ t /= d_team d
   guard $ any (\(Rect p s) -> intersects (Rectangle (coerce pos) sz) $ Rectangle (P p) s) hits
-  pure d
+  pure (normalize $ me - src, d)
 
-checkDamage' :: Team -> [AnimBox] -> ObjectInEvents -> Event [Damage]
-checkDamage' t boxes =
+
+checkDamage' :: Team -> V2 WorldPos -> [AnimBox] -> ObjectInput -> Event (V2 Double, [Damage])
+checkDamage' t me boxes =
   let (hits, _) = splitAnimBoxes boxes
-   in checkDamage t $ fmap ab_rect hits
+   in checkDamage t me $ fmap ab_rect hits
 
 
 mkEvent :: [a] -> Event [a]
 mkEvent [] = NoEvent
 mkEvent a = Event a
 
+
 splitAnimBoxes :: [AnimBox] -> ([AnimBox], [AnimBox])
 splitAnimBoxes = partition ((== Hitbox) . ab_type)
 
 
-damageHandler :: Team -> SF (ObjectInput, OriginRect Double, [AnimBox]) (ObjectEvents, Event (), Int -> Int)
+damageHandler
+      :: Team
+      -> SF (ObjectInput, OriginRect Double, [AnimBox])
+            (ObjectEvents, Maybe (V2 Double), Event (), Int -> Int)
 damageHandler team = proc (oi, ore, boxes) -> do
   let os = oi_state oi
       OriginRect sz _ = ore
+      pos = os_pos os
 
-  let dmg_in_ev = fmap (sum . fmap d_damage) $ checkDamage' team boxes $ oi_events oi
-  dmg_ev <- onlyOncePer 0.1 -< dmg_in_ev
+  let dmg_in_ev = fmap (second $ sum . fmap d_damage) $ checkDamage' team pos boxes oi
+  both <- onlyOncePer 0.1 -< dmg_in_ev
+  let dmg_ev = fmap snd both
+      dir = eventToMaybe $ fmap (normalize . fst) both
 
   let dmg = event 0 id dmg_ev
   let hp' = os_hp os - dmg
   die <- edge -< hp' <= 0
 
   returnA -<
-    ( sendDamage team boxes
-          & #oe_spawn .~ (fmap (pure . dmgIndicator (os_pos os - V2 0 20 - (coerce sz & _x .~ 0))) dmg_ev)
+    ( sendDamage team pos boxes
+          & #oe_spawn .~ fmap
+              (pure . dmgIndicator (pos - V2 0 20 - (coerce sz & _x .~ 0)))
+              dmg_ev
+    , dir
     , die
     , event id subtract dmg_ev
     )
@@ -172,7 +186,7 @@ damageHandler team = proc (oi, ore, boxes) -> do
 
 dmgIndicator :: V2 WorldPos -> Int -> Object
 dmgIndicator pos dmg =
-  particle pos (V2 0 (-100)) (arr $ drawText 5 (V3 255 0 0) $ '-' : show dmg) 0 3
+  particle pos (V2 0 (-30)) (arr $ drawText 6 (V3 255 0 0) $ '-' : show dmg) 0 2
 
 
 mkHurtHitBox :: V2 WorldPos -> OriginRect Double -> [AnimBox]
@@ -193,5 +207,24 @@ mkHurtBox pos ore =
   let rect = originRectToRect2 ore $ coerce pos
    in [ AnimBox Hurtbox rect
       ]
+
+pauseWhenOffscreen :: Object -> Object
+pauseWhenOffscreen obj = proc oi -> do
+  pause (ObjectOutput mempty mempty $ noObjectState 0)
+    ( proc oi -> do
+        t <- time -< ()
+        on_start <- lessNowish () -< ()
+        start_time <- hold 100 -< t <$ on_start
+        let pos = os_pos $ oi_state oi
+        let should_run = t < start_time || rectContains (fi_active_level $ frameInfo oi) pos
+        returnA -< not should_run
+    ) obj -< oi
+
+spawnTime :: SF a Time
+spawnTime = proc _ -> do
+  on_start <- nowish () -< ()
+  t <- time -< ()
+  start <- hold 0 -< t <$ on_start
+  returnA -< t - start
 
 

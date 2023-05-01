@@ -1,18 +1,18 @@
 {-# LANGUAGE DeriveAnyClass #-}
 module Game.Types where
 
+import Data.Map (Map)
+import Data.Set (Set)
 import Engine.CoreTypes
 import GHC.Generics (Generic)
 import Generics.Deriving.Enum
-import Data.Text (Text)
-import Data.Set (Set)
-import Data.Map (Map)
 
 
 data GameState = GameState
   { gs_inventory :: Set PowerupType
   , gs_dyn_col :: Map ObjectId (Set CollisionPurpose, Rectangle WorldPos)
   , gs_player_loc :: V2 WorldPos
+  , gs_damage_set :: [DamageSource]
   }
   deriving stock Generic
 
@@ -29,6 +29,14 @@ data GameMessage
   | RegisterDynCollision ObjectId (Set CollisionPurpose) (Rectangle WorldPos)
   | UnregisterDynCollision ObjectId
   | SetPlayerLocation (V2 WorldPos)
+  | SendDamageSource DamageSource
+  deriving stock (Eq, Ord, Show, Read, Generic)
+
+data DamageSource =
+  DamageSource
+    (V2 WorldPos)  -- origin
+    Damage
+    (V2 WorldPos) (V2 Double)  -- rect
   deriving stock (Eq, Ord, Show, Read, Generic)
 
 ------------------------------------------------------------------------------
@@ -150,7 +158,6 @@ data Message
   = SetCheckpoint (V2 WorldPos)
   | CurrentCheckpoint ObjectId
   | Die
-  | DamageSource Damage (V2 WorldPos) (V2 Double)
   deriving stock (Eq, Ord, Show, Read, Generic)
 
 data Damage = Damage
@@ -195,6 +202,7 @@ data PuppetAnim
   | PlayerSlidePrep
   | PlayerSlide
   | PlayerAirSlide
+  | PlayerKnockback
   deriving stock (Eq, Ord, Show, Read, Generic, Enum, Bounded)
 
 data BoxType

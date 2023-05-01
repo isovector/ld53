@@ -48,7 +48,8 @@ buildEntity "Player" pos _ props _ =
 buildEntity "Antagonist" pos _ _ _ = pure $ antagonist pos
 buildEntity "Thrower" pos ore props _ =
   thrower pos ore
-    <$> optional (asPos "Thrower" "path" props)
+    <$> asEnum "Thrower" "projectile" props
+    <*> optional (asPos "Thrower" "path" props)
     <*> asDouble "Thrower" "cooldown" props
 buildEntity "Checkpoint" pos _ _ _ = pure $ checkpoint pos
 buildEntity "TutorialRegion" pos ore props _ =

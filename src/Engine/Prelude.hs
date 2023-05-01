@@ -12,9 +12,10 @@ import Data.Text as X (Text)
 import Data.Word as X
 import Engine.CoreTypes as X
 import Engine.Drawing as X
-import Engine.FRP as X hiding (norm)
+import Engine.FRP as X hiding (norm, normalize)
 import Engine.Types as X
 import Engine.Utils as X
+import Linear.Metric as X (normalize)
 import SDL as X (quadrance, qd, norm, _xy, _xyz)
 
 

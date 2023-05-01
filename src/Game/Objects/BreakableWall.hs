@@ -1,21 +1,19 @@
 module Game.Objects.BreakableWall where
 
-import Game.Common
-import Game.Objects.Player (playerOre)
-import Data.Hashable (hash)
 import qualified Data.Set as S
+import           Game.Common
 
 allPurposes :: Set CollisionPurpose
 allPurposes = S.fromList [minBound .. maxBound]
 
 breakableWall :: V2 WorldPos -> OriginRect Double -> Object
-breakableWall pos0 ore = proc oi -> do
+breakableWall pos0 ore = pauseWhenOffscreen $ proc oi -> do
   on_start <- nowish () -< ()
   let def = (noObjectState pos0) { os_hp = 5, os_collision = Just ore }
   let os = event (oi_state oi) (const def) on_start
       pos = os_pos os
 
-  (dmg_oe, on_die, hp') <- damageHandler OtherTeam -< (oi, ore, mkHitBox pos ore)
+  (dmg_oe, _, on_die, hp') <- damageHandler OtherTeam -< (oi, ore, mkHitBox pos ore)
 
   let obj_id = oi_self oi
 

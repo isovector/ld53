@@ -14,7 +14,7 @@ sandbag pos ore = proc oi -> do
           }
   let os = event (oi_state oi) (const def) on_start
 
-  let dmg_ev = checkDamage OtherTeam [Rect (coerce pos - off) sz] $ oi_events oi
+  let dmg_ev = checkDamage OtherTeam pos [Rect (coerce pos - off) sz] oi
 --   hits <- oi_events oi
 --   case find (any $ S.member otag . os_tags) hits of
 --     Just x0 -> pure $ fst x0

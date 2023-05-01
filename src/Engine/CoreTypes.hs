@@ -7,6 +7,7 @@ import SDL (V2(..), Rectangle(..), Point(..))
 import Data.Hashable (Hashable)
 import Data.Text (Text)
 import Control.DeepSeq (NFData)
+import SDL.Vect
 
 
 newtype Tile = Tile
@@ -30,7 +31,14 @@ newtype ScreenPos = ScreenPos
 newtype WorldPos = WorldPos
   { getWorldPos :: Double
   }
-  deriving newtype (Eq, Ord, Show, Read, Enum, Num, Fractional, Floating, Real, RealFrac, Hashable, NFData)
+  deriving newtype (Eq, Ord, Show, Read, Enum, Num, Fractional, Floating, Real, RealFrac, Hashable, NFData, Epsilon)
+
+instance Semigroup WorldPos where
+  (<>) = (+)
+
+instance Monoid WorldPos where
+  mempty = 0
+
 
 
 data ObjectId

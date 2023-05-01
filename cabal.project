@@ -15,6 +15,11 @@ source-repository-package
     tag: 88e497bb8eb20a1ce8746b0be388ab084d4f1537
     --sha256: sha256-rL0KsIKGFDvMJ/0dbzDq2SXiURA+XFD9vGo+caW4K0w=
 
+source-repository-package
+    type: git
+    location: https://github.com/isovector/bones.git
+    tag: f4e881bff268f631447814388e8129e0329813db
+    --sha256: sha256-6n5lEYBstrl15QyzlkZ1H6PtI0mjHwxKyq9JH045Yyo=
 
 allow-older: *
 allow-newer: *

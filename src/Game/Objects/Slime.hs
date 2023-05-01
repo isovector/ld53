@@ -2,11 +2,10 @@ module Game.Objects.Slime where
 
 import Game.Common
 import System.Random (mkStdGen)
-import Data.Hashable (hash)
 
 
 slime :: V2 WorldPos -> OriginRect Double -> Maybe (V2 WorldPos) -> Object
-slime pos0 ore mgoal = proc (oi) -> do
+slime pos0 ore mgoal = pauseWhenOffscreen $ proc oi -> do
   on_start <- nowish () -< ()
   let def = (noObjectState pos0) { os_hp = 5 }
   let os = event (oi_state oi) (const def) on_start
@@ -15,7 +14,7 @@ slime pos0 ore mgoal = proc (oi) -> do
   step <- occasionally (mkStdGen $ hash pos0) 0.1 () -< ()
   pos' <- maybe (pure pos0) (paceBetween 2 pos0 . useYOfFirst pos0) mgoal -< (pos, step)
 
-  (dmg_oe, on_die, hp') <- damageHandler OtherTeam -< (oi, ore, mkHurtHitBox pos ore)
+  (dmg_oe, _, on_die, hp') <- damageHandler OtherTeam -< (oi, ore, mkHurtHitBox pos ore)
 
   returnA -<
     ObjectOutput

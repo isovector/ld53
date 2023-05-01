@@ -12,11 +12,11 @@ import           Control.Lens.Lens
 import           Data.Foldable (find)
 import           Data.Map (Map)
 import qualified Data.Map as M
-import           Data.Maybe (maybeToList)
+import           Data.Maybe (maybeToList, fromMaybe)
 import           Data.Monoid
 import qualified Data.Set as S
 import           Data.Text (Text)
-import           Engine.Camera (camera, getCameraFocus)
+import           Engine.Camera (camera, getCameraFocus, rectToRect)
 import           Engine.Drawing (playSound)
 import           Engine.FRP
 import           Engine.Geometry (intersects, rectContains)
@@ -30,14 +30,31 @@ renderObjects
     -> V2 WorldPos
     -> ObjectMap ObjSF
     -> SF RawFrameInfo (Camera, ObjectMap ObjectOutput, Renderable)
-renderObjects gs0 cam0 objs0 = proc fi -> do
+renderObjects gs0 cam0 objs0 = loopPre (0, []) $ proc (fi, (last_focus, last_levels)) -> do
   objs <- router gs0 objs0 -< fi
-  let focuson = M.lookup (objm_camera_focus objs) $ objm_map objs
-  focus <- camera cam0 -< ( fi & #fi_global .~ objm_globalState objs
-                          , maybe 0 (getCameraFocus . oo_state) focuson
-                          )
+            & #fi_active_level .~ (
+                fromMaybe
+                  (Rectangle 0 0)
+                  $ find (flip rectContains last_focus)
+                  $ fmap ( rectToRect
+                         . fmap (fromIntegral . getPixel)
+                         . l_bounds
+                         )
+                  $ last_levels
+                                  )
+  focuson
+    <- hold (V2 0 0)
+    -< maybe NoEvent (Event . getCameraFocus . oo_state)
+          $ M.lookup (objm_camera_focus objs)
+          $ objm_map objs
+  let gs = objm_globalState objs
+  focus
+    <- camera cam0
+    -< ( fi & #fi_global .~ gs
+        , focuson
+        )
   let dat = toList $ objm_map objs
-  returnA -<
+  returnA -< (, (focuson, gs_loaded_levels gs)) $
     ( focus
     , objs
     , flip foldMap dat $ mconcat
@@ -88,7 +105,8 @@ router' objs0 =
      >>> notYet
     )
     -- NOTE(sandy): this only gets called on a new event!!!
-    (\new f -> router' $ appEndo f $ new & #objm_undeliveredMsgs .~ mempty)
+    (\new f -> router' $ appEndo f $ new & #objm_undeliveredMsgs .~ mempty
+                                         & #objm_globalState . #gs_gameState . #gs_damage_set .~ [])
 
 
 routeHits :: RawFrameInfo -> ObjectMap ObjectOutput -> ObjectMap sf -> ObjectMap (ObjectInput, sf)

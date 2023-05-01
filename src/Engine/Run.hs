@@ -57,7 +57,7 @@ main = ALUT.withProgNameAndArgs ALUT.runALUT $ \_ _ -> do
   tRef <- newIORef seconds
 
   reactimate
-    (pure $ FrameInfo defaultControls 0.016 ())
+    (pure $ FrameInfo defaultControls 0.016 () $ Rectangle 0 0)
     (input window tRef $ listToMaybe jss)
     (output rs)
     -- game
@@ -82,7 +82,7 @@ input win tRef mjs _ = do
   keys <- getKeyboardState
   js <- for mjs parseController
 
-  pure (dt, Just $ FrameInfo (parseControls keys <> fold js) dt ())
+  pure (dt, Just $ FrameInfo (parseControls keys <> fold js) dt () $ Rectangle 0 0)
 
 
 pattern Keypress :: Scancode -> EventPayload
