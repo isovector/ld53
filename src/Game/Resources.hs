@@ -120,6 +120,10 @@ instance IsResource GameTexture WrappedTexture where
   resourceName ActiveCheckpointTexture = "checkpoint-active"
   resourceName EggTexture = "coin"
   resourceName ArrowTexture = "green_arrow"
+  resourceName JumpMedalTexture = "jump_medallion"
+  resourceName DoubleJumpMedalTexture = "double_jump_medallion"
+  resourceName SlideMedalTexture = "slide_medallion"
+  resourceName SwordMedalTexture = "sword_medallion"
 
 instance IsResource PuppetName WrappedSchema where
   load _ e fp = do

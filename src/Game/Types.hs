@@ -64,6 +64,10 @@ data GameTexture
     | ActiveCheckpointTexture
     | EggTexture
     | ArrowTexture
+    | JumpMedalTexture
+    | DoubleJumpMedalTexture
+    | SlideMedalTexture
+    | SwordMedalTexture
   deriving (Eq, Ord, Show, Read, Enum, Bounded)
 
 
