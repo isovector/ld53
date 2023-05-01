@@ -172,16 +172,17 @@ mkPuppet scale = proc (dsd, pos) -> do
 
 
 getBox :: V2 Bool -> Double -> V2 WorldPos -> ResultBone -> Maybe AnimBox
-getBox (fmap (bool id negate) -> flips) sz pos rb = do
+getBox flips@(V2 fx _) sz pos rb = do
+  let theflips = fmap (bool id negate) flips
   oi <- _rbObjInfo rb
   guard $ _objInfoType oi == SpriterBox
   let dpos = sz *^ V2 (_rbX rb) (_rbY rb)
-      orig_sz = V2 (_objInfoWidth oi) (_objInfoHeight oi)
+      orig_sz = sz *^ V2 (_objInfoWidth oi) (_objInfoHeight oi) * scale
       scale = V2 (_rbScaleX rb) (_rbScaleY rb)
   box <- parseBox $ T.unpack $ _objInfoName oi
   pure $ AnimBox box
-       $ Rect (coerce pos + (flips <*> (dpos & _y %~ negate)))
-       $ sz *^ (orig_sz * scale)
+       $ Rect (coerce pos + (theflips <*> (dpos & _y %~ negate)) - bool 0 (orig_sz & _y .~ 0) fx)
+       $ orig_sz
 
 
 drawResultBone
