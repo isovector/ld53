@@ -35,6 +35,7 @@ frameCounts :: Anim -> Int
 frameCounts (Idle _)   = 1
 frameCounts (NoAnim _) = 1
 frameCounts (Run _)    = 4
+frameCounts SlimeIdle = 4
 
 frameSound :: Anim -> Int -> Maybe Sound
 frameSound _ _ = Nothing
@@ -65,6 +66,7 @@ animName :: Anim -> FilePath
 animName (Idle s) = charName s </> "idle"
 animName (NoAnim s) = charName s </> "no_anim"
 animName (Run s) = charName s </> "run"
+animName (SlimeIdle) = "slime" </> "slime"
 
 
 charName :: Sprite -> FilePath

@@ -151,6 +151,7 @@ data Anim
   = Idle Sprite
   | NoAnim Sprite
   | Run Sprite
+  | SlimeIdle
   deriving stock (Eq, Ord, Show, Read, Generic)
   deriving anyclass (GEnum)
 

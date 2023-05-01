@@ -70,8 +70,8 @@ buildEntity "Elevator" pos ore _ _ =
 buildEntity "Sandbag" pos ore _ _ =
   sandbag pos
     <$> pure ore
-buildEntity "Slime" pos ore props _ =
-  slime pos ore
+buildEntity "Slime" pos _ props _ =
+  slime pos
     <$> optional (asPos "Slime" "path" props)
 buildEntity "Text" pos _ props _ =
   textBillboard
