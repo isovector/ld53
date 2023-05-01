@@ -36,6 +36,8 @@ frameCounts (Idle _)   = 1
 frameCounts (NoAnim _) = 1
 frameCounts (Run _)    = 4
 frameCounts SlimeIdle = 4
+frameCounts DraculaActive = 1
+frameCounts DraculaIdle = 1
 
 frameSound :: Anim -> Int -> Maybe Sound
 frameSound _ _ = Nothing
@@ -66,7 +68,9 @@ animName :: Anim -> FilePath
 animName (Idle s) = charName s </> "idle"
 animName (NoAnim s) = charName s </> "no_anim"
 animName (Run s) = charName s </> "run"
-animName (SlimeIdle) = "slime" </> "slime"
+animName SlimeIdle = "slime" </> "slime"
+animName DraculaIdle = "dracula" </> "idle"
+animName DraculaActive = "dracula" </> "active"
 
 
 charName :: Sprite -> FilePath
@@ -102,6 +106,7 @@ instance IsResource GameTexture WrappedTexture where
   resourceFolder = "textures"
   resourceExt    = "png"
   resourceName NintendoLogo = "nintendo"
+  resourceName LightningTexture = "lightning"
   resourceName ChickenTexture = "chicken"
   resourceName Parallax0 = "parallax0"
   resourceName Parallax1 = "parallax1"
@@ -213,5 +218,6 @@ getPuppetAnim PlayerDuckStab    = mkAnim ManPuppet    "DuckStab"        1000 Fal
 getPuppetAnim PlayerSlidePrep   = mkAnim ManPuppet    "SlidePrep"       1000 False
 getPuppetAnim PlayerSlide       = mkAnim ManPuppet    "Slide"           1000 False
 getPuppetAnim PlayerAirSlide    = mkAnim ManPuppet    "Slide"           1000 False
-getPuppetAnim PlayerKnockback   = mkAnim ManPuppet    "Knockback"       1600  False
+getPuppetAnim PlayerKnockback   = mkAnim ManPuppet    "Knockback"       1600 False
+getPuppetAnim PlayerDie         = mkAnim ManPuppet    "Death"           220  False
 

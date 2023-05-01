@@ -50,6 +50,7 @@ data DamageSource =
 -- | Textures used by the game.
 data GameTexture
     = NintendoLogo
+    | LightningTexture
     | ChickenTexture
     | Parallax0
     | Parallax1
@@ -163,6 +164,8 @@ data Anim
   | NoAnim Sprite
   | Run Sprite
   | SlimeIdle
+  | DraculaIdle
+  | DraculaActive
   deriving stock (Eq, Ord, Show, Read, Generic)
   deriving anyclass (GEnum)
 
@@ -216,11 +219,11 @@ data PuppetAnim
   | PlayerSlide
   | PlayerAirSlide
   | PlayerKnockback
+  | PlayerDie
   deriving stock (Eq, Ord, Show, Read, Generic, Enum, Bounded)
 
 data BoxType
   = Hitbox
   | Hurtbox
   deriving stock (Eq, Ord, Show, Read, Generic)
-
 

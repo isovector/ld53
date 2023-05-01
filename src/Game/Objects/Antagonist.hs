@@ -13,7 +13,7 @@ antagonist pos = pauseWhenOffscreen $ loopPre PlayerIdleSword $ proc (oi, anim) 
   on_start <- nowish () -< ()
   let def = (noObjectState pos) { os_hp = 5 }
   let os = event (oi_state oi) (const def) on_start
-      ore = playerOre & #orect_size *~ scale
+      ore = mkGroundOriginRect $ orect_size playerOre * scale
 
   let V2 player_x _ = gs_player_loc $ gameState oi
   let flipped = player_x < view _x pos

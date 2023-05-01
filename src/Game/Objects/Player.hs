@@ -199,7 +199,7 @@ player pos0 starting_pus = loopPre (0, PStateIdle, Standing) $ proc (oi, (vel, s
   let def =
         (noObjectState pos)
           { os_collision = Just playerOre
-          , os_hp = 1
+          , os_hp = 50
           }
   let os = event (oi_state oi) (const def) on_start
       hp = os_hp os
@@ -296,6 +296,7 @@ player pos0 starting_pus = loopPre (0, PStateIdle, Standing) $ proc (oi, (vel, s
     <- mkPuppet 1
     -< ( shr_dsd shr & #dsd_flips . _x .~ not facing'
                      & #dsd_remap .~ remapSword has_sword
+                     & #dsd_anim %~ bool (const PlayerDie) id (hp > 0)
        , pos
        )
 
@@ -383,7 +384,7 @@ player pos0 starting_pus = loopPre (0, PStateIdle, Standing) $ proc (oi, (vel, s
   let hp'' = change_hp hp'
 
   dead <- hold False -< True <$ on_die
-  end_game <- delay 2 NoEvent -< on_die
+  end_game <- delay 4 NoEvent -< on_die
 
   returnA -< (, (vel'', st', shr_setduck shr stand)) $
     ObjectOutput
@@ -402,14 +403,14 @@ player pos0 starting_pus = loopPre (0, PStateIdle, Standing) $ proc (oi, (vel, s
               & #os_tags %~ S.insert IsPlayer
               & #os_facing .~ facing'
               & #os_hp .~ hp''
-        , oo_render = bool id (const mempty) dead $ mconcat
-            [ drawOriginRect (V4 255 255 255 92) ore pos
-            , drawn
+        , oo_render = mconcat
+            [ -- drawOriginRect (V4 255 255 255 92) ore pos
+              drawn
             -- , flip foldMap hits $ \(ab_rect -> Rect abpos absz) ->
             --     drawOriginRect (V4 0 255 0 92) (OriginRect absz 0) $ coerce abpos
-            , flip foldMap hurts $ \(ab_rect -> Rect abpos absz) ->
-                drawOriginRect (V4 255 0 0 92) (OriginRect absz 0) $ coerce abpos
-            , drawText 8 (V3 255 255 255) (show hp'') (pos - coerce (orect_size ore & _x .~ 0) - V2 8 20)
+            -- , flip foldMap hurts $ \(ab_rect -> Rect abpos absz) ->
+            --     drawOriginRect (V4 255 0 0 92) (OriginRect absz 0) $ coerce abpos
+            , bool id (const mempty) dead $ drawText 8 (V3 255 255 255) (show hp'') (pos - coerce (orect_size ore & _x .~ 0) - V2 8 20)
             ]
         }
 
