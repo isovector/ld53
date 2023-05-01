@@ -275,7 +275,7 @@ player pos0 starting_pus = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
               (PStateRise j,     _, _, _, _, _, _, _, F, _) -> PStateFall j
               (p,                _, _, _, _, _, _, _, _, _) -> p
 
-  (dmg_oe, hp') <- damageHandler PlayerTeam  -< (oi, shr_ore shr, boxes)
+  (dmg_oe, on_die, hp') <- damageHandler PlayerTeam  -< (oi, shr_ore shr, boxes)
 
   -- do hits
   let (_hits, hurts) = splitAnimBoxes boxes
@@ -286,6 +286,7 @@ player pos0 starting_pus = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
             dmg_oe
               & #oe_focus .~ on_start
               & #oe_game_message <>~ (fmap AddInventory starting_pus <$ on_start)
+              & #oe_die <>~ on_die
         , oo_state =
             os
               & #os_pos .~ pos'

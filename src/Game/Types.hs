@@ -6,15 +6,26 @@ import GHC.Generics (Generic)
 import Generics.Deriving.Enum
 import Data.Text (Text)
 import Data.Set (Set)
+import Data.Map (Map)
 
 
 data GameState = GameState
   { gs_inventory :: Set PowerupType
+  , gs_dyn_col :: Map ObjectId (Set CollisionPurpose, Rectangle WorldPos)
   }
   deriving stock Generic
 
+data CollisionPurpose
+  = CollisionWall
+  | CollisionGround
+  | CollisionCeiling
+  | CollisionCheckGround
+  deriving (Eq, Ord, Show, Enum, Bounded, Read, Generic)
+
 data GameMessage
   = AddInventory PowerupType
+  | RegisterDynCollision ObjectId (Set CollisionPurpose) (Rectangle WorldPos)
+  | UnregisterDynCollision ObjectId
   deriving stock (Eq, Ord, Show, Read, Generic)
 
 ------------------------------------------------------------------------------

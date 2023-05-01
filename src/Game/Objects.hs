@@ -10,6 +10,7 @@ import           Control.Lens (Prism')
 import           Control.Monad.Error (Error)
 import           Data.Map (Map)
 import qualified Data.Map as M
+import           Data.Maybe (mapMaybe, fromMaybe)
 import qualified Data.Set as S
 import           Data.Text (Text)
 import qualified Data.Text as T
@@ -18,18 +19,18 @@ import           Engine.Importer (ldtkColorToColor)
 import           Engine.Types
 import           Engine.Utils (tileToPos)
 import           Game.Objects.Antagonist (antagonist)
+import           Game.Objects.BreakableWall (breakableWall)
 import           Game.Objects.Checkpoint (checkpoint)
 import           Game.Objects.DespawnTrigger (despawnTrigger)
 import           Game.Objects.ParticleSpawner (particleSpawner)
 import           Game.Objects.Player (player)
 import           Game.Objects.Sandbag (sandbag)
+import           Game.Objects.Slime (slime)
 import           Game.Objects.SpawnTrigger (spawnTrigger)
 import           Game.Objects.TextBillboard (textBillboard)
 import           Game.Objects.TutorialRegion (tutorialRegion)
 import           Game.Objects.Unknown (unknown)
 import qualified LDtk.Types as LDtk
-import Game.Objects.Slime (slime)
-import Data.Maybe (mapMaybe, fromMaybe)
 
 
 buildEntity
@@ -48,6 +49,8 @@ buildEntity "TutorialRegion" pos ore props _ =
   tutorialRegion pos ore
     <$> asText "TutorialRegion" "key" props
     <*> fmap fromIntegral (asInt "TutorialRegion" "timer" props)
+buildEntity "BreakableWall" pos ore _ _ =
+  pure $ breakableWall pos ore
 buildEntity "Sandbag" pos ore _ _ =
   sandbag pos
     <$> pure ore

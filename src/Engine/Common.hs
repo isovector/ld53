@@ -3,6 +3,7 @@ module Engine.Common where
 import           Control.Lens (Lens')
 import           Data.Monoid
 import qualified Data.Set as S
+import           Engine.Geometry (rectContains)
 import           Engine.Prelude
 
 response
@@ -141,7 +142,16 @@ getCollisionMap gs = do
   let levels = fmap l_hitmap $ gs_loaded_levels gs
       layers = enumFromTo minBound maxBound
 
-  \purpose -> getAny
-            . foldMap (fmap Any .) (($) <$> levels <*> layers)  purpose
-            . posToTile
+  \purpose pos ->
+    or
+      [ getAny
+          . foldMap (fmap Any .) (($) <$> levels <*> layers)  purpose
+          $ posToTile pos
+      , any (flip rectContains pos)
+          $ fmap snd
+          $ filter (S.member purpose . fst)
+          $ toList
+          $ gs_dyn_col
+          $ gs_gameState gs
+      ]
 

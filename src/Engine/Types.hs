@@ -64,13 +64,6 @@ data World = World
   }
   deriving Generic
 
-data CollisionPurpose
-  = CollisionWall
-  | CollisionGround
-  | CollisionCeiling
-  | CollisionCheckGround
-  deriving (Eq, Ord, Show, Enum, Bounded, Read, Generic)
-
 data Level = Level
   { l_bgcolor :: Color
   , l_tilebounds :: Rect Tile
