@@ -34,6 +34,7 @@ import           Game.Objects.Thrower (thrower)
 import           Game.Objects.TutorialRegion (tutorialRegion)
 import           Game.Objects.Unknown (unknown)
 import qualified LDtk.Types as LDtk
+import Game.Objects.HealthPickup (healthPickup)
 
 
 buildEntity
@@ -46,6 +47,8 @@ buildEntity
 buildEntity "Player" pos _ props _ =
   player pos
     <$> fmap (fromMaybe []) (optional $ asEnumArray "Player" "powerups" props)
+buildEntity "HealthPickup" pos _ _ _ =
+  pure $ healthPickup pos
 buildEntity "PowerUp" pos _ props _ =
   collectPowerup pos
     <$> asEnum "PowerUp" "power" props

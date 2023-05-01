@@ -158,6 +158,7 @@ data Message
   = SetCheckpoint (V2 WorldPos)
   | CurrentCheckpoint ObjectId
   | Die
+  | RecoverHealth
   deriving stock (Eq, Ord, Show, Read, Generic)
 
 data Damage = Damage

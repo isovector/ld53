@@ -172,15 +172,21 @@ hasItem oi pu = S.member pu $ gs_inventory $ gs_gameState $fi_global $ oi_frameI
 
 player :: V2 WorldPos -> [PowerupType] -> Object
 player pos0 starting_pus = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
+  let max_hp = 100
+
   on_start <- nowish () -< ()
   let pos = event (os_pos $ oi_state oi) (const $ pos0 - V2 0 10) on_start
-
   let def =
         (noObjectState pos)
           { os_collision = Just playerOre
-          , os_hp = 100
+          , os_hp = 50
           }
   let os = event (oi_state oi) (const def) on_start
+      hp = os_hp os
+
+  -- respond to mail
+  let recover =  listenInbox (preview #_RecoverHealth . snd) $ oi_events oi
+      hp' = event hp  (const max_hp) recover
 
   st_changed <- onChange -< st
 
@@ -331,7 +337,7 @@ player pos0 starting_pus = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
 
   -- do hits
   let (_hits, hurts) = splitAnimBoxes boxes
-  let hp' = change_hp $ os_hp os
+  let hp'' = change_hp hp'
 
   returnA -< (, (vel'', st')) $
     ObjectOutput
@@ -347,7 +353,7 @@ player pos0 starting_pus = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
               & #os_collision .~ Just ore
               & #os_tags %~ S.insert IsPlayer
               & #os_facing .~ facing'
-              & #os_hp .~ hp'
+              & #os_hp .~ hp''
         , oo_render = mconcat
             [ drawOriginRect (V4 255 255 255 92) ore pos
             , drawn
@@ -355,7 +361,7 @@ player pos0 starting_pus = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
             --     drawOriginRect (V4 0 255 0 92) (OriginRect absz 0) $ coerce abpos
             , flip foldMap hurts $ \(ab_rect -> Rect abpos absz) ->
                 drawOriginRect (V4 255 0 0 92) (OriginRect absz 0) $ coerce abpos
-            , drawText 8 (V3 255 255 255) (show hp') (pos - coerce (orect_size ore & _x .~ 0) - V2 8 20)
+            , drawText 8 (V3 255 255 255) (show hp'') (pos - coerce (orect_size ore & _x .~ 0) - V2 8 20)
             ]
         }
 
