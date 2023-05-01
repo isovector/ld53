@@ -5,15 +5,16 @@ import Engine.CoreTypes
 import GHC.Generics (Generic)
 import Generics.Deriving.Enum
 import Data.Text (Text)
+import Data.Set (Set)
 
 
 data GameState = GameState
-  {
+  { gs_inventory :: Set PowerupType
   }
   deriving stock Generic
 
 data GameMessage
-  = ChangeLevel Text
+  = AddInventory PowerupType
   deriving stock (Eq, Ord, Show, Read, Generic)
 
 ------------------------------------------------------------------------------
@@ -94,9 +95,10 @@ tileSize :: Num a => a
 tileSize = 16
 
 data PowerupType
-  = PowerupDoubleJump
-  | PowerupWarpBall
-  | PowerupTotsugeki
+  = PowerupJump
+  | PowerupDoubleJump
+  | PowerupSword
+  | PowerupSlide
   deriving (Eq, Ord, Show, Enum, Bounded, Generic, Read)
 
 data ObjectTag
