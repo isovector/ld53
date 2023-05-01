@@ -210,5 +210,5 @@ getPuppetAnim PlayerSlidePrep   = mkAnim ManPuppet    "SlidePrep"       1000 Fal
 getPuppetAnim PlayerSlide       = mkAnim ManPuppet    "Slide"           1000 False
 getPuppetAnim PlayerAirSlide    = mkAnim ManPuppet    "Slide"           1000 False
 getPuppetAnim PlayerKnockback   = mkAnim ManPuppet    "Knockback"       1600 False
-getPuppetAnim PlayerDie         = mkAnim ManPuppet    "Knockback"       220  False
+getPuppetAnim PlayerDie         = mkAnim ManPuppet    "Death"           220  False
 

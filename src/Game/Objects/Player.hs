@@ -384,7 +384,7 @@ player pos0 starting_pus = loopPre (0, PStateIdle, Standing) $ proc (oi, (vel, s
   let hp'' = change_hp hp'
 
   dead <- hold False -< True <$ on_die
-  end_game <- delay 2 NoEvent -< on_die
+  end_game <- delay 4 NoEvent -< on_die
 
   returnA -< (, (vel'', st', shr_setduck shr stand)) $
     ObjectOutput
