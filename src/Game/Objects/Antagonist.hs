@@ -13,7 +13,7 @@ antagonist pos = loopPre PlayerIdleSword $ proc (oi, anim) -> do
   let def = (noObjectState pos) { os_hp = 5 }
   let os = event (oi_state oi) (const def) on_start
 
-  (boxes, done, d) <- mkPuppet -< (DrawSpriteDetails anim 0 $ V2 False False, pos)
+  (boxes, done, d) <- mkPuppet -< (DrawSpriteDetails anim mempty 0 $ V2 False False, pos)
   (dmg_oe, hp') <- damageHandler OtherTeam -< (oi, playerOre, boxes)
 
   new_anim <- hold PlayerIdleSword -< mergeEvents

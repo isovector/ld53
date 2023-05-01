@@ -1,5 +1,6 @@
-{-# OPTIONS_GHC -Wno-orphans #-}
-{-# LANGUAGE PatternSynonyms #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE PatternSynonyms   #-}
+{-# OPTIONS_GHC -Wno-orphans   #-}
 
 module Game.Objects.Player where
 
@@ -54,7 +55,12 @@ data StateHandlerResult = StateHandlerResult
   }
 
 mkDsd :: a -> DrawSpriteDetails a
-mkDsd a = DrawSpriteDetails a 0 $ V2 True False
+mkDsd a =
+  DrawSpriteDetails
+      a
+      Just
+      0
+    $ V2 True False
 
 mkSHR :: PuppetAnim -> OriginRect Double -> (V2 Double -> V2 Double) -> StateHandlerResult
 mkSHR a ore f = StateHandlerResult mempty (mkDsd a) ore id f
@@ -149,6 +155,8 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
   let dt = deltaTime oi
   let on_ground = touchingGround (collision CollisionCheckGround) playerOre pos
 
+  let has_sword = False
+
   -- handle current
   let input = StateHandlerInput oi (() <$ st_changed) Standing on_ground dt
   shr_idle       <- idleHandler                       -< input
@@ -204,6 +212,7 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
   (boxes, anim_done_ev, drawn)
     <- mkPuppet
     -< ( shr_dsd shr & #dsd_flips . _x .~ not facing'
+                     & #dsd_remap .~ remapSword has_sword
        , pos
        )
 
@@ -215,48 +224,49 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
                                           wants_jump,
                                              wants_attack,
                                                 wants_slide,
-                                                   upwards_v) of
+                                                   upwards_v,
+                                                      has_sword) of
               -- fall off edge
-              (PStateIdle,       _, F, _, _, _, _, _) -> PStateFall First
-              (PStateWalk,       _, F, _, _, _, _, _) -> PStateFall First
-              (PStateStartSlide, _, F, _, _, _, _, _) -> PStateAirSlide
-              (PStateSlide,      _, F, _, _, _, _, _) -> PStateAirSlide
+              (PStateIdle,       _, F, _, _, _, _, _, _) -> PStateFall First
+              (PStateWalk,       _, F, _, _, _, _, _, _) -> PStateFall First
+              (PStateStartSlide, _, F, _, _, _, _, _, _) -> PStateAirSlide
+              (PStateSlide,      _, F, _, _, _, _, _, _) -> PStateAirSlide
               -- hit the ground
-              (PStateFall j,     _, T, _, _, _, _, F) -> PStateIdle
-              (PStateAirSlide,   _, T, _, _, _, _, F) -> PStateSlide
+              (PStateFall _,     _, T, _, _, _, _, F, _) -> PStateIdle
+              (PStateAirSlide,   _, T, _, _, _, _, F, _) -> PStateSlide
               -- jumping
-              (PStateIdle,       _, _, _, T, _, _, _) -> PStateTakeoff
-              (PStateWalk,       _, _, _, T, _, _, _) -> PStateTakeoff
-              (PStateRise First, _, _, _, T, _, _, _) -> PStateJump (PStateRise Second)
-              (PStateFall First, _, _, _, T, _, _, _) -> PStateJump (PStateRise Second)
-              (PStateSlide,      _, T, _, T, _, _, _) -> PStateJump PStateAirSlide
-              (PStateStartSlide, _, T, _, T, _, _, _) -> PStateJump PStateAirSlide
+              (PStateIdle,       _, _, _, T, _, _, _, _) -> PStateTakeoff
+              (PStateWalk,       _, _, _, T, _, _, _, _) -> PStateTakeoff
+              (PStateRise First, _, _, _, T, _, _, _, _) -> PStateJump (PStateRise Second)
+              (PStateFall First, _, _, _, T, _, _, _, _) -> PStateJump (PStateRise Second)
+              (PStateSlide,      _, T, _, T, _, _, _, _) -> PStateJump PStateAirSlide
+              (PStateStartSlide, _, T, _, T, _, _, _, _) -> PStateJump PStateAirSlide
               -- attacks
-              (PStateIdle,       _, _, _, _, T, _, _) -> PStateStab
-              (PStateWalk,       _, _, _, _, T, _, _) -> PStateWalkStab
-              (PStateRise _,     _, _, _, _, T, _, _) -> PStateRiseStab
-              (PStateFall _,     _, _, _, _, T, _, F) -> PStateFallSlice
+              (PStateIdle,       _, _, _, _, T, _, _, T) -> PStateStab
+              (PStateWalk,       _, _, _, _, T, _, _, T) -> PStateWalkStab
+              (PStateRise _,     _, _, _, _, T, _, _, T) -> PStateRiseStab
+              (PStateFall _,     _, _, _, _, T, _, F, T) -> PStateFallSlice
               -- walking
-              (PStateIdle,       _, _, T, _, _, _, _) -> PStateWalk
-              (PStateWalk,       _, _, F, _, _, _, _) -> PStateIdle
+              (PStateIdle,       _, _, T, _, _, _, _, _) -> PStateWalk
+              (PStateWalk,       _, _, F, _, _, _, _, _) -> PStateIdle
               -- do slides
-              (PStateIdle,       _, _, _, _, _, T, _) -> PStateStartSlide
-              (PStateWalk,       _, _, _, _, _, T, _) -> PStateStartSlide
+              (PStateIdle,       _, _, _, _, _, T, _, _) -> PStateStartSlide
+              (PStateWalk,       _, _, _, _, _, T, _, _) -> PStateStartSlide
               -- anims done
-              (PStateTakeoff,    T, _, _, _, _, _, _) -> PStateJump (PStateRise First)
-              (PStateStartSlide, T, _, _, _, _, _, _) -> PStateSlide
-              (PStateSlide,      T, _, _, _, _, _, _) -> PStateIdle
-              (PStateStab,       T, _, _, _, _, _, _) -> PStateIdle
-              (PStateWalkStab,   T, _, _, _, _, _, _) -> PStateIdle
-              (PStateRiseStab,   T, _, _, _, _, _, _) -> PStateFall Second
-              (PStateFallSlice,  T, _, _, _, _, _, _) -> PStateFall Second
+              (PStateTakeoff,    T, _, _, _, _, _, _, _) -> PStateJump (PStateRise First)
+              (PStateStartSlide, T, _, _, _, _, _, _, _) -> PStateSlide
+              (PStateSlide,      T, _, _, _, _, _, _, _) -> PStateIdle
+              (PStateStab,       T, _, _, _, _, _, _, _) -> PStateIdle
+              (PStateWalkStab,   T, _, _, _, _, _, _, _) -> PStateIdle
+              (PStateRiseStab,   T, _, _, _, _, _, _, _) -> PStateFall Second
+              (PStateFallSlice,  T, _, _, _, _, _, _, _) -> PStateFall Second
               -- cancel
-              (PStateRiseStab,   _, T, _, _, _, _, _) -> PStateIdle
-              (PStateFallSlice,  _, T, _, _, _, _, _) -> PStateIdle
+              (PStateRiseStab,   _, T, _, _, _, _, _, _) -> PStateIdle
+              (PStateFallSlice,  _, T, _, _, _, _, _, _) -> PStateIdle
               -- automatic transitions
-              (PStateJump goto,  _, _, _, _, _, _, _) -> goto
-              (PStateRise j,     _, _, _, _, _, _, F) -> PStateFall j
-              (p,                _, _, _, _, _, _, _) -> p
+              (PStateJump goto,  _, _, _, _, _, _, _, _) -> goto
+              (PStateRise j,     _, _, _, _, _, _, F, _) -> PStateFall j
+              (p,                _, _, _, _, _, _, _, _) -> p
 
   (dmg_oe, hp') <- damageHandler PlayerTeam  -< (oi, shr_ore shr, boxes)
 
@@ -284,6 +294,11 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
                 drawOriginRect (V4 255 0 0 92) (OriginRect absz 0) $ coerce abpos
             ]
         }
+
+remapSword :: Bool -> Text -> Maybe Text
+remapSword True v        = Just v
+remapSword False "Sword" = Nothing
+remapSword False t       = Just t
 
 pick :: SF (a, a -> b) b
 pick = arr $ uncurry $ flip ($)

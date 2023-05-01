@@ -259,10 +259,10 @@ instance (Bounded b, Enum a, Enum b) => Enum (a, b) where
 
 data DrawSpriteDetails a = DrawSpriteDetails
   { dsd_anim :: a
+  , dsd_remap :: Text -> Maybe Text
   , dsd_rotation :: Double
   , dsd_flips :: V2 Bool
-  }
-  deriving stock (Eq, Ord, Show, Read, Generic)
+  } deriving (Generic)
 
 
 ------------------------------------------------------------------------------
@@ -320,7 +320,8 @@ data CannedAnim = CannedAnim
 
 data WrappedSchema = WrappedSchema
   { ws_schema   :: Schema
-  , ws_textures :: IntMap WrappedTexture
+  , ws_textureid :: IntMap Text
+  , ws_textures :: Map Text WrappedTexture
   }
 
 data AnimBox = AnimBox

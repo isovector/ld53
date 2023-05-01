@@ -10,11 +10,12 @@ module Engine.Drawing where
 import           Control.Lens (at)
 import           Control.Monad (guard)
 import           Data.Foldable (for_, traverse_)
-import           Data.IntMap (IntMap)
 import qualified Data.IntMap as IM
+import qualified Data.Map as M
 import           Data.Maybe (fromJust, mapMaybe)
 import           Data.Spriter.Skeleton (ResultBone(..), fmod, animate, isBone)
 import           Data.Spriter.Types hiding (AnimationName)
+import           Data.Text (Text)
 import qualified Data.Text as T
 import           Engine.Camera (viaCamera)
 import           Engine.FRP
@@ -165,7 +166,7 @@ mkPuppet = proc (dsd, pos) -> do
     case animate entity _aAnim frame of
       Nothing -> mempty
       Just rbs -> do
-        let draw = foldMap (drawResultBone dsd (ws_textures ws) ca_scale pos) $ filter (not . isBone) rbs
+        let draw = foldMap (drawResultBone dsd ws ca_scale pos) $ filter (not . isBone) rbs
             boxes = mapMaybe (getBox (dsd_flips dsd) ca_scale pos) rbs
          in (boxes, bool NoEvent (Event ()) is_over, draw)
 
@@ -185,22 +186,25 @@ getBox (fmap (bool id negate) -> flips) sz pos rb = do
 
 drawResultBone
     :: DrawSpriteDetails a
-    -> IntMap WrappedTexture
+    -> WrappedSchema
     -> Double  -- ^ scale
     -> V2 WorldPos
     -> ResultBone
     -> Renderable
-drawResultBone dsd wts sz pos ResultBone{..}
+drawResultBone dsd ws sz pos ResultBone{..}
+  | Nothing <- textureLookup (dsd_remap dsd) ws (_boneObjFile $ fromJust _rbObj)
+  = mempty
   | dsd_flips dsd == V2 False False
+  , Just wt <- textureLookup (dsd_remap dsd) ws (_boneObjFile $ fromJust _rbObj)
   = drawSpriteStretched
-      (wts IM.! (_boneObjFile $ fromJust _rbObj))
+      wt
       (pos + coerce (sz *^ (V2  _rbX $ negate _rbY)))
       (dsd_rotation dsd - (_rbAngle * 180 / pi))
       (dsd_flips dsd)
       (sz *^ V2 _rbScaleX _rbScaleY)
   | dsd_flips dsd == V2 True False
-  = let wt = wts IM.! (_boneObjFile $ fromJust _rbObj)
-        sz' = sz *^ V2 _rbScaleX _rbScaleY
+  , Just wt <- textureLookup (dsd_remap dsd) ws (_boneObjFile $ fromJust _rbObj)
+  = let sz' = sz *^ V2 _rbScaleX _rbScaleY
         wtsz = (fmap fromIntegral $ wt_size wt) * sz'
         wtsz_y0 = wtsz & _y .~ 0
         ore = OriginRect wtsz wtsz_y0
@@ -213,6 +217,12 @@ drawResultBone dsd wts sz pos ResultBone{..}
       (dsd_flips dsd)
       --
   | otherwise = error "NO YOU MUSTNT"
+
+textureLookup :: (Text -> Maybe Text) -> WrappedSchema -> Int -> Maybe WrappedTexture
+textureLookup key_replace ws ix =
+  let key = ws_textureid ws IM.! ix
+      key' = key_replace key
+   in fmap (ws_textures ws M.!) key'
 
 
 atScreenPos :: Renderable -> Renderable

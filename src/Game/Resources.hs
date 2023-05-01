@@ -18,9 +18,10 @@ import           SDL (Texture, textureWidth, textureHeight)
 import           SDL.JuicyPixels (loadJuicyTexture)
 import           SDL.Video (queryTexture)
 import qualified Sound.ALUT as ALUT
-import           System.FilePath ((</>), (<.>), takeDirectory)
+import           System.FilePath ((</>), (<.>), takeDirectory, takeBaseName)
 
 import {-# SOURCE #-} Engine.Importer (loadWorld)
+import qualified Data.Text as T
 
 newtype Char' = Char' { getChar' :: Char }
   deriving (Eq, Ord, Show, Enum)
@@ -120,8 +121,10 @@ instance IsResource PuppetName WrappedSchema where
     textures <-
       for (schema ^. schemaFolder . _head . folderFile) $ \ff -> do
         let fn = _fileName ff
-        loadWrappedTexture e $ dir </> fn
-    pure $ WrappedSchema schema $ IM.fromList $ zip [0..] textures
+        fmap (T.pack $ takeBaseName fn, ) $ loadWrappedTexture e $ dir </> fn
+    pure
+      $ WrappedSchema schema (IM.fromList $ zip [0..] $ fmap fst textures)
+      $ M.fromList textures
   resourceFolder = "puppets"
   resourceExt    = "scon"
   resourceName BallerPuppet = "baller"
