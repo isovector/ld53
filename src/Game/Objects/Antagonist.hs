@@ -17,7 +17,7 @@ antagonist pos = loopPre PlayerIdleSword $ proc (oi, anim) -> do
   let flipped = player_x < view _x pos
 
   (boxes, done, d) <- mkPuppet -< (DrawSpriteDetails anim Just 0 $ V2 flipped False, pos)
-  (dmg_oe, on_die, hp') <- damageHandler OtherTeam -< (oi, playerOre, boxes)
+  (dmg_oe, _, on_die, hp') <- damageHandler OtherTeam -< (oi, playerOre, boxes)
 
   new_anim <- hold PlayerIdleSword -< mergeEvents
     [ PlayerIdleSword <$ done

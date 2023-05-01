@@ -150,7 +150,7 @@ splitAnimBoxes :: [AnimBox] -> ([AnimBox], [AnimBox])
 splitAnimBoxes = partition ((== Hitbox) . ab_type)
 
 
-damageHandler :: Team -> SF (ObjectInput, OriginRect Double, [AnimBox]) (ObjectEvents, Event (), Int -> Int)
+damageHandler :: Team -> SF (ObjectInput, OriginRect Double, [AnimBox]) (ObjectEvents, Bool, Event (), Int -> Int)
 damageHandler team = proc (oi, ore, boxes) -> do
   let os = oi_state oi
       OriginRect sz _ = ore
@@ -165,6 +165,7 @@ damageHandler team = proc (oi, ore, boxes) -> do
   returnA -<
     ( sendDamage team boxes
           & #oe_spawn .~ (fmap (pure . dmgIndicator (os_pos os - V2 0 20 - (coerce sz & _x .~ 0))) dmg_ev)
+    , isEvent dmg_ev
     , die
     , event id subtract dmg_ev
     )

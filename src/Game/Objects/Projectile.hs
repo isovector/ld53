@@ -12,7 +12,7 @@ projectile flipped pos0 = withLifetime 5 $ proc oi -> do
       ore = mkCenterdOriginRect 3
       pos = os_pos os
 
-  (oe_events, _, _) <- damageHandler OtherTeam -< (oi, ore, mkHurtBox pos ore)
+  (oe_events, _, _, _) <- damageHandler OtherTeam -< (oi, ore, mkHurtBox pos ore)
 
   returnA -<
     ObjectOutput

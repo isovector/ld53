@@ -15,7 +15,7 @@ slime pos0 ore mgoal = proc (oi) -> do
   step <- occasionally (mkStdGen $ hash pos0) 0.1 () -< ()
   pos' <- maybe (pure pos0) (paceBetween 2 pos0 . useYOfFirst pos0) mgoal -< (pos, step)
 
-  (dmg_oe, on_die, hp') <- damageHandler OtherTeam -< (oi, ore, mkHurtHitBox pos ore)
+  (dmg_oe, _, on_die, hp') <- damageHandler OtherTeam -< (oi, ore, mkHurtHitBox pos ore)
 
   returnA -<
     ObjectOutput

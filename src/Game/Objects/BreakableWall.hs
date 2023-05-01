@@ -15,7 +15,7 @@ breakableWall pos0 ore = proc oi -> do
   let os = event (oi_state oi) (const def) on_start
       pos = os_pos os
 
-  (dmg_oe, on_die, hp') <- damageHandler OtherTeam -< (oi, ore, mkHitBox pos ore)
+  (dmg_oe, _, on_die, hp') <- damageHandler OtherTeam -< (oi, ore, mkHitBox pos ore)
 
   let obj_id = oi_self oi
 
