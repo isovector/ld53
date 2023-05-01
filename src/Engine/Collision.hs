@@ -78,6 +78,15 @@ epsilon :: Fractional a => a
 epsilon = 0.00001
 
 
+checkOre :: (CollisionPurpose -> V2 WorldPos -> Bool) -> OriginRect WorldPos -> V2 WorldPos -> Bool
+checkOre f ore pos =
+  and $ fmap not
+    [ f CollisionCeiling $ orTopLeft pos ore
+    , f CollisionCeiling $ orTopRight pos ore
+    , f CollisionGround  $ orBotLeft pos ore
+    , f CollisionGround  $ orBotRight pos ore
+    ]
+
 
 moveXY
     :: (OriginRect WorldPos -> DeltaDir -> V2 WorldPos -> [V2 WorldPos])
