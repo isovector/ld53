@@ -73,12 +73,17 @@ lightning offset x = let lifetime = 1.5 in withLifetime lifetime $ proc oi -> do
   let dur = t - start
 
   (oe_events, _, _, _) <- damageHandler 0.1 OtherTeam -< (oi, ore, mkHurtBox pos ore)
-  let painful = dur >= lifetime - 0.2
+  let painful = dur >= lifetime - 0.1
 
   returnA -<
     ObjectOutput
       { oo_events = bool mempty oe_events painful
-      , oo_render = drawOriginRect (V4 255 255 255 $ bool 92 255 painful) ore pos
+      , oo_render =
+          mconcat $
+            [ drawOriginRect (V4 255 255 255 20) ore pos
+              | not painful] <>
+            [ drawGameTextureOriginRect LightningTexture ore pos 0 $ pure False
+              | painful]
       , oo_state = os
       }
 

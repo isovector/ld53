@@ -106,6 +106,7 @@ instance IsResource GameTexture WrappedTexture where
   resourceFolder = "textures"
   resourceExt    = "png"
   resourceName NintendoLogo = "nintendo"
+  resourceName LightningTexture = "lightning"
   resourceName ChickenTexture = "chicken"
   resourceName Parallax0 = "parallax0"
   resourceName Parallax1 = "parallax1"

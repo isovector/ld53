@@ -50,6 +50,7 @@ data DamageSource =
 -- | Textures used by the game.
 data GameTexture
     = NintendoLogo
+    | LightningTexture
     | ChickenTexture
     | Parallax0
     | Parallax1
