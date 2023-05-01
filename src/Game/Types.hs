@@ -20,6 +20,7 @@ data CollisionPurpose
   | CollisionGround
   | CollisionCeiling
   | CollisionCheckGround
+  | CollisionOnElevator
   deriving (Eq, Ord, Show, Enum, Bounded, Read, Generic)
 
 data GameMessage

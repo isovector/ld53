@@ -41,7 +41,7 @@ buildCollisionMap offset sz col = \purpose (coerce -> subtract offset -> V2 x y)
 
 checkPurpose :: CollisionPurpose -> Int -> Bool
 checkPurpose _ 0 = False
-checkPurpose _ 1 = True
+checkPurpose c 1 = c /= CollisionOnElevator
 checkPurpose CollisionGround 2 = True
 checkPurpose CollisionCheckGround 2 = True
 checkPurpose _ 2 = False

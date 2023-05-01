@@ -75,7 +75,7 @@ deltaDir n =
     _ ->  error "impossible"
 
 epsilon :: Fractional a => a
-epsilon = 0.001
+epsilon = 0.00001
 
 
 
