@@ -113,7 +113,7 @@ mainMenu = loopPre Start $ proc (fi, sel) -> do
   returnA -<
     ( ( mconcat
           [ bggame cam
-          , drawText 16 (V3 0 192 255) "Where's my Chicken, man?" (V2 50 20) (Camera 0)
+          , drawText 16 (V3 0 192 255) "Deliverance" (V2 50 20) (Camera 0)
           , mconcat
             $ zipWith (drawMenuItem sel) [minBound .. maxBound] [0..]
           ]
