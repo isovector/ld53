@@ -83,8 +83,8 @@ checkOre f ore pos =
   and $ fmap not
     [ f CollisionCeiling $ orTopLeft pos ore
     , f CollisionCeiling $ orTopRight pos ore
-    , f CollisionGround  $ orBotLeft pos ore
-    , f CollisionGround  $ orBotRight pos ore
+    -- , f CollisionGround  $ orBotLeft pos ore
+    -- , f CollisionGround  $ orBotRight pos ore
     ]
 
 
