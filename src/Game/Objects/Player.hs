@@ -358,7 +358,7 @@ player pos0 starting_pus = loopPre (0, PStateIdle, Standing) $ proc (oi, (vel, s
               (PStateTakeoff,    T, _, _, _, _, _, _, _, _, _, _, _, _, _, _) -> PStateJump (PStateRise First)
               (PStateStartSlide, T, _, _, _, _, _, _, _, _, _, _, _, _, _, _) -> PStateSlide
               (PStateKnockback _,T, _, _, _, _, _, _, _, _, _, _, _, _, _, _) -> PStateIdle
-              (PStateSlide,      T, _, _, _, _, _, _, _, _, _, _, _, F, F, _) -> PStateStartSlide
+              (PStateSlide,      T, _, _, _, _, _, _, _, _, _, _, _, _, F, _) -> PStateStartSlide
               (PStateSlide,      T, _, _, _, _, _, _, _, _, _, _, _, F, _, _) -> PStateSetDuck Ducking
               (PStateSlide,      T, _, _, _, _, _, _, _, _, _, _, _, T, _, _) -> PStateIdle
               (PStateStab,       T, _, _, _, _, _, _, _, _, _, _, _, _, _, _) -> PStateIdle
