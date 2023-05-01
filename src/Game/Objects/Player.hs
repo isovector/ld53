@@ -264,7 +264,8 @@ player pos0 starting_pus = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
        , pos
        )
 
-  (dmg_oe, took_dmg, on_die, hp') <- damageHandler PlayerTeam -< (oi, shr_ore shr, boxes)
+  (dmg_oe, took_dmg, on_die, change_hp)
+    <- damageHandler PlayerTeam -< (oi, shr_ore shr, boxes)
 
   let incoming_damage_dir = fmap (bool RightSide LeftSide . (> 0) . view _x) took_dmg
 
@@ -330,6 +331,7 @@ player pos0 starting_pus = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
 
   -- do hits
   let (_hits, hurts) = splitAnimBoxes boxes
+  let hp' = change_hp $ os_hp os
 
   returnA -< (, (vel'', st')) $
     ObjectOutput
@@ -345,7 +347,7 @@ player pos0 starting_pus = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
               & #os_collision .~ Just ore
               & #os_tags %~ S.insert IsPlayer
               & #os_facing .~ facing'
-              & #os_hp %~ hp'
+              & #os_hp .~ hp'
         , oo_render = mconcat
             [ drawOriginRect (V4 255 255 255 92) ore pos
             , drawn
@@ -353,6 +355,7 @@ player pos0 starting_pus = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
             --     drawOriginRect (V4 0 255 0 92) (OriginRect absz 0) $ coerce abpos
             , flip foldMap hurts $ \(ab_rect -> Rect abpos absz) ->
                 drawOriginRect (V4 255 0 0 92) (OriginRect absz 0) $ coerce abpos
+            , drawText 8 (V3 255 255 255) (show hp') (pos - coerce (orect_size ore & _x .~ 0) - V2 8 20)
             ]
         }
 
