@@ -23,7 +23,9 @@ import           Game.Objects.BreakableWall (breakableWall)
 import           Game.Objects.Checkpoint (checkpoint)
 import           Game.Objects.CollectPowerup (collectPowerup)
 import           Game.Objects.DespawnTrigger (despawnTrigger)
+import           Game.Objects.Dracula (dracula)
 import           Game.Objects.Elevator (elevator)
+import           Game.Objects.HealthPickup (healthPickup)
 import           Game.Objects.ParticleSpawner (particleSpawner)
 import           Game.Objects.Player (player)
 import           Game.Objects.Sandbag (sandbag)
@@ -34,7 +36,6 @@ import           Game.Objects.Thrower (thrower)
 import           Game.Objects.TutorialRegion (tutorialRegion)
 import           Game.Objects.Unknown (unknown)
 import qualified LDtk.Types as LDtk
-import Game.Objects.HealthPickup (healthPickup)
 
 
 buildEntity
@@ -53,6 +54,7 @@ buildEntity "PowerUp" pos _ props _ =
   collectPowerup pos
     <$> asEnum "PowerUp" "power" props
 buildEntity "Antagonist" pos _ _ _ = pure $ antagonist pos
+buildEntity "Dracula" pos ore _ _ = pure $ dracula pos ore
 buildEntity "Thrower" pos ore props _ =
   thrower pos ore
     <$> asEnum "Thrower" "projectile" props
