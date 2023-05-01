@@ -150,7 +150,10 @@ data Message
   = SetCheckpoint (V2 WorldPos)
   | CurrentCheckpoint ObjectId
   | Die
-  | DamageSource Damage (V2 WorldPos) (V2 Double)
+  | DamageSource
+      (V2 WorldPos)  -- origin
+      Damage
+      (V2 WorldPos) (V2 Double)  -- rect
   deriving stock (Eq, Ord, Show, Read, Generic)
 
 data Damage = Damage

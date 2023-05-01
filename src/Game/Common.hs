@@ -123,49 +123,58 @@ onlyOncePer dur = proc ev -> do
   fmap rl_data $ rateLimit dur (arr fst) -< (ev, ())
 
 
-sendDamage :: Team -> [AnimBox] -> ObjectEvents
-sendDamage team boxes =
+sendDamage :: Team -> V2 WorldPos -> [AnimBox] -> ObjectEvents
+sendDamage team src boxes =
   let (_, hurts) = splitAnimBoxes boxes
-      send t (ab_rect -> Rect pos sz) = DamageSource (Damage t 1) (coerce pos) sz
+      send t (ab_rect -> Rect pos sz) = DamageSource src (Damage t 1) (coerce pos) sz
    in mempty & #oe_broadcast_message .~ Event (fmap (send team) hurts)
 
-checkDamage :: Team -> [Rect Double] -> ObjectInEvents -> Event [Damage]
-checkDamage t hits evs = mkEvent $ do
-  (_, DamageSource d pos sz) <- fromEvent mempty $ oie_receive evs
+
+checkDamage :: Team -> V2 WorldPos -> [Rect Double] -> ObjectInEvents -> Event (V2 Double, [Damage])
+checkDamage t me hits evs = coerce $ fmap sequence $ mkEvent $ do
+  (_, DamageSource src d pos sz) <- fromEvent mempty $ oie_receive evs
   guard $ t /= d_team d
   guard $ any (\(Rect p s) -> intersects (Rectangle (coerce pos) sz) $ Rectangle (P p) s) hits
-  pure d
+  pure (normalize $ me - src, d)
 
-checkDamage' :: Team -> [AnimBox] -> ObjectInEvents -> Event [Damage]
-checkDamage' t boxes =
+
+checkDamage' :: Team -> V2 WorldPos -> [AnimBox] -> ObjectInEvents -> Event (V2 Double, [Damage])
+checkDamage' t me boxes =
   let (hits, _) = splitAnimBoxes boxes
-   in checkDamage t $ fmap ab_rect hits
+   in checkDamage t me $ fmap ab_rect hits
 
 
 mkEvent :: [a] -> Event [a]
 mkEvent [] = NoEvent
 mkEvent a = Event a
 
+
 splitAnimBoxes :: [AnimBox] -> ([AnimBox], [AnimBox])
 splitAnimBoxes = partition ((== Hitbox) . ab_type)
 
 
-damageHandler :: Team -> SF (ObjectInput, OriginRect Double, [AnimBox]) (ObjectEvents, Bool, Event (), Int -> Int)
+damageHandler
+      :: Team
+      -> SF (ObjectInput, OriginRect Double, [AnimBox])
+            (ObjectEvents, Maybe (V2 Double), Event (), Int -> Int)
 damageHandler team = proc (oi, ore, boxes) -> do
   let os = oi_state oi
       OriginRect sz _ = ore
+      pos = os_pos os
 
-  let dmg_in_ev = fmap (sum . fmap d_damage) $ checkDamage' team boxes $ oi_events oi
-  dmg_ev <- onlyOncePer 0.1 -< dmg_in_ev
+  let dmg_in_ev = fmap (second $ sum . fmap d_damage) $ checkDamage' team pos boxes $ oi_events oi
+  both <- onlyOncePer 0.1 -< dmg_in_ev
+  let dmg_ev = fmap snd both
+      dir = eventToMaybe $ fmap (normalize . fst) both
 
   let dmg = event 0 id dmg_ev
   let hp' = os_hp os - dmg
   die <- edge -< hp' <= 0
 
   returnA -<
-    ( sendDamage team boxes
-          & #oe_spawn .~ (fmap (pure . dmgIndicator (os_pos os - V2 0 20 - (coerce sz & _x .~ 0))) dmg_ev)
-    , isEvent dmg_ev
+    ( sendDamage team pos boxes
+          & #oe_spawn .~ (fmap (pure . dmgIndicator (pos - V2 0 20 - (coerce sz & _x .~ 0))) dmg_ev)
+    , dir
     , die
     , event id subtract dmg_ev
     )
