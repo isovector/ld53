@@ -11,7 +11,7 @@
 	"iid": "a22d35f0-7820-11ed-b6fd-213e885f30da",
 	"jsonVersion": "1.2.3",
 	"appBuildId": 464726,
-	"nextUid": 306,
+	"nextUid": 308,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "GridVania",
 	"worldGridWidth": 480,
@@ -2475,6 +2475,41 @@
 					"allowedRefs": "OnlySame",
 					"allowedRefTags": [],
 					"tilesetUid": null
+				},
+				{
+					"identifier": "projectile",
+					"doc": null,
+					"__type": "LocalEnum.ProjectileType",
+					"uid": 307,
+					"type": "F_Enum(306)",
+					"isArray": false,
+					"canBeNull": false,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "Hidden",
+					"editorDisplayPos": "Above",
+					"editorLinkStyle": "StraightArrow",
+					"editorAlwaysShow": false,
+					"editorShowInWorld": true,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": {
+						"id": "V_String",
+						"params": ["BallToss"]
+					},
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": [],
+					"tilesetUid": null
 				}
 			]
 		},
@@ -2693,7 +2728,8 @@
 			{ "id": "PowerupSlide", "tileId": -1, "color": 15389866, "__tileSrcRect": null },
 			{ "id": "PowerupSword", "tileId": -1, "color": 14984818, "__tileSrcRect": null }
 		], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": [] },
-		{ "identifier": "ParticleType", "uid": 217, "values": [{ "id": "Gore", "tileId": -1, "color": 14120515, "__tileSrcRect": null }], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }
+		{ "identifier": "ParticleType", "uid": 217, "values": [{ "id": "Gore", "tileId": -1, "color": 14120515, "__tileSrcRect": null }], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": [] },
+		{ "identifier": "ProjectileType", "uid": 306, "values": [ { "id": "Shuriken", "tileId": null, "color": 12470831, "__tileSrcRect": null }, { "id": "BallToss", "tileId": null, "color": 14120515, "__tileSrcRect": null } ], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }
 	], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{
@@ -3997,7 +4033,7 @@
 							"height": 24,
 							"defUid": 259,
 							"px": [516,352],
-							"fieldInstances": [{ "__identifier": "path", "__type": "Point", "__value": { "cx": 59, "cy": 43 }, "__tile": null, "defUid": 263, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "path", "__value": { "cx": 59, "cy": 43 }, "__type": "Point", "__tile": null, "defUid": 263, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["59,43"]
 							}] }]
@@ -4014,7 +4050,7 @@
 							"height": 24,
 							"defUid": 259,
 							"px": [460,528],
-							"fieldInstances": [{ "__identifier": "path", "__type": "Point", "__value": { "cx": 45, "cy": 65 }, "__tile": null, "defUid": 263, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "path", "__value": { "cx": 45, "cy": 65 }, "__type": "Point", "__tile": null, "defUid": 263, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["45,65"]
 							}] }]
@@ -4032,12 +4068,12 @@
 							"defUid": 268,
 							"px": [588,260],
 							"fieldInstances": [
-								{ "__identifier": "path", "__type": "Point", "__value": { "cx": 3, "cy": 32 }, "__tile": null, "defUid": 269, "realEditorValues": [{
+								{ "__identifier": "path", "__value": { "cx": 3, "cy": 32 }, "__type": "Point", "__tile": null, "defUid": 269, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["3,32"]
 								}] },
-								{ "__identifier": "amplitude", "__type": "Float", "__value": 1, "__tile": null, "defUid": 270, "realEditorValues": [{ "id": "V_Float", "params": [1] }] },
-								{ "__identifier": "frequency", "__type": "Float", "__value": 1, "__tile": null, "defUid": 271, "realEditorValues": [] }
+								{ "__identifier": "amplitude", "__value": 1, "__type": "Float", "__tile": null, "defUid": 270, "realEditorValues": [{ "id": "V_Float", "params": [1] }] },
+								{ "__identifier": "frequency", "__value": 1, "__type": "Float", "__tile": null, "defUid": 271, "realEditorValues": [] }
 							]
 						},
 						{
@@ -4053,11 +4089,12 @@
 							"defUid": 264,
 							"px": [604,488],
 							"fieldInstances": [
-								{ "__identifier": "path", "__type": "Point", "__value": { "cx": 68, "cy": 60 }, "__tile": null, "defUid": 265, "realEditorValues": [{
+								{ "__identifier": "path", "__value": { "cx": 68, "cy": 60 }, "__type": "Point", "__tile": null, "defUid": 265, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["68,60"]
 								}] },
-								{ "__identifier": "cooldown", "__type": "Float", "__value": 3, "__tile": null, "defUid": 266, "realEditorValues": [] }
+								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] },
+								{ "__identifier": "projectile", "__value": "BallToss", "__type": "LocalEnum.ProjectileType", "__tile": null, "defUid": 307, "realEditorValues": [] }
 							]
 						},
 						{
@@ -4073,11 +4110,11 @@
 							"defUid": 260,
 							"px": [44,360],
 							"fieldInstances": [
-								{ "__identifier": "path", "__type": "Point", "__value": { "cx": 14, "cy": 44 }, "__tile": null, "defUid": 262, "realEditorValues": [{
+								{ "__identifier": "path", "__value": { "cx": 14, "cy": 44 }, "__type": "Point", "__tile": null, "defUid": 262, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["14,44"]
 								}] },
-								{ "__identifier": "cooldown", "__type": "Float", "__value": 3, "__tile": null, "defUid": 267, "realEditorValues": [] }
+								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 267, "realEditorValues": [] }
 							]
 						}
 					]
@@ -4394,7 +4431,7 @@
 							"height": 24,
 							"defUid": 259,
 							"px": [52,472],
-							"fieldInstances": [{ "__identifier": "path", "__type": "Point", "__value": { "cx": 11, "cy": 57 }, "__tile": null, "defUid": 263, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "path", "__value": { "cx": 11, "cy": 57 }, "__type": "Point", "__tile": null, "defUid": 263, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["11,57"]
 							}] }]
@@ -6777,11 +6814,11 @@
 							"defUid": 260,
 							"px": [1020,240],
 							"fieldInstances": [
-								{ "__identifier": "path", "__type": "Point", "__value": { "cx": 115, "cy": 29 }, "__tile": null, "defUid": 262, "realEditorValues": [{
+								{ "__identifier": "path", "__value": { "cx": 115, "cy": 29 }, "__type": "Point", "__tile": null, "defUid": 262, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["115,29"]
 								}] },
-								{ "__identifier": "cooldown", "__type": "Float", "__value": 1, "__tile": null, "defUid": 267, "realEditorValues": [{ "id": "V_Float", "params": [1] }] }
+								{ "__identifier": "cooldown", "__value": 1, "__type": "Float", "__tile": null, "defUid": 267, "realEditorValues": [{ "id": "V_Float", "params": [1] }] }
 							]
 						},
 						{
@@ -6796,7 +6833,7 @@
 							"height": 24,
 							"defUid": 259,
 							"px": [876,232],
-							"fieldInstances": [{ "__identifier": "path", "__type": "Point", "__value": { "cx": 94, "cy": 28 }, "__tile": null, "defUid": 263, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "path", "__value": { "cx": 94, "cy": 28 }, "__type": "Point", "__tile": null, "defUid": 263, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["94,28"]
 							}] }]
@@ -6814,12 +6851,12 @@
 							"defUid": 268,
 							"px": [1692,68],
 							"fieldInstances": [
-								{ "__identifier": "path", "__type": "Point", "__value": { "cx": 8, "cy": 11 }, "__tile": null, "defUid": 269, "realEditorValues": [{
+								{ "__identifier": "path", "__value": { "cx": 8, "cy": 11 }, "__type": "Point", "__tile": null, "defUid": 269, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["8,11"]
 								}] },
-								{ "__identifier": "amplitude", "__type": "Float", "__value": 100, "__tile": null, "defUid": 270, "realEditorValues": [{ "id": "V_Float", "params": [100] }] },
-								{ "__identifier": "frequency", "__type": "Float", "__value": 2, "__tile": null, "defUid": 271, "realEditorValues": [{ "id": "V_Float", "params": [2] }] }
+								{ "__identifier": "amplitude", "__value": 100, "__type": "Float", "__tile": null, "defUid": 270, "realEditorValues": [{ "id": "V_Float", "params": [100] }] },
+								{ "__identifier": "frequency", "__value": 2, "__type": "Float", "__tile": null, "defUid": 271, "realEditorValues": [{ "id": "V_Float", "params": [2] }] }
 							]
 						},
 						{
@@ -6835,11 +6872,12 @@
 							"defUid": 264,
 							"px": [1644,152],
 							"fieldInstances": [
-								{ "__identifier": "path", "__type": "Point", "__value": { "cx": 192, "cy": 18 }, "__tile": null, "defUid": 265, "realEditorValues": [{
+								{ "__identifier": "path", "__value": { "cx": 192, "cy": 18 }, "__type": "Point", "__tile": null, "defUid": 265, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["192,18"]
 								}] },
-								{ "__identifier": "cooldown", "__type": "Float", "__value": 4, "__tile": null, "defUid": 266, "realEditorValues": [{ "id": "V_Float", "params": [4] }] }
+								{ "__identifier": "cooldown", "__value": 4, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [{ "id": "V_Float", "params": [4] }] },
+								{ "__identifier": "projectile", "__value": "BallToss", "__type": "LocalEnum.ProjectileType", "__tile": null, "defUid": 307, "realEditorValues": [] }
 							]
 						},
 						{
@@ -6854,7 +6892,7 @@
 							"height": 24,
 							"defUid": 259,
 							"px": [564,232],
-							"fieldInstances": [{ "__identifier": "path", "__type": "Point", "__value": { "cx": 54, "cy": 28 }, "__tile": null, "defUid": 263, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "path", "__value": { "cx": 54, "cy": 28 }, "__type": "Point", "__tile": null, "defUid": 263, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["54,28"]
 							}] }]
@@ -9152,7 +9190,7 @@
 							"height": 24,
 							"defUid": 259,
 							"px": [1692,432],
-							"fieldInstances": [{ "__identifier": "path", "__type": "Point", "__value": { "cx": 213, "cy": 52 }, "__tile": null, "defUid": 263, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "path", "__value": { "cx": 213, "cy": 52 }, "__type": "Point", "__tile": null, "defUid": 263, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["213,52"]
 							}] }]
@@ -9170,12 +9208,12 @@
 							"defUid": 268,
 							"px": [1676,84],
 							"fieldInstances": [
-								{ "__identifier": "path", "__type": "Point", "__value": { "cx": 296, "cy": 10 }, "__tile": null, "defUid": 269, "realEditorValues": [{
+								{ "__identifier": "path", "__value": { "cx": 296, "cy": 10 }, "__type": "Point", "__tile": null, "defUid": 269, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["296,10"]
 								}] },
-								{ "__identifier": "amplitude", "__type": "Float", "__value": 2, "__tile": null, "defUid": 270, "realEditorValues": [{ "id": "V_Float", "params": [2] }] },
-								{ "__identifier": "frequency", "__type": "Float", "__value": 1, "__tile": null, "defUid": 271, "realEditorValues": [{ "id": "V_Float", "params": [1] }] }
+								{ "__identifier": "amplitude", "__value": 2, "__type": "Float", "__tile": null, "defUid": 270, "realEditorValues": [{ "id": "V_Float", "params": [2] }] },
+								{ "__identifier": "frequency", "__value": 1, "__type": "Float", "__tile": null, "defUid": 271, "realEditorValues": [{ "id": "V_Float", "params": [1] }] }
 							]
 						}
 					]
@@ -11360,7 +11398,7 @@
 							"height": 24,
 							"defUid": 259,
 							"px": [2420,512],
-							"fieldInstances": [{ "__identifier": "path", "__type": "Point", "__value": null, "__tile": null, "defUid": 263, "realEditorValues": [] }]
+							"fieldInstances": [{ "__identifier": "path", "__value": null, "__type": "Point", "__tile": null, "defUid": 263, "realEditorValues": [] }]
 						}
 					]
 				},
@@ -13746,7 +13784,8 @@
 									"id": "V_String",
 									"params": ["179,43"]
 								}] },
-								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] }
+								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] },
+								{ "__identifier": "projectile", "__value": "BallToss", "__type": "LocalEnum.ProjectileType", "__tile": null, "defUid": 307, "realEditorValues": [] }
 							]
 						},
 						{
@@ -13763,7 +13802,8 @@
 							"px": [964,144],
 							"fieldInstances": [
 								{ "__identifier": "path", "__value": null, "__type": "Point", "__tile": null, "defUid": 265, "realEditorValues": [] },
-								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] }
+								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] },
+								{ "__identifier": "projectile", "__value": "BallToss", "__type": "LocalEnum.ProjectileType", "__tile": null, "defUid": 307, "realEditorValues": [] }
 							]
 						},
 						{
@@ -13884,7 +13924,8 @@
 							"px": [156,256],
 							"fieldInstances": [
 								{ "__identifier": "path", "__value": null, "__type": "Point", "__tile": null, "defUid": 265, "realEditorValues": [] },
-								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] }
+								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] },
+								{ "__identifier": "projectile", "__value": "BallToss", "__type": "LocalEnum.ProjectileType", "__tile": null, "defUid": 307, "realEditorValues": [] }
 							]
 						},
 						{
@@ -16552,7 +16593,8 @@
 							"px": [484,864],
 							"fieldInstances": [
 								{ "__identifier": "path", "__value": null, "__type": "Point", "__tile": null, "defUid": 265, "realEditorValues": [] },
-								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] }
+								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] },
+								{ "__identifier": "projectile", "__value": "BallToss", "__type": "LocalEnum.ProjectileType", "__tile": null, "defUid": 307, "realEditorValues": [] }
 							]
 						},
 						{
@@ -16569,7 +16611,8 @@
 							"px": [444,912],
 							"fieldInstances": [
 								{ "__identifier": "path", "__value": null, "__type": "Point", "__tile": null, "defUid": 265, "realEditorValues": [] },
-								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] }
+								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] },
+								{ "__identifier": "projectile", "__value": "BallToss", "__type": "LocalEnum.ProjectileType", "__tile": null, "defUid": 307, "realEditorValues": [] }
 							]
 						},
 						{
@@ -16589,7 +16632,8 @@
 									"id": "V_String",
 									"params": ["96,113"]
 								}] },
-								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] }
+								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] },
+								{ "__identifier": "projectile", "__value": "BallToss", "__type": "LocalEnum.ProjectileType", "__tile": null, "defUid": 307, "realEditorValues": [] }
 							]
 						},
 						{
@@ -16623,7 +16667,8 @@
 							"px": [860,768],
 							"fieldInstances": [
 								{ "__identifier": "path", "__value": null, "__type": "Point", "__tile": null, "defUid": 265, "realEditorValues": [] },
-								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] }
+								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] },
+								{ "__identifier": "projectile", "__value": "BallToss", "__type": "LocalEnum.ProjectileType", "__tile": null, "defUid": 307, "realEditorValues": [] }
 							]
 						},
 						{
@@ -16680,7 +16725,8 @@
 									"id": "V_String",
 									"params": ["106,33"]
 								}] },
-								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] }
+								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] },
+								{ "__identifier": "projectile", "__value": "BallToss", "__type": "LocalEnum.ProjectileType", "__tile": null, "defUid": 307, "realEditorValues": [] }
 							]
 						},
 						{
@@ -16854,7 +16900,8 @@
 									"id": "V_String",
 									"params": ["280,27"]
 								}] },
-								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] }
+								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] },
+								{ "__identifier": "projectile", "__value": "BallToss", "__type": "LocalEnum.ProjectileType", "__tile": null, "defUid": 307, "realEditorValues": [] }
 							]
 						}
 					]
@@ -23573,7 +23620,8 @@
 							"px": [276,304],
 							"fieldInstances": [
 								{ "__identifier": "path", "__value": null, "__type": "Point", "__tile": null, "defUid": 265, "realEditorValues": [] },
-								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] }
+								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] },
+								{ "__identifier": "projectile", "__value": "BallToss", "__type": "LocalEnum.ProjectileType", "__tile": null, "defUid": 307, "realEditorValues": [] }
 							]
 						}
 					]
@@ -26760,7 +26808,8 @@
 							"px": [28,592],
 							"fieldInstances": [
 								{ "__identifier": "path", "__value": null, "__type": "Point", "__tile": null, "defUid": 265, "realEditorValues": [] },
-								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] }
+								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] },
+								{ "__identifier": "projectile", "__value": "BallToss", "__type": "LocalEnum.ProjectileType", "__tile": null, "defUid": 307, "realEditorValues": [] }
 							]
 						},
 						{
@@ -26780,7 +26829,8 @@
 									"id": "V_String",
 									"params": ["42,73"]
 								}] },
-								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] }
+								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] },
+								{ "__identifier": "projectile", "__value": "BallToss", "__type": "LocalEnum.ProjectileType", "__tile": null, "defUid": 307, "realEditorValues": [] }
 							]
 						},
 						{
@@ -26817,7 +26867,8 @@
 									"id": "V_String",
 									"params": ["27,133"]
 								}] },
-								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] }
+								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] },
+								{ "__identifier": "projectile", "__value": "BallToss", "__type": "LocalEnum.ProjectileType", "__tile": null, "defUid": 307, "realEditorValues": [] }
 							]
 						},
 						{
@@ -26906,7 +26957,8 @@
 									"id": "V_String",
 									"params": ["36,200"]
 								}] },
-								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] }
+								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] },
+								{ "__identifier": "projectile", "__value": "BallToss", "__type": "LocalEnum.ProjectileType", "__tile": null, "defUid": 307, "realEditorValues": [] }
 							]
 						}
 					]
