@@ -304,7 +304,7 @@ player pos0 starting_pus = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
               -- attacks
               (PStateIdle,       _, _, _, _, _, _, T, _, _, T, _) -> PStateStab
               (PStateWalk,       _, _, _, _, _, _, T, _, _, T, _) -> PStateWalkStab
-              (PStateRise _,     _, _, _, _, _, _, T, _, _, T, _) -> PStateRiseStab
+              (PStateRise _,     _, _, _, _, _, _, T, _, _, T, _) -> PStateFallSlice
               (PStateFall _,     _, _, _, _, _, _, T, _, F, T, _) -> PStateFallSlice
               -- walking
               (PStateIdle,       _, _, _, T, _, _, _, _, _, _, _) -> PStateWalk
