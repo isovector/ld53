@@ -253,7 +253,7 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
               (PStateRise,       _, _, _, _, _, _, F) -> PStateFall
               (p,                _, _, _, _, _, _, _) -> p
 
-  (dmg_oe, hp') <- damageHandler PlayerTeam -< (oi, boxes)
+  (dmg_oe, hp') <- damageHandler PlayerTeam  -< (oi, shr_ore shr, boxes)
 
   -- do hits
   let (_hits, hurts) = splitAnimBoxes boxes

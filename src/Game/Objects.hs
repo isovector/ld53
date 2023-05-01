@@ -28,6 +28,7 @@ import           Game.Objects.TextBillboard (textBillboard)
 import           Game.Objects.TutorialRegion (tutorialRegion)
 import           Game.Objects.Unknown (unknown)
 import qualified LDtk.Types as LDtk
+import Game.Objects.Slime (slime)
 
 
 buildEntity
@@ -47,6 +48,9 @@ buildEntity "TutorialRegion" pos ore props _ =
 buildEntity "Sandbag" pos ore _ _ =
   sandbag pos
     <$> pure ore
+buildEntity "Slime" pos ore props _ =
+  slime pos ore
+    <$> optional (asPos "Slime" "path" props)
 buildEntity "Text" pos _ props _ =
   textBillboard
     <$> optional (asDouble "Text" "duration" props)

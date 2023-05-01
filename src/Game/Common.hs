@@ -4,14 +4,14 @@ module Game.Common
   , module Engine.Common
   ) where
 
+import           Control.Monad (guard)
+import           Data.List (partition)
 import           Data.Maybe (isNothing)
 import qualified Data.Set as S
 import           Engine.Common
+import           Engine.Geometry (intersects)
 import           Engine.Prelude
-import Control.Monad (guard)
-import Engine.Geometry (intersects)
-import Data.List (partition)
-import Game.Objects.Particle (particle)
+import           Game.Objects.Particle (particle)
 
 
 withLifetime :: Double -> Object -> Object
@@ -150,10 +150,10 @@ splitAnimBoxes :: [AnimBox] -> ([AnimBox], [AnimBox])
 splitAnimBoxes = partition ((== Hitbox) . ab_type)
 
 
-damageHandler :: Team -> SF (ObjectInput, [AnimBox]) (ObjectEvents, Int -> Int)
-damageHandler team = proc (oi, boxes) -> do
+damageHandler :: Team -> SF (ObjectInput, OriginRect Double, [AnimBox]) (ObjectEvents, Int -> Int)
+damageHandler team = proc (oi, ore, boxes) -> do
   let os = oi_state oi
-      OriginRect sz _ = fromMaybe (OriginRect 0 0) $ os_collision os
+      OriginRect sz _ = ore
 
   let dmg_in_ev = fmap (sum . fmap d_damage) $ checkDamage' team boxes $ oi_events oi
   dmg_ev <- onlyOncePer 0.1 -< dmg_in_ev
@@ -173,5 +173,13 @@ damageHandler team = proc (oi, boxes) -> do
 dmgIndicator :: V2 WorldPos -> Int -> Object
 dmgIndicator pos dmg =
   particle pos (V2 0 (-100)) (arr $ drawText 5 (V3 255 0 0) $ '-' : show dmg) 0 3
+
+
+mkHurtHitBox :: V2 WorldPos -> OriginRect Double -> [AnimBox]
+mkHurtHitBox pos ore =
+  let rect = originRectToRect2 ore $ coerce pos
+   in [ AnimBox Hitbox rect
+      , AnimBox Hurtbox rect
+      ]
 
 
