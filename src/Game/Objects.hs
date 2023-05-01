@@ -29,6 +29,7 @@ import           Game.Objects.Sandbag (sandbag)
 import           Game.Objects.Slime (slime)
 import           Game.Objects.SpawnTrigger (spawnTrigger)
 import           Game.Objects.TextBillboard (textBillboard)
+import           Game.Objects.Thrower (thrower)
 import           Game.Objects.TutorialRegion (tutorialRegion)
 import           Game.Objects.Unknown (unknown)
 import qualified LDtk.Types as LDtk
@@ -45,6 +46,10 @@ buildEntity "Player" pos _ props _ =
   player pos
     <$> fmap (fromMaybe []) (optional $ asEnumArray "Player" "powerups" props)
 buildEntity "Antagonist" pos _ _ _ = pure $ antagonist pos
+buildEntity "Thrower" pos ore props _ =
+  thrower pos ore
+    <$> optional (asPos "Thrower" "path" props)
+    <*> asDouble "Thrower" "cooldown" props
 buildEntity "Checkpoint" pos _ _ _ = pure $ checkpoint pos
 buildEntity "TutorialRegion" pos ore props _ =
   tutorialRegion pos ore

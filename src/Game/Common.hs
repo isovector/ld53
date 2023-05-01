@@ -188,4 +188,10 @@ mkHitBox pos ore =
    in [ AnimBox Hitbox rect
       ]
 
+mkHurtBox :: V2 WorldPos -> OriginRect Double -> [AnimBox]
+mkHurtBox pos ore =
+  let rect = originRectToRect2 ore $ coerce pos
+   in [ AnimBox Hurtbox rect
+      ]
+
 
