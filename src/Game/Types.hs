@@ -212,11 +212,11 @@ data PuppetAnim
   | PlayerSlide
   | PlayerAirSlide
   | PlayerKnockback
+  | PlayerDie
   deriving stock (Eq, Ord, Show, Read, Generic, Enum, Bounded)
 
 data BoxType
   = Hitbox
   | Hurtbox
   deriving stock (Eq, Ord, Show, Read, Generic)
-
 
