@@ -5,14 +5,15 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "1.2.3",
+		"appVersion": "1.3.0",
 		"url": "https://ldtk.io"
 	},
 	"iid": "a22d35f0-7820-11ed-b6fd-213e885f30da",
-	"jsonVersion": "1.2.3",
-	"appBuildId": 464726,
-	"nextUid": 293,
+	"jsonVersion": "1.3.0",
+	"appBuildId": 467453,
+	"nextUid": 294,
 	"identifierStyle": "Capitalize",
+	"toc": [],
 	"worldLayout": "GridVania",
 	"worldGridWidth": 480,
 	"worldGridHeight": 272,
@@ -32,16 +33,18 @@
 	"pngFilePattern": null,
 	"backupOnSave": false,
 	"backupLimit": 10,
+	"backupRelPath": null,
 	"levelNamePattern": "%world_Level_%idx",
 	"tutorialDesc": "IntGrid layers can paint tiles automatically using simple RULE SETS.\n\n - Press [SHIFT + R] to toggle auto-layer rendering\n - Click on the RULES button on the left to see/edit rules.",
 	"customCommands": [],
-	"flags": ["UseMultilinesType"],
+	"flags": [ "IgnoreBackupSuggest", "UseMultilinesType" ],
 	"defs": { "layers": [
 		{
 			"__type": "IntGrid",
 			"identifier": "Layer3",
 			"type": "IntGrid",
 			"uid": 132,
+			"doc": null,
 			"gridSize": 16,
 			"guideGridWid": 0,
 			"guideGridHei": 0,
@@ -74,6 +77,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -98,6 +107,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -122,6 +137,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -146,6 +167,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -170,6 +197,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -194,6 +227,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -218,6 +257,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -244,6 +289,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -268,6 +319,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -292,6 +349,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -318,6 +381,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -342,6 +411,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -366,6 +441,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -390,6 +471,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -414,6 +501,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -438,6 +531,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -464,6 +563,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -488,6 +593,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -512,6 +623,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Stamp",
 						"pivotX": 0.5,
@@ -536,6 +653,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Stamp",
 						"pivotX": 0.5,
@@ -560,6 +683,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Stamp",
 						"pivotX": 0.5,
@@ -584,6 +713,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -608,6 +743,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -632,6 +773,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -658,6 +805,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Stamp",
 						"pivotX": 0.5,
@@ -682,6 +835,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Stamp",
 						"pivotX": 0.5,
@@ -706,6 +865,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -730,6 +895,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -754,6 +925,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Stamp",
 						"pivotX": 0.5,
@@ -778,6 +955,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Stamp",
 						"pivotX": 0.5,
@@ -802,6 +985,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Stamp",
 						"pivotX": 0.5,
@@ -826,6 +1015,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Stamp",
 						"pivotX": 0.5,
@@ -850,6 +1045,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -874,6 +1075,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -898,6 +1105,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -922,6 +1135,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -944,6 +1163,7 @@
 			"identifier": "Entities",
 			"type": "Entities",
 			"uid": 123,
+			"doc": null,
 			"gridSize": 8,
 			"guideGridWid": 0,
 			"guideGridHei": 0,
@@ -971,6 +1191,7 @@
 			"identifier": "City",
 			"type": "IntGrid",
 			"uid": 235,
+			"doc": null,
 			"gridSize": 16,
 			"guideGridWid": 0,
 			"guideGridHei": 0,
@@ -1007,6 +1228,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Stamp",
 						"pivotX": 0.5,
@@ -1031,6 +1258,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Stamp",
 						"pivotX": 0.5,
@@ -1055,6 +1288,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0.5,
@@ -1079,6 +1318,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Stamp",
 						"pivotX": 0.5,
@@ -1103,6 +1348,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Stamp",
 						"pivotX": 0.5,
@@ -1129,6 +1380,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Stamp",
 						"pivotX": 0.5,
@@ -1153,6 +1410,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -1177,6 +1440,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Stamp",
 						"pivotX": 0.5,
@@ -1203,6 +1472,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -1227,6 +1502,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -1251,6 +1532,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -1275,6 +1562,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -1299,6 +1592,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -1323,6 +1622,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -1347,6 +1652,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -1371,6 +1682,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -1395,6 +1712,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -1419,6 +1742,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -1443,6 +1772,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -1467,6 +1802,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -1491,6 +1832,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -1515,6 +1862,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -1539,6 +1892,12 @@
 						"yModulo": 1,
 						"xOffset": 0,
 						"yOffset": 0,
+						"tileXOffset": 0,
+						"tileYOffset": 0,
+						"tileRandomXMin": 0,
+						"tileRandomXMax": 0,
+						"tileRandomYMin": 0,
+						"tileRandomYMax": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -1561,6 +1920,8 @@
 			"identifier": "Player",
 			"uid": 121,
 			"tags": [],
+			"exportToToc": false,
+			"doc": null,
 			"width": 24,
 			"height": 68,
 			"resizableX": false,
@@ -1582,12 +1943,49 @@
 			"limitBehavior": "MoveLastOne",
 			"pivotX": 0.5,
 			"pivotY": 1,
-			"fieldDefs": []
+			"fieldDefs": [
+				{
+					"identifier": "powerups",
+					"doc": null,
+					"__type": "Array<LocalEnum.Power>",
+					"uid": 293,
+					"type": "F_Enum(182)",
+					"isArray": true,
+					"canBeNull": false,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "Hidden",
+					"editorDisplayScale": 0,
+					"editorDisplayPos": "Above",
+					"editorLinkStyle": "StraightArrow",
+					"editorAlwaysShow": false,
+					"editorShowInWorld": true,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
+					"allowedRefTags": [],
+					"tilesetUid": null
+				}
+			]
 		},
 		{
 			"identifier": "Antagonist",
 			"uid": 260,
 			"tags": [],
+			"exportToToc": false,
+			"doc": null,
 			"width": 24,
 			"height": 68,
 			"resizableX": false,
@@ -1621,6 +2019,7 @@
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "PointPath",
+					"editorDisplayScale": 1,
 					"editorDisplayPos": "Above",
 					"editorLinkStyle": "StraightArrow",
 					"editorAlwaysShow": true,
@@ -1639,6 +2038,7 @@
 					"autoChainRef": true,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
 					"allowedRefTags": [],
 					"tilesetUid": null
 				},
@@ -1653,6 +2053,7 @@
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "Hidden",
+					"editorDisplayScale": 1,
 					"editorDisplayPos": "Above",
 					"editorLinkStyle": "StraightArrow",
 					"editorAlwaysShow": false,
@@ -1671,6 +2072,7 @@
 					"autoChainRef": true,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
 					"allowedRefTags": [],
 					"tilesetUid": null
 				}
@@ -1680,6 +2082,8 @@
 			"identifier": "Text",
 			"uid": 127,
 			"tags": [],
+			"exportToToc": false,
+			"doc": null,
 			"width": 8,
 			"height": 8,
 			"resizableX": false,
@@ -1713,6 +2117,7 @@
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "Hidden",
+					"editorDisplayScale": 1,
 					"editorDisplayPos": "Above",
 					"editorLinkStyle": "StraightArrow",
 					"editorAlwaysShow": false,
@@ -1731,6 +2136,7 @@
 					"autoChainRef": true,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
 					"allowedRefTags": [],
 					"tilesetUid": null
 				},
@@ -1745,6 +2151,7 @@
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "ValueOnly",
+					"editorDisplayScale": 1,
 					"editorDisplayPos": "Center",
 					"editorLinkStyle": "StraightArrow",
 					"editorAlwaysShow": false,
@@ -1766,6 +2173,7 @@
 					"autoChainRef": true,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
 					"allowedRefTags": [],
 					"tilesetUid": null
 				},
@@ -1780,6 +2188,7 @@
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "Hidden",
+					"editorDisplayScale": 1,
 					"editorDisplayPos": "Above",
 					"editorLinkStyle": "StraightArrow",
 					"editorAlwaysShow": false,
@@ -1798,6 +2207,7 @@
 					"autoChainRef": true,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
 					"allowedRefTags": [],
 					"tilesetUid": null
 				},
@@ -1812,6 +2222,7 @@
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "Hidden",
+					"editorDisplayScale": 1,
 					"editorDisplayPos": "Above",
 					"editorLinkStyle": "StraightArrow",
 					"editorAlwaysShow": false,
@@ -1830,6 +2241,7 @@
 					"autoChainRef": true,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
 					"allowedRefTags": [],
 					"tilesetUid": null
 				}
@@ -1839,6 +2251,8 @@
 			"identifier": "SpawnTrigger",
 			"uid": 213,
 			"tags": [],
+			"exportToToc": false,
+			"doc": null,
 			"width": 16,
 			"height": 16,
 			"resizableX": true,
@@ -1872,6 +2286,7 @@
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "RefLinkBetweenCenters",
+					"editorDisplayScale": 1,
 					"editorDisplayPos": "Above",
 					"editorLinkStyle": "CurvedArrow",
 					"editorAlwaysShow": false,
@@ -1890,6 +2305,7 @@
 					"autoChainRef": false,
 					"allowOutOfLevelRef": false,
 					"allowedRefs": "Any",
+					"allowedRefsEntityUid": null,
 					"allowedRefTags": [],
 					"tilesetUid": null
 				},
@@ -1904,6 +2320,7 @@
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "Hidden",
+					"editorDisplayScale": 1,
 					"editorDisplayPos": "Above",
 					"editorLinkStyle": "StraightArrow",
 					"editorAlwaysShow": false,
@@ -1925,6 +2342,7 @@
 					"autoChainRef": true,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
 					"allowedRefTags": [],
 					"tilesetUid": null
 				}
@@ -1934,6 +2352,8 @@
 			"identifier": "ParticleSpawner",
 			"uid": 215,
 			"tags": [],
+			"exportToToc": false,
+			"doc": null,
 			"width": 8,
 			"height": 8,
 			"resizableX": false,
@@ -1967,6 +2387,7 @@
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "Hidden",
+					"editorDisplayScale": 1,
 					"editorDisplayPos": "Above",
 					"editorLinkStyle": "StraightArrow",
 					"editorAlwaysShow": false,
@@ -1985,6 +2406,7 @@
 					"autoChainRef": true,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
 					"allowedRefTags": [],
 					"tilesetUid": null
 				}
@@ -1994,6 +2416,8 @@
 			"identifier": "DespawnTrigger",
 			"uid": 221,
 			"tags": [],
+			"exportToToc": false,
+			"doc": null,
 			"width": 16,
 			"height": 16,
 			"resizableX": true,
@@ -2027,6 +2451,7 @@
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "RefLinkBetweenCenters",
+					"editorDisplayScale": 1,
 					"editorDisplayPos": "Above",
 					"editorLinkStyle": "CurvedArrow",
 					"editorAlwaysShow": false,
@@ -2045,6 +2470,7 @@
 					"autoChainRef": true,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "Any",
+					"allowedRefsEntityUid": null,
 					"allowedRefTags": [],
 					"tilesetUid": null
 				}
@@ -2054,6 +2480,8 @@
 			"identifier": "TutorialRegion",
 			"uid": 223,
 			"tags": [],
+			"exportToToc": false,
+			"doc": null,
 			"width": 16,
 			"height": 16,
 			"resizableX": true,
@@ -2087,6 +2515,7 @@
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "ValueOnly",
+					"editorDisplayScale": 1,
 					"editorDisplayPos": "Above",
 					"editorLinkStyle": "StraightArrow",
 					"editorAlwaysShow": false,
@@ -2105,6 +2534,7 @@
 					"autoChainRef": true,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
 					"allowedRefTags": [],
 					"tilesetUid": null
 				},
@@ -2119,6 +2549,7 @@
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "Hidden",
+					"editorDisplayScale": 1,
 					"editorDisplayPos": "Above",
 					"editorLinkStyle": "StraightArrow",
 					"editorAlwaysShow": false,
@@ -2137,6 +2568,7 @@
 					"autoChainRef": true,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
 					"allowedRefTags": [],
 					"tilesetUid": null
 				}
@@ -2146,6 +2578,8 @@
 			"identifier": "Sandbag",
 			"uid": 231,
 			"tags": [],
+			"exportToToc": false,
+			"doc": null,
 			"width": 32,
 			"height": 64,
 			"resizableX": false,
@@ -2173,6 +2607,8 @@
 			"identifier": "Slime",
 			"uid": 259,
 			"tags": [],
+			"exportToToc": false,
+			"doc": null,
 			"width": 24,
 			"height": 24,
 			"resizableX": false,
@@ -2206,6 +2642,7 @@
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "PointPath",
+					"editorDisplayScale": 1,
 					"editorDisplayPos": "Above",
 					"editorLinkStyle": "StraightArrow",
 					"editorAlwaysShow": true,
@@ -2224,6 +2661,7 @@
 					"autoChainRef": true,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
 					"allowedRefTags": [],
 					"tilesetUid": null
 				}
@@ -2233,6 +2671,8 @@
 			"identifier": "Flyer",
 			"uid": 268,
 			"tags": [],
+			"exportToToc": false,
+			"doc": null,
 			"width": 24,
 			"height": 24,
 			"resizableX": false,
@@ -2266,6 +2706,7 @@
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "PointPath",
+					"editorDisplayScale": 1,
 					"editorDisplayPos": "Above",
 					"editorLinkStyle": "StraightArrow",
 					"editorAlwaysShow": true,
@@ -2284,6 +2725,7 @@
 					"autoChainRef": true,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
 					"allowedRefTags": [],
 					"tilesetUid": null
 				},
@@ -2298,6 +2740,7 @@
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "Hidden",
+					"editorDisplayScale": 1,
 					"editorDisplayPos": "Above",
 					"editorLinkStyle": "StraightArrow",
 					"editorAlwaysShow": false,
@@ -2316,6 +2759,7 @@
 					"autoChainRef": true,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
 					"allowedRefTags": [],
 					"tilesetUid": null
 				},
@@ -2330,6 +2774,7 @@
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "Hidden",
+					"editorDisplayScale": 1,
 					"editorDisplayPos": "Above",
 					"editorLinkStyle": "StraightArrow",
 					"editorAlwaysShow": false,
@@ -2348,6 +2793,7 @@
 					"autoChainRef": true,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
 					"allowedRefTags": [],
 					"tilesetUid": null
 				}
@@ -2357,6 +2803,8 @@
 			"identifier": "Thrower",
 			"uid": 264,
 			"tags": [],
+			"exportToToc": false,
+			"doc": null,
 			"width": 24,
 			"height": 64,
 			"resizableX": false,
@@ -2390,6 +2838,7 @@
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "PointPath",
+					"editorDisplayScale": 1,
 					"editorDisplayPos": "Above",
 					"editorLinkStyle": "StraightArrow",
 					"editorAlwaysShow": true,
@@ -2408,6 +2857,7 @@
 					"autoChainRef": true,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
 					"allowedRefTags": [],
 					"tilesetUid": null
 				},
@@ -2422,6 +2872,7 @@
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "Hidden",
+					"editorDisplayScale": 1,
 					"editorDisplayPos": "Above",
 					"editorLinkStyle": "StraightArrow",
 					"editorAlwaysShow": false,
@@ -2440,6 +2891,7 @@
 					"autoChainRef": true,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
 					"allowedRefTags": [],
 					"tilesetUid": null
 				}
@@ -2536,16 +2988,17 @@
 		}
 	], "enums": [
 		{ "identifier": "Layer", "uid": 174, "values": [
-			{ "id": "Layer1", "tileId": -1, "color": 12470831, "__tileSrcRect": null },
-			{ "id": "Layer2", "tileId": -1, "color": 14120515, "__tileSrcRect": null },
-			{ "id": "Layer3", "tileId": -1, "color": 15389866, "__tileSrcRect": null }
+			{ "id": "Layer1", "tileRect": null, "tileId": -1, "color": 12470831, "__tileSrcRect": null },
+			{ "id": "Layer2", "tileRect": null, "tileId": -1, "color": 14120515, "__tileSrcRect": null },
+			{ "id": "Layer3", "tileRect": null, "tileId": -1, "color": 15389866, "__tileSrcRect": null }
 		], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": [] },
 		{ "identifier": "Power", "uid": 182, "values": [
-			{ "id": "PowerupWarpBall", "tileId": -1, "color": 12470831, "__tileSrcRect": null },
-			{ "id": "PowerupDoubleJump", "tileId": -1, "color": 14120515, "__tileSrcRect": null },
-			{ "id": "PowerupTotsugeki", "tileId": -1, "color": 15389866, "__tileSrcRect": null }
+			{ "id": "PowerupDoubleJump", "tileRect": null, "tileId": -1, "color": 14120515, "__tileSrcRect": null },
+			{ "id": "PowerupJump", "tileRect": null, "tileId": -1, "color": 15389866, "__tileSrcRect": null },
+			{ "id": "PowerupSword", "tileRect": null, "tileId": -1, "color": 12470831, "__tileSrcRect": null },
+			{ "id": "PowerupSlide", "tileRect": null, "tileId": -1, "color": 14984818, "__tileSrcRect": null }
 		], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": [] },
-		{ "identifier": "ParticleType", "uid": 217, "values": [ { "id": "Firework", "tileId": -1, "color": 12470831, "__tileSrcRect": null }, { "id": "Gore", "tileId": -1, "color": 14120515, "__tileSrcRect": null } ], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }
+		{ "identifier": "ParticleType", "uid": 217, "values": [{ "id": "Gore", "tileRect": null, "tileId": -1, "color": 14120515, "__tileSrcRect": null }], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }
 	], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{
@@ -3835,7 +4288,13 @@
 							"height": 68,
 							"defUid": 121,
 							"px": [156,368],
-							"fieldInstances": []
+							"fieldInstances": [{ "__identifier": "powerups", "__type": "Array<LocalEnum.Power>", "__value": [ "PowerupJump", "PowerupSlide" ], "__tile": null, "defUid": 293, "realEditorValues": [ {
+								"id": "V_String",
+								"params": ["PowerupJump"]
+							}, {
+								"id": "V_String",
+								"params": ["PowerupSlide"]
+							} ] }]
 						},
 						{
 							"__identifier": "Sandbag",
@@ -3863,7 +4322,7 @@
 							"height": 24,
 							"defUid": 259,
 							"px": [516,352],
-							"fieldInstances": [{ "__identifier": "path", "__value": { "cx": 59, "cy": 43 }, "__type": "Point", "__tile": null, "defUid": 263, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "path", "__type": "Point", "__value": { "cx": 59, "cy": 43 }, "__tile": null, "defUid": 263, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["59,43"]
 							}] }]
@@ -3880,7 +4339,7 @@
 							"height": 24,
 							"defUid": 259,
 							"px": [460,528],
-							"fieldInstances": [{ "__identifier": "path", "__value": { "cx": 45, "cy": 65 }, "__type": "Point", "__tile": null, "defUid": 263, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "path", "__type": "Point", "__value": { "cx": 45, "cy": 65 }, "__tile": null, "defUid": 263, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["45,65"]
 							}] }]
@@ -3898,12 +4357,12 @@
 							"defUid": 268,
 							"px": [588,260],
 							"fieldInstances": [
-								{ "__identifier": "path", "__value": { "cx": 3, "cy": 32 }, "__type": "Point", "__tile": null, "defUid": 269, "realEditorValues": [{
+								{ "__identifier": "path", "__type": "Point", "__value": { "cx": 3, "cy": 32 }, "__tile": null, "defUid": 269, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["3,32"]
 								}] },
-								{ "__identifier": "amplitude", "__value": 1, "__type": "Float", "__tile": null, "defUid": 270, "realEditorValues": [{ "id": "V_Float", "params": [1] }] },
-								{ "__identifier": "frequency", "__value": 1, "__type": "Float", "__tile": null, "defUid": 271, "realEditorValues": [] }
+								{ "__identifier": "amplitude", "__type": "Float", "__value": 1, "__tile": null, "defUid": 270, "realEditorValues": [{ "id": "V_Float", "params": [1] }] },
+								{ "__identifier": "frequency", "__type": "Float", "__value": 1, "__tile": null, "defUid": 271, "realEditorValues": [] }
 							]
 						},
 						{
@@ -3919,11 +4378,11 @@
 							"defUid": 264,
 							"px": [604,488],
 							"fieldInstances": [
-								{ "__identifier": "path", "__value": { "cx": 68, "cy": 60 }, "__type": "Point", "__tile": null, "defUid": 265, "realEditorValues": [{
+								{ "__identifier": "path", "__type": "Point", "__value": { "cx": 68, "cy": 60 }, "__tile": null, "defUid": 265, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["68,60"]
 								}] },
-								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] }
+								{ "__identifier": "cooldown", "__type": "Float", "__value": 3, "__tile": null, "defUid": 266, "realEditorValues": [] }
 							]
 						},
 						{
@@ -3939,11 +4398,11 @@
 							"defUid": 260,
 							"px": [44,360],
 							"fieldInstances": [
-								{ "__identifier": "path", "__value": { "cx": 14, "cy": 44 }, "__type": "Point", "__tile": null, "defUid": 262, "realEditorValues": [{
+								{ "__identifier": "path", "__type": "Point", "__value": { "cx": 14, "cy": 44 }, "__tile": null, "defUid": 262, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["14,44"]
 								}] },
-								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 267, "realEditorValues": [] }
+								{ "__identifier": "cooldown", "__type": "Float", "__value": 3, "__tile": null, "defUid": 267, "realEditorValues": [] }
 							]
 						}
 					]
@@ -4260,7 +4719,7 @@
 							"height": 24,
 							"defUid": 259,
 							"px": [52,472],
-							"fieldInstances": [{ "__identifier": "path", "__value": { "cx": 11, "cy": 57 }, "__type": "Point", "__tile": null, "defUid": 263, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "path", "__type": "Point", "__value": { "cx": 11, "cy": 57 }, "__tile": null, "defUid": 263, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["11,57"]
 							}] }]
@@ -6643,11 +7102,11 @@
 							"defUid": 260,
 							"px": [1020,240],
 							"fieldInstances": [
-								{ "__identifier": "path", "__value": { "cx": 115, "cy": 29 }, "__type": "Point", "__tile": null, "defUid": 262, "realEditorValues": [{
+								{ "__identifier": "path", "__type": "Point", "__value": { "cx": 115, "cy": 29 }, "__tile": null, "defUid": 262, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["115,29"]
 								}] },
-								{ "__identifier": "cooldown", "__value": 1, "__type": "Float", "__tile": null, "defUid": 267, "realEditorValues": [{ "id": "V_Float", "params": [1] }] }
+								{ "__identifier": "cooldown", "__type": "Float", "__value": 1, "__tile": null, "defUid": 267, "realEditorValues": [{ "id": "V_Float", "params": [1] }] }
 							]
 						},
 						{
@@ -6662,7 +7121,7 @@
 							"height": 24,
 							"defUid": 259,
 							"px": [876,232],
-							"fieldInstances": [{ "__identifier": "path", "__value": { "cx": 94, "cy": 28 }, "__type": "Point", "__tile": null, "defUid": 263, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "path", "__type": "Point", "__value": { "cx": 94, "cy": 28 }, "__tile": null, "defUid": 263, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["94,28"]
 							}] }]
@@ -6680,12 +7139,12 @@
 							"defUid": 268,
 							"px": [1692,68],
 							"fieldInstances": [
-								{ "__identifier": "path", "__value": { "cx": 8, "cy": 11 }, "__type": "Point", "__tile": null, "defUid": 269, "realEditorValues": [{
+								{ "__identifier": "path", "__type": "Point", "__value": { "cx": 8, "cy": 11 }, "__tile": null, "defUid": 269, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["8,11"]
 								}] },
-								{ "__identifier": "amplitude", "__value": 100, "__type": "Float", "__tile": null, "defUid": 270, "realEditorValues": [{ "id": "V_Float", "params": [100] }] },
-								{ "__identifier": "frequency", "__value": 2, "__type": "Float", "__tile": null, "defUid": 271, "realEditorValues": [{ "id": "V_Float", "params": [2] }] }
+								{ "__identifier": "amplitude", "__type": "Float", "__value": 100, "__tile": null, "defUid": 270, "realEditorValues": [{ "id": "V_Float", "params": [100] }] },
+								{ "__identifier": "frequency", "__type": "Float", "__value": 2, "__tile": null, "defUid": 271, "realEditorValues": [{ "id": "V_Float", "params": [2] }] }
 							]
 						},
 						{
@@ -6701,11 +7160,11 @@
 							"defUid": 264,
 							"px": [1644,152],
 							"fieldInstances": [
-								{ "__identifier": "path", "__value": { "cx": 192, "cy": 18 }, "__type": "Point", "__tile": null, "defUid": 265, "realEditorValues": [{
+								{ "__identifier": "path", "__type": "Point", "__value": { "cx": 192, "cy": 18 }, "__tile": null, "defUid": 265, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["192,18"]
 								}] },
-								{ "__identifier": "cooldown", "__value": 4, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [{ "id": "V_Float", "params": [4] }] }
+								{ "__identifier": "cooldown", "__type": "Float", "__value": 4, "__tile": null, "defUid": 266, "realEditorValues": [{ "id": "V_Float", "params": [4] }] }
 							]
 						},
 						{
@@ -6720,7 +7179,7 @@
 							"height": 24,
 							"defUid": 259,
 							"px": [564,232],
-							"fieldInstances": [{ "__identifier": "path", "__value": { "cx": 54, "cy": 28 }, "__type": "Point", "__tile": null, "defUid": 263, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "path", "__type": "Point", "__value": { "cx": 54, "cy": 28 }, "__tile": null, "defUid": 263, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["54,28"]
 							}] }]
@@ -9018,7 +9477,7 @@
 							"height": 24,
 							"defUid": 259,
 							"px": [1692,432],
-							"fieldInstances": [{ "__identifier": "path", "__value": { "cx": 213, "cy": 52 }, "__type": "Point", "__tile": null, "defUid": 263, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "path", "__type": "Point", "__value": { "cx": 213, "cy": 52 }, "__tile": null, "defUid": 263, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["213,52"]
 							}] }]
@@ -9036,12 +9495,12 @@
 							"defUid": 268,
 							"px": [1676,84],
 							"fieldInstances": [
-								{ "__identifier": "path", "__value": { "cx": 296, "cy": 10 }, "__type": "Point", "__tile": null, "defUid": 269, "realEditorValues": [{
+								{ "__identifier": "path", "__type": "Point", "__value": { "cx": 296, "cy": 10 }, "__tile": null, "defUid": 269, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["296,10"]
 								}] },
-								{ "__identifier": "amplitude", "__value": 2, "__type": "Float", "__tile": null, "defUid": 270, "realEditorValues": [{ "id": "V_Float", "params": [2] }] },
-								{ "__identifier": "frequency", "__value": 1, "__type": "Float", "__tile": null, "defUid": 271, "realEditorValues": [{ "id": "V_Float", "params": [1] }] }
+								{ "__identifier": "amplitude", "__type": "Float", "__value": 2, "__tile": null, "defUid": 270, "realEditorValues": [{ "id": "V_Float", "params": [2] }] },
+								{ "__identifier": "frequency", "__type": "Float", "__value": 1, "__tile": null, "defUid": 271, "realEditorValues": [{ "id": "V_Float", "params": [1] }] }
 							]
 						}
 					]
@@ -11226,7 +11685,7 @@
 							"height": 24,
 							"defUid": 259,
 							"px": [2420,512],
-							"fieldInstances": [{ "__identifier": "path", "__value": null, "__type": "Point", "__tile": null, "defUid": 263, "realEditorValues": [] }]
+							"fieldInstances": [{ "__identifier": "path", "__type": "Point", "__value": null, "__tile": null, "defUid": 263, "realEditorValues": [] }]
 						}
 					]
 				},
@@ -12214,7 +12673,7 @@
 							"height": 68,
 							"defUid": 121,
 							"px": [484,344],
-							"fieldInstances": []
+							"fieldInstances": [{ "__identifier": "powerups", "__type": "Array<LocalEnum.Power>", "__value": [], "__tile": null, "defUid": 293, "realEditorValues": [] }]
 						}
 					]
 				},
@@ -13538,7 +13997,7 @@
 							"height": 24,
 							"defUid": 259,
 							"px": [1628,272],
-							"fieldInstances": [{ "__identifier": "path", "__value": null, "__type": "Point", "__tile": null, "defUid": 263, "realEditorValues": [] }]
+							"fieldInstances": [{ "__identifier": "path", "__type": "Point", "__value": null, "__tile": null, "defUid": 263, "realEditorValues": [] }]
 						},
 						{
 							"__identifier": "Thrower",
@@ -13553,11 +14012,11 @@
 							"defUid": 264,
 							"px": [1420,352],
 							"fieldInstances": [
-								{ "__identifier": "path", "__value": { "cx": 179, "cy": 43 }, "__type": "Point", "__tile": null, "defUid": 265, "realEditorValues": [{
+								{ "__identifier": "path", "__type": "Point", "__value": { "cx": 179, "cy": 43 }, "__tile": null, "defUid": 265, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["179,43"]
 								}] },
-								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] }
+								{ "__identifier": "cooldown", "__type": "Float", "__value": 3, "__tile": null, "defUid": 266, "realEditorValues": [] }
 							]
 						},
 						{
@@ -13573,8 +14032,8 @@
 							"defUid": 264,
 							"px": [964,144],
 							"fieldInstances": [
-								{ "__identifier": "path", "__value": null, "__type": "Point", "__tile": null, "defUid": 265, "realEditorValues": [] },
-								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] }
+								{ "__identifier": "path", "__type": "Point", "__value": null, "__tile": null, "defUid": 265, "realEditorValues": [] },
+								{ "__identifier": "cooldown", "__type": "Float", "__value": 3, "__tile": null, "defUid": 266, "realEditorValues": [] }
 							]
 						},
 						{
@@ -13590,8 +14049,8 @@
 							"defUid": 260,
 							"px": [1204,336],
 							"fieldInstances": [
-								{ "__identifier": "path", "__value": null, "__type": "Point", "__tile": null, "defUid": 262, "realEditorValues": [] },
-								{ "__identifier": "cooldown", "__value": 1, "__type": "Float", "__tile": null, "defUid": 267, "realEditorValues": [{ "id": "V_Float", "params": [1] }] }
+								{ "__identifier": "path", "__type": "Point", "__value": null, "__tile": null, "defUid": 262, "realEditorValues": [] },
+								{ "__identifier": "cooldown", "__type": "Float", "__value": 1, "__tile": null, "defUid": 267, "realEditorValues": [{ "id": "V_Float", "params": [1] }] }
 							]
 						},
 						{
@@ -13607,8 +14066,8 @@
 							"defUid": 260,
 							"px": [1164,336],
 							"fieldInstances": [
-								{ "__identifier": "path", "__value": null, "__type": "Point", "__tile": null, "defUid": 262, "realEditorValues": [] },
-								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 267, "realEditorValues": [] }
+								{ "__identifier": "path", "__type": "Point", "__value": null, "__tile": null, "defUid": 262, "realEditorValues": [] },
+								{ "__identifier": "cooldown", "__type": "Float", "__value": 3, "__tile": null, "defUid": 267, "realEditorValues": [] }
 							]
 						},
 						{
@@ -13623,7 +14082,7 @@
 							"height": 24,
 							"defUid": 259,
 							"px": [972,304],
-							"fieldInstances": [{ "__identifier": "path", "__value": null, "__type": "Point", "__tile": null, "defUid": 263, "realEditorValues": [] }]
+							"fieldInstances": [{ "__identifier": "path", "__type": "Point", "__value": null, "__tile": null, "defUid": 263, "realEditorValues": [] }]
 						},
 						{
 							"__identifier": "Slime",
@@ -13637,7 +14096,7 @@
 							"height": 24,
 							"defUid": 259,
 							"px": [916,304],
-							"fieldInstances": [{ "__identifier": "path", "__value": null, "__type": "Point", "__tile": null, "defUid": 263, "realEditorValues": [] }]
+							"fieldInstances": [{ "__identifier": "path", "__type": "Point", "__value": null, "__tile": null, "defUid": 263, "realEditorValues": [] }]
 						},
 						{
 							"__identifier": "Slime",
@@ -13651,7 +14110,7 @@
 							"height": 24,
 							"defUid": 259,
 							"px": [852,208],
-							"fieldInstances": [{ "__identifier": "path", "__value": null, "__type": "Point", "__tile": null, "defUid": 263, "realEditorValues": [] }]
+							"fieldInstances": [{ "__identifier": "path", "__type": "Point", "__value": null, "__tile": null, "defUid": 263, "realEditorValues": [] }]
 						},
 						{
 							"__identifier": "Slime",
@@ -13665,7 +14124,7 @@
 							"height": 24,
 							"defUid": 259,
 							"px": [1044,192],
-							"fieldInstances": [{ "__identifier": "path", "__value": null, "__type": "Point", "__tile": null, "defUid": 263, "realEditorValues": [] }]
+							"fieldInstances": [{ "__identifier": "path", "__type": "Point", "__value": null, "__tile": null, "defUid": 263, "realEditorValues": [] }]
 						},
 						{
 							"__identifier": "Slime",
@@ -13679,7 +14138,7 @@
 							"height": 24,
 							"defUid": 259,
 							"px": [388,144],
-							"fieldInstances": [{ "__identifier": "path", "__value": null, "__type": "Point", "__tile": null, "defUid": 263, "realEditorValues": [] }]
+							"fieldInstances": [{ "__identifier": "path", "__type": "Point", "__value": null, "__tile": null, "defUid": 263, "realEditorValues": [] }]
 						},
 						{
 							"__identifier": "Thrower",
@@ -13694,8 +14153,8 @@
 							"defUid": 264,
 							"px": [156,256],
 							"fieldInstances": [
-								{ "__identifier": "path", "__value": null, "__type": "Point", "__tile": null, "defUid": 265, "realEditorValues": [] },
-								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] }
+								{ "__identifier": "path", "__type": "Point", "__value": null, "__tile": null, "defUid": 265, "realEditorValues": [] },
+								{ "__identifier": "cooldown", "__type": "Float", "__value": 3, "__tile": null, "defUid": 266, "realEditorValues": [] }
 							]
 						},
 						{
@@ -13710,7 +14169,7 @@
 							"height": 24,
 							"defUid": 259,
 							"px": [68,160],
-							"fieldInstances": [{ "__identifier": "path", "__value": null, "__type": "Point", "__tile": null, "defUid": 263, "realEditorValues": [] }]
+							"fieldInstances": [{ "__identifier": "path", "__type": "Point", "__value": null, "__tile": null, "defUid": 263, "realEditorValues": [] }]
 						},
 						{
 							"__identifier": "Slime",
@@ -13724,7 +14183,7 @@
 							"height": 24,
 							"defUid": 259,
 							"px": [324,224],
-							"fieldInstances": [{ "__identifier": "path", "__value": { "cx": 23, "cy": 26 }, "__type": "Point", "__tile": null, "defUid": 263, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "path", "__type": "Point", "__value": { "cx": 23, "cy": 26 }, "__tile": null, "defUid": 263, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["23,26"]
 							}] }]
@@ -16811,8 +17270,8 @@
 							"defUid": 264,
 							"px": [276,304],
 							"fieldInstances": [
-								{ "__identifier": "path", "__value": null, "__type": "Point", "__tile": null, "defUid": 265, "realEditorValues": [] },
-								{ "__identifier": "cooldown", "__value": 3, "__type": "Float", "__tile": null, "defUid": 266, "realEditorValues": [] }
+								{ "__identifier": "path", "__type": "Point", "__value": null, "__tile": null, "defUid": 265, "realEditorValues": [] },
+								{ "__identifier": "cooldown", "__type": "Float", "__value": 3, "__tile": null, "defUid": 266, "realEditorValues": [] }
 							]
 						}
 					]
@@ -17957,5 +18416,6 @@
 			"__neighbours": [{ "levelIid": "4cc5bde0-c640-11ed-8182-45d795c50d91", "dir": "s" }]
 		}
 	],
-	"worlds": []
+	"worlds": [],
+	"dummyWorldIid": "585c1340-c640-11ed-8b64-53e6fb315d89"
 }

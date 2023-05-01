@@ -140,8 +140,8 @@ pattern F = False
 hasItem :: ObjectInput -> PowerupType -> Bool
 hasItem oi pu = S.member pu $ gs_inventory $ gs_gameState $fi_global $ oi_frameInfo oi
 
-player :: V2 WorldPos -> Object
-player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
+player :: V2 WorldPos -> [PowerupType] -> Object
+player pos0 starting_pus = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
   on_start <- nowish () -< ()
   let pos = event (os_pos $ oi_state oi) (const $ pos0 - V2 0 10) on_start
 
@@ -285,6 +285,7 @@ player pos0 = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
         { oo_events =
             dmg_oe
               & #oe_focus .~ on_start
+              & #oe_game_message <>~ (fmap AddInventory starting_pus <$ on_start)
         , oo_state =
             os
               & #os_pos .~ pos'

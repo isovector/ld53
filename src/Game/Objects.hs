@@ -29,6 +29,7 @@ import           Game.Objects.TutorialRegion (tutorialRegion)
 import           Game.Objects.Unknown (unknown)
 import qualified LDtk.Types as LDtk
 import Game.Objects.Slime (slime)
+import Data.Maybe (mapMaybe)
 
 
 buildEntity
@@ -38,7 +39,9 @@ buildEntity
     -> Map Text LDtk.FieldValue
     -> Map Text Object
     -> Either Text Object
-buildEntity "Player" pos _ _ _ = pure $ player pos
+buildEntity "Player" pos _ props _ =
+  player pos
+    <$> asEnumArray "Player" "powerups" props
 buildEntity "Antagonist" pos _ _ _ = pure $ antagonist pos
 buildEntity "Checkpoint" pos _ _ _ = pure $ checkpoint pos
 buildEntity "TutorialRegion" pos ore props _ =
@@ -123,6 +126,9 @@ asColor = fmap (fmap (fmap ldtkColorToColor)) . as "Color" #_ColorValue
 
 asEnum :: Read a => Text -> Text -> Map Text LDtk.FieldValue -> Either Text a
 asEnum = fmap (fmap (fmap $ read . T.unpack)) . as "Enum" #_EnumValue
+
+asEnumArray :: Read a => Text -> Text -> Map Text LDtk.FieldValue -> Either Text [a]
+asEnumArray = fmap (fmap (fmap (mapMaybe (fmap (read . T.unpack) . preview #_EnumValue )))) . as "Array" #_ArrayValue
 
 asBool :: Text -> Text -> Map Text LDtk.FieldValue -> Either Text Bool
 asBool = as "Int" #_BooleanValue
