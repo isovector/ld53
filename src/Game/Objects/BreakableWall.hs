@@ -26,7 +26,7 @@ breakableWall pos0 ore = pauseWhenOffscreen $ proc oi -> do
             & #oe_game_message
                 <>~ ([UnregisterDynCollision obj_id] <$ on_die)
             & #oe_die <>~ on_die
-      , oo_render = drawOriginRect (V4 0 255 0 128) ore pos
+      , oo_render = drawOriginRect (V4 0 0 0 255) ore pos
       , oo_state =
           os & #os_hp %~ hp'
       }
