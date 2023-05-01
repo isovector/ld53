@@ -28,7 +28,7 @@ projectile arc flipped pos0 = withLifetime (lifetimeForArc arc) $ proc oi -> do
       ore = mkCenterdOriginRect 3
       pos = os_pos os
 
-  (oe_events, _, _, _) <- damageHandler OtherTeam -< (oi, ore, mkHurtBox pos ore)
+  (oe_events, _, _, _) <- damageHandler 0.1 OtherTeam -< (oi, ore, mkHurtBox pos ore)
 
   dpos <- arcToVel arc -< oi
 

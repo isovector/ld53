@@ -296,7 +296,7 @@ player pos0 starting_pus = loopPre (0, PStateIdle, Standing) $ proc (oi, (vel, s
        )
 
   (dmg_oe, took_dmg, on_die, change_hp)
-    <- damageHandler PlayerTeam -< (oi, shr_ore shr, mkHitBox pos ore <> boxes)
+    <- damageHandler 0.8 PlayerTeam -< (oi, shr_ore shr, mkHitBox pos ore <> boxes)
 
   let incoming_damage_dir = fmap (bool RightSide LeftSide . (> 0) . view _x) took_dmg
 

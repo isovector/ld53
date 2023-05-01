@@ -156,16 +156,17 @@ splitAnimBoxes = partition ((== Hitbox) . ab_type)
 
 
 damageHandler
-      :: Team
+      :: Time
+      -> Team
       -> SF (ObjectInput, OriginRect Double, [AnimBox])
             (ObjectEvents, Maybe (V2 Double), Event (), Int -> Int)
-damageHandler team = proc (oi, ore, boxes) -> do
+damageHandler per team = proc (oi, ore, boxes) -> do
   let os = oi_state oi
       OriginRect sz _ = ore
       pos = os_pos os
 
   let dmg_in_ev = fmap (second $ sum . fmap d_damage) $ checkDamage' team pos boxes oi
-  both <- onlyOncePer 0.1 -< dmg_in_ev
+  both <- onlyOncePer per -< dmg_in_ev
   let dmg_ev = fmap snd both
       dir = eventToMaybe $ fmap (normalize . fst) both
 

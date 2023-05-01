@@ -17,7 +17,7 @@ slime pos0 mgoal = pauseWhenOffscreen $ proc oi -> do
 
   d <- mkAnim -< (DrawSpriteDetails SlimeIdle Just 0 $ pure False, pos + V2 0 3)
 
-  (dmg_oe, _, on_die, hp') <- damageHandler OtherTeam -< (oi, ore, mkHurtHitBox pos ore)
+  (dmg_oe, _, on_die, hp') <- damageHandler 0.3 OtherTeam -< (oi, ore, mkHurtHitBox pos ore)
 
   returnA -<
     ObjectOutput

@@ -20,7 +20,7 @@ thrower pos0 ore arc mgoal cooldown = pauseWhenOffscreen $ proc oi -> do
   let V2 player_x _ = gs_player_loc $ gameState oi
   let flipped = player_x < view _x pos'
 
-  (dmg_oe, _, on_die, hp') <- damageHandler OtherTeam -< (oi, ore, mkHurtHitBox pos ore)
+  (dmg_oe, _, on_die, hp') <- damageHandler 0.3 OtherTeam -< (oi, ore, mkHurtHitBox pos ore)
 
   returnA -<
     ObjectOutput
