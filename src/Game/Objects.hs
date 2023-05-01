@@ -21,6 +21,7 @@ import           Engine.Utils (tileToPos)
 import           Game.Objects.Antagonist (antagonist)
 import           Game.Objects.BreakableWall (breakableWall)
 import           Game.Objects.Checkpoint (checkpoint)
+import           Game.Objects.CollectPowerup (collectPowerup)
 import           Game.Objects.DespawnTrigger (despawnTrigger)
 import           Game.Objects.Elevator (elevator)
 import           Game.Objects.ParticleSpawner (particleSpawner)
@@ -45,6 +46,9 @@ buildEntity
 buildEntity "Player" pos _ props _ =
   player pos
     <$> fmap (fromMaybe []) (optional $ asEnumArray "Player" "powerups" props)
+buildEntity "PowerUp" pos _ props _ =
+  collectPowerup pos
+    <$> asEnum "PowerUp" "power" props
 buildEntity "Antagonist" pos _ _ _ = pure $ antagonist pos
 buildEntity "Thrower" pos ore props _ =
   thrower pos ore

@@ -228,3 +228,10 @@ spawnTime = proc _ -> do
   returnA -< t - start
 
 
+addInventoryResponse :: PowerupType -> SF (Event a) ObjectEvents
+addInventoryResponse
+  = response #oe_game_message
+  . const
+  . pure
+  . AddInventory
+
