@@ -2,9 +2,11 @@ module Game.Common
   ( module Engine.Prelude
   , module Game.Common
   , module Engine.Common
+  , hash
   ) where
 
 import           Control.Monad (guard)
+import           Data.Hashable (hash)
 import           Data.List (partition)
 import           Data.Maybe (isNothing)
 import qualified Data.Set as S
@@ -182,7 +184,7 @@ damageHandler team = proc (oi, ore, boxes) -> do
 
 dmgIndicator :: V2 WorldPos -> Int -> Object
 dmgIndicator pos dmg =
-  particle pos (V2 0 (-100)) (arr $ drawText 5 (V3 255 0 0) $ '-' : show dmg) 0 3
+  particle pos (V2 0 (-30)) (arr $ drawText 6 (V3 255 0 0) $ '-' : show dmg) 0 2
 
 
 mkHurtHitBox :: V2 WorldPos -> OriginRect Double -> [AnimBox]

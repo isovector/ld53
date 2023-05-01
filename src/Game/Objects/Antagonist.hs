@@ -7,7 +7,7 @@ import System.Random (mkStdGen)
 
 antagonist :: V2 WorldPos -> Object
 antagonist pos = loopPre PlayerIdleSword $ proc (oi, anim) -> do
-  slash <- occasionally (mkStdGen 0) 2 () -< ()
+  slash <- occasionally (mkStdGen $ hash pos) 2 () -< ()
 
   on_start <- nowish () -< ()
   let def = (noObjectState pos) { os_hp = 5, os_collision = Just playerOre }

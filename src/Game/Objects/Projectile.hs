@@ -4,7 +4,7 @@ import Game.Common
 
 
 projectile :: Bool -> V2 WorldPos -> Object
-projectile flipped pos0 = withLifetime 5 $ proc oi -> do
+projectile flipped pos0 = withLifetime 1 $ proc oi -> do
   on_start <- nowish () -< ()
   let def = (noObjectState pos0)
   let os = event (oi_state oi) (const def) on_start

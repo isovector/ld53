@@ -1,9 +1,7 @@
 module Game.Objects.BreakableWall where
 
-import Game.Common
-import Game.Objects.Player (playerOre)
-import Data.Hashable (hash)
 import qualified Data.Set as S
+import           Game.Common
 
 allPurposes :: Set CollisionPurpose
 allPurposes = S.fromList [minBound .. maxBound]

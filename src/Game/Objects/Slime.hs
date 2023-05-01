@@ -2,7 +2,6 @@ module Game.Objects.Slime where
 
 import Game.Common
 import System.Random (mkStdGen)
-import Data.Hashable (hash)
 
 
 slime :: V2 WorldPos -> OriginRect Double -> Maybe (V2 WorldPos) -> Object

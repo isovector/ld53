@@ -2,7 +2,6 @@ module Game.Objects.Thrower where
 
 import Game.Common
 import System.Random (mkStdGen)
-import Data.Hashable (hash)
 import Game.Objects.Slime
 import Game.Objects.Projectile (projectile)
 
