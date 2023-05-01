@@ -12,6 +12,7 @@ import Data.Map (Map)
 data GameState = GameState
   { gs_inventory :: Set PowerupType
   , gs_dyn_col :: Map ObjectId (Set CollisionPurpose, Rectangle WorldPos)
+  , gs_player_loc :: V2 WorldPos
   }
   deriving stock Generic
 
@@ -27,6 +28,7 @@ data GameMessage
   = AddInventory PowerupType
   | RegisterDynCollision ObjectId (Set CollisionPurpose) (Rectangle WorldPos)
   | UnregisterDynCollision ObjectId
+  | SetPlayerLocation (V2 WorldPos)
   deriving stock (Eq, Ord, Show, Read, Generic)
 
 ------------------------------------------------------------------------------

@@ -289,6 +289,7 @@ player pos0 starting_pus = loopPre (0, PStateIdle) $ proc (oi, (vel, st)) -> do
             dmg_oe
               & #oe_focus .~ on_start
               & #oe_game_message <>~ (fmap AddInventory starting_pus <$ on_start)
+              & #oe_game_message <>~ Event [SetPlayerLocation pos']
               & #oe_die <>~ on_die
         , oo_state =
             os

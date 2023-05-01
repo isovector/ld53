@@ -18,6 +18,9 @@ thrower pos0 ore mgoal cooldown = proc (oi) -> do
   throw <- occasionally (mkStdGen $ hash (pos0 ^* coerce cooldown)) cooldown () -< ()
   pos' <- maybe (pure pos0) (paceBetween 2 pos0 . useYOfFirst pos0) mgoal -< (pos, step)
 
+  let V2 player_x _ = gs_player_loc $ gameState oi
+  let flipped = player_x < view _x pos'
+
   (dmg_oe, on_die, hp') <- damageHandler OtherTeam -< (oi, ore, mkHurtHitBox pos ore)
 
   returnA -<
@@ -25,7 +28,7 @@ thrower pos0 ore mgoal cooldown = proc (oi) -> do
       { oo_events =
           dmg_oe
             & #oe_die <>~ on_die
-            & #oe_spawn <>~ ([projectile $ pos - coerce (orect_size ore / 2)] <$ throw)
+            & #oe_spawn <>~ ([projectile flipped $ pos - coerce (orect_size ore / 2)] <$ throw)
       , oo_render = drawOriginRect (V4 0 255 0 128) ore pos
       , oo_state =
         os & #os_hp %~ hp'

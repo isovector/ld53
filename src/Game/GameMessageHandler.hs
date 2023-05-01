@@ -12,4 +12,6 @@ handleGameMessage (RegisterDynCollision oi p r) =
   #gs_gameState . #gs_dyn_col %~ M.insert oi (p, r)
 handleGameMessage (UnregisterDynCollision oi) =
   #gs_gameState . #gs_dyn_col %~ M.delete oi
+handleGameMessage (SetPlayerLocation loc) =
+  #gs_gameState . #gs_player_loc .~ loc
 
