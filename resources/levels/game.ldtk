@@ -16821,24 +16821,7 @@
 						},
 						{
 							"__identifier": "Slime",
-							"__grid": [245,15],
-							"__pivot": [0.5,1],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#3E8948",
-							"iid": "a5a5fd90-c640-11ed-8182-dd997da5761a",
-							"width": 24,
-							"height": 24,
-							"defUid": 259,
-							"px": [1964,128],
-							"fieldInstances": [{ "__identifier": "path", "__value": { "cx": 243, "cy": 15 }, "__type": "Point", "__tile": null, "defUid": 263, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["243,15"]
-							}] }]
-						},
-						{
-							"__identifier": "Slime",
-							"__grid": [245,27],
+							"__grid": [245,21],
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": null,
@@ -16847,10 +16830,10 @@
 							"width": 24,
 							"height": 24,
 							"defUid": 259,
-							"px": [1964,224],
-							"fieldInstances": [{ "__identifier": "path", "__value": { "cx": 242, "cy": 27 }, "__type": "Point", "__tile": null, "defUid": 263, "realEditorValues": [{
+							"px": [1964,176],
+							"fieldInstances": [{ "__identifier": "path", "__value": { "cx": 231, "cy": 21 }, "__type": "Point", "__tile": null, "defUid": 263, "realEditorValues": [{
 								"id": "V_String",
-								"params": ["242,27"]
+								"params": ["231,21"]
 							}] }]
 						},
 						{
@@ -16954,6 +16937,23 @@
 							"fieldInstances": [{ "__identifier": "path", "__value": { "cx": 170, "cy": 31 }, "__type": "Point", "__tile": null, "defUid": 263, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["170,31"]
+							}] }]
+						},
+						{
+							"__identifier": "Slime",
+							"__grid": [254,27],
+							"__pivot": [0.5,1],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#3E8948",
+							"iid": "ceb74b90-c640-11ed-935a-55e1824317c2",
+							"width": 24,
+							"height": 24,
+							"defUid": 259,
+							"px": [2036,224],
+							"fieldInstances": [{ "__identifier": "path", "__value": { "cx": 248, "cy": 27 }, "__type": "Point", "__tile": null, "defUid": 263, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["248,27"]
 							}] }]
 						}
 					]
