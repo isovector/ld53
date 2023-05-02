@@ -2,7 +2,7 @@
 
 set -ex
 
-name="WheresMyChickenMan"
+name="Deliverance"
 t=$(date --rfc-3339=seconds | sed 's/ /-/g' | sed 's/:/-/g')
 g=$(git rev-parse --short HEAD)
 outdir="jam-windows-$t-$g"
