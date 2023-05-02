@@ -4,7 +4,7 @@ let
 in pkgs.haskell-nix.cabalProject { # macaroni.nix is currently only tested with cabal
   # 'cleanGit' cleans a source directory based on the files known by git
   src = pkgs.haskell-nix.haskellLib.cleanGit {
-    name = "ld52";
+    name = "ld53";
     src = ./.;
   };
   # Specify the GHC version to use.

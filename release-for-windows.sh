@@ -9,7 +9,7 @@ outdir="jam-windows-$t-$g"
 releasework="releases/windows-$t-$g"
 releasedir="$releasework/$name"
 
-nix-build -A projectCross.mingwW64.hsPkgs.ld52.components.exes.ld52-exe -o "$outdir" ./default.nix
+nix-build -A projectCross.mingwW64.hsPkgs.ld53.components.exes.ld53-exe -o "$outdir" ./default.nix
 
 mkdir -p "$releasedir"/resources
 
