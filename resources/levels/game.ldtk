@@ -15958,23 +15958,6 @@
 							"defUid": 296,
 							"px": [256,224],
 							"fieldInstances": []
-						},
-						{
-							"__identifier": "Player",
-							"__grid": [42,18],
-							"__pivot": [0.5,1],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#E90D6D",
-							"iid": "87288bc0-c640-11ed-afd6-e9ac330812d9",
-							"width": 24,
-							"height": 68,
-							"defUid": 121,
-							"px": [340,152],
-							"fieldInstances": [{ "__identifier": "powerups", "__value": ["PowerupJump"], "__type": "Array<LocalEnum.Power>", "__tile": null, "defUid": 295, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["PowerupJump"]
-							}] }]
 						}
 					]
 				},
