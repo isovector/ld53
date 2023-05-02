@@ -5,7 +5,7 @@ THE ACCOUNTANT SLAYS DRACULA
 
 ## Downloads
 
-[over at Ludum Dare](https://ldjam.com/events/ludum-dare/53/$347678)
+[over at Ludum Dare](https://ldjam.com/events/ludum-dare/53/deliverance-5)
 
 ## Made By:
 
