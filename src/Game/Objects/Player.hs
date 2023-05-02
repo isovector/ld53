@@ -394,7 +394,7 @@ player pos0 starting_pus = loopPre (0, PStateIdle, Standing) $ proc (oi, (vel, s
               & #oe_spawn .~ (gore pos <$ on_die)
               & #oe_game_message <>~ (fmap AddInventory starting_pus <$ on_start)
               & #oe_game_message <>~ Event [SetPlayerLocation pos']
-              & #oe_game_message <>~ ([GameOver] <$ end_game)
+              & #oe_game_message <>~ ([GameOver GORDeath] <$ end_game)
               -- & #oe_die <>~ on_die
         , oo_state =
             os

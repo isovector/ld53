@@ -3,12 +3,12 @@
 
 module Game where
 
+import           Control.Monad (join)
 import qualified Data.Map as M
 import           Engine.Globals
 import           Engine.ObjectRouter
 import           Engine.Prelude
 import           Game.World (drawLevel)
-import           Numeric (showFFloat)
 
 
 #ifndef __HLINT__
@@ -20,7 +20,7 @@ initialObjs gs
   $ foldMap l_defaultObjs $ gs_loaded_levels gs
 
 
-game :: GlobalState -> SF RawFrameInfo ((Camera, Renderable), Event GameOverReason)
+game :: GlobalState -> SF RawFrameInfo ((Camera, Renderable), Event (Time, GameOverReason))
 game gs0 =
   proc rfi -> do
     (cam, objs, to_draw) <-
@@ -35,11 +35,12 @@ game gs0 =
 
     bgs <- arr $ foldMap drawLevel -< gs_loaded_levels gs
     reset <- edge -< c_full_restart $ controls rfi
-    on_die <- edge -< gs_game_over $ gs_gameState gs
+    on_die <- fmap eventToMaybe $ onChange -< gs_game_over $ gs_gameState gs
+    t <- time -< ()
 
-    returnA -< (, mergeEvents
+    returnA -< (, fmap (t, ) $ mergeEvents
                     [ GORReset <$ reset
-                    , GORDeath <$ on_die
+                    , maybeToEvent $ join on_die
                     ]) $
       ( cam
       , mconcat
@@ -52,22 +53,9 @@ game gs0 =
           ]
         )
 
-formatTime :: Time -> String
-formatTime t =
-  let (tsecs, tmils) = properFraction @_ @Int t
-      mins = lpad 2 '0' $ show $ div tsecs 60
-      secs = lpad 2 '0' $ show $ mod tsecs 60
-   in mins <> (':' : secs <> ('.' : drop 2 (showFFloat (Just 3) tmils "")))
-
-lpad :: Int -> Char -> String -> String
-lpad n c s
-  | let l = length s
-  , l < n = replicate (n - l) c <> s
-  | otherwise = s
-
 initialGlobalState :: WorldName -> GlobalState
 initialGlobalState w
   = GlobalState (toList $ w_levels $ global_worlds w)
-  $ GameState mempty mempty 0 mempty False
+  $ GameState mempty mempty 0 mempty Nothing
 
 #endif

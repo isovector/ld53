@@ -1,8 +1,9 @@
 module Game.GameMessageHandler where
 
+import           Control.Lens ((?~))
+import qualified Data.Map as M
 import qualified Data.Set as S
 import           Engine.Types
-import qualified Data.Map as M
 
 
 handleGameMessage :: GameMessage -> GlobalState -> GlobalState
@@ -16,6 +17,6 @@ handleGameMessage (SetPlayerLocation loc) =
   #gs_gameState . #gs_player_loc .~ loc
 handleGameMessage (SendDamageSource ds) =
   #gs_gameState . #gs_damage_set %~ (ds :)
-handleGameMessage GameOver =
-  #gs_gameState . #gs_game_over .~ True
+handleGameMessage (GameOver r) =
+  #gs_gameState . #gs_game_over ?~ r
 

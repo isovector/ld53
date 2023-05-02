@@ -216,6 +216,7 @@ dracula pos0 = pauseWhenOffscreen $ loopPre NoAttack $ proc (oi, attack) -> do
       { oo_events =
           (evs <> dmg_oe)
             & #oe_die <>~ on_die
+            & #oe_game_message <>~ ([GameOver GORWin] <$ on_die)
             -- & #oe_spawn <>~ ([dracBullet arc flipped $ pos - coerce (orect_size ore / 2)] <$ throw)
       , oo_render = d
       , oo_state =

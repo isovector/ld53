@@ -27,7 +27,7 @@ instance {-# OVERLAPPABLE #-} (Enum a, Bounded a) => GEnum a where
 
 resourceRootPath :: IO FilePath
 resourceRootPath =
-  maybe "resources" (</> "usr/share/ld52-exe/resources") <$> getEnv "APPDIR"
+  maybe "resources" (</> "usr/share/ld53-exe/resources") <$> getEnv "APPDIR"
 
 loadResource
     :: forall key res

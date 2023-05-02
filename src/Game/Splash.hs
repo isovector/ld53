@@ -5,6 +5,7 @@ import Game.Common
 import SDL (setWindowMode, WindowMode (FullscreenDesktop), get, ($=), rendererScale)
 import Engine.Globals (global_resources)
 import SDL.Video (windowSize)
+import Numeric (showFFloat)
 
 
 runIntro :: SF RawFrameInfo (Camera, Renderable)
@@ -18,9 +19,12 @@ splashScreen = do
     Start -> do
       end <- swont $ game (initialGlobalState GameWorld)
       case end of
-        GORReset -> splashScreen
-        GORDeath -> do
+        (_, GORReset) -> splashScreen
+        (_, GORDeath) -> do
           swont $ liftIntoGame gameOverScreen
+          splashScreen
+        (t, GORWin) -> do
+          swont $ liftIntoGame $ youWinScreen t
           splashScreen
 
     Fullscreen -> do
@@ -150,6 +154,32 @@ gameOverScreen = proc rfi -> do
     ( mconcat
         [ drawBackgroundColor (V4 0 0 0 255) (Camera 0)
         , drawText 20 (V3 255 0 0) "GAME OVER" (V2 130 70) (Camera 0)
+        ]
+    , press
+    )
+
+formatTime :: Time -> String
+formatTime t =
+  let (tsecs, tmils) = properFraction @_ @Int t
+      mins = lpad 2 '0' $ show $ div tsecs 60
+      secs = lpad 2 '0' $ show $ mod tsecs 60
+   in mins <> (':' : secs <> ('.' : drop 2 (showFFloat (Just 3) tmils "")))
+
+lpad :: Int -> Char -> String -> String
+lpad n c s
+  | let l = length s
+  , l < n = replicate (n - l) c <> s
+  | otherwise = s
+
+youWinScreen :: Time -> SF RawFrameInfo (IO (), Event ())
+youWinScreen t = proc rfi -> do
+  press <- edge -< anyKey $ fi_controls rfi
+
+  returnA -<
+    ( mconcat
+        [ drawBackgroundColor (V4 0 0 0 255) (Camera 0)
+        , drawText 20 (V3 255 255 255) "THE GALAXY IS AT PEACE" (V2 20 70) (Camera 0)
+        , drawText 10 (V3 255 255 255) ("You won in " <> formatTime t) (V2 150 180) (Camera 0)
         ]
     , press
     )
