@@ -23,8 +23,8 @@ thrower pos0 arc mgoal cooldown = pauseWhenOffscreen $ loopPre PlayerIdleSword $
   let V2 player_x _ = gs_player_loc $ gameState oi
   let flipped = player_x < view _x pos
 
-  (boxes, throw, d) <- mkPuppet scale -< (DrawSpriteDetails anim throwerRemap 0 $ V2 flipped False, pos)
-  (dmg_oe, _, on_die, hp') <- damageHandler 0.3 OtherTeam -< (oi, playerOre, mkHurtHitBox pos ore <> boxes)
+  (_, throw, d) <- mkPuppet scale -< (DrawSpriteDetails anim throwerRemap 0 $ V2 flipped False, pos)
+  (dmg_oe, _, on_die, hp') <- damageHandler 0.3 OtherTeam -< (oi, playerOre, mkHurtHitBox pos ore)
 
   new_anim <- hold PlayerIdleNoSword -< mergeEvents
     [ PlayerIdleNoSword <$ throw
