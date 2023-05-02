@@ -22,8 +22,8 @@ healthPickup pos
 
 drawPowerup :: OriginRect Double -> V2 WorldPos -> Renderable
 drawPowerup ore pos = mconcat
-  [ drawGameTextureOriginRect (AuraTexture) (mkCenterdOriginRect $ orect_size ore * 3) pos 0 $ pure False
-  , drawGameTextureOriginRect ChickenTexture ore pos 0 $ pure False
+  [ --drawGameTextureOriginRect (AuraTexture) (mkCenterdOriginRect $ orect_size ore * 3) pos 0 $ pure False
+  drawGameTextureOriginRect ChickenTexture (mkCenterdOriginRect $ orect_size ore * 3) pos 0 $ pure False
   ]
 
 
