@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Game.Objects.Antagonist where
 
 import Game.Common
@@ -18,8 +20,8 @@ antagonist pos = pauseWhenOffscreen $ loopPre PlayerIdleSword $ proc (oi, anim) 
   let V2 player_x _ = gs_player_loc $ gameState oi
   let flipped = player_x < view _x pos
 
-  (boxes, done, d) <- mkPuppet scale -< (DrawSpriteDetails anim Just 0 $ V2 flipped False, pos)
-  (dmg_oe, _, on_die, hp') <- damageHandler 0.3 OtherTeam -< (oi, playerOre, mkHitBox pos ore <> boxes)
+  (boxes, done, d) <- mkPuppet scale -< (DrawSpriteDetails anim antagonistRemap 0 $ V2 flipped False, pos)
+  (dmg_oe, _, on_die, hp') <- damageHandler 0.3 OtherTeam -< (oi, playerOre, mkHurtHitBox pos ore <> boxes)
 
   new_anim <- hold PlayerIdleSword -< mergeEvents
     [ PlayerIdleSword <$ done
@@ -34,6 +36,9 @@ antagonist pos = pauseWhenOffscreen $ loopPre PlayerIdleSword $ proc (oi, anim) 
       , oo_render = d
       , oo_state = os & #os_hp %~ hp'
       }
+
+antagonistRemap :: Text -> Maybe Text
+antagonistRemap t       = Just $ "Antagonist" <> t
 
 scale :: Fractional a => a
 scale = 1.2
