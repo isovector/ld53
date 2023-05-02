@@ -9,6 +9,7 @@ import           Engine.ObjectRouter
 import           Engine.Prelude
 import           Game.World (drawLevel)
 import           Numeric (showFFloat)
+import Control.Monad (join)
 
 
 #ifndef __HLINT__
@@ -35,11 +36,11 @@ game gs0 =
 
     bgs <- arr $ foldMap drawLevel -< gs_loaded_levels gs
     reset <- edge -< c_full_restart $ controls rfi
-    on_die <- edge -< gs_game_over $ gs_gameState gs
+    on_die <- fmap eventToMaybe $ onChange -< gs_game_over $ gs_gameState gs
 
     returnA -< (, mergeEvents
                     [ GORReset <$ reset
-                    , GORDeath <$ on_die
+                    , maybeToEvent $ join on_die
                     ]) $
       ( cam
       , mconcat
@@ -68,6 +69,6 @@ lpad n c s
 initialGlobalState :: WorldName -> GlobalState
 initialGlobalState w
   = GlobalState (toList $ w_levels $ global_worlds w)
-  $ GameState mempty mempty 0 mempty False
+  $ GameState mempty mempty 0 mempty Nothing
 
 #endif

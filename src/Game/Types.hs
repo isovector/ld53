@@ -13,7 +13,7 @@ data GameState = GameState
   , gs_dyn_col :: Map ObjectId (Set CollisionPurpose, Rectangle WorldPos)
   , gs_player_loc :: V2 WorldPos
   , gs_damage_set :: [DamageSource]
-  , gs_game_over :: Bool
+  , gs_game_over :: Maybe GameOverReason
   }
   deriving stock Generic
 
@@ -28,6 +28,7 @@ data CollisionPurpose
 data GameOverReason
   = GORReset
   | GORDeath
+  | GORWin
   deriving (Eq, Ord, Show, Enum, Bounded, Read, Generic)
 
 data GameMessage
@@ -36,7 +37,7 @@ data GameMessage
   | UnregisterDynCollision ObjectId
   | SetPlayerLocation (V2 WorldPos)
   | SendDamageSource DamageSource
-  | GameOver
+  | GameOver GameOverReason
   deriving stock (Eq, Ord, Show, Read, Generic)
 
 data DamageSource =

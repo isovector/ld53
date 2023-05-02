@@ -22,6 +22,9 @@ splashScreen = do
         GORDeath -> do
           swont $ liftIntoGame gameOverScreen
           splashScreen
+        GORWin -> do
+          swont $ liftIntoGame youWinScreen
+          splashScreen
 
     Fullscreen -> do
       momentary $ (Camera 0, const $ do
@@ -150,6 +153,19 @@ gameOverScreen = proc rfi -> do
     ( mconcat
         [ drawBackgroundColor (V4 0 0 0 255) (Camera 0)
         , drawText 20 (V3 255 0 0) "GAME OVER" (V2 130 70) (Camera 0)
+        ]
+    , press
+    )
+
+youWinScreen :: SF RawFrameInfo (IO (), Event ())
+youWinScreen = proc rfi -> do
+  press <- edge -< anyKey $ fi_controls rfi
+
+  returnA -<
+    ( mconcat
+        [ drawBackgroundColor (V4 0 0 0 255) (Camera 0)
+        , drawText 20 (V3 255 255 255) "THE GALAXY IS AT PEACE" (V2 20 70) (Camera 0)
+        , drawText 10 (V3 255 255 255) "You won!" (V2 200 180) (Camera 0)
         ]
     , press
     )
