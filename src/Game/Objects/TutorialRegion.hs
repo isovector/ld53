@@ -37,4 +37,4 @@ tutorialRegion pos ore (T.unpack -> str) timer =
       }
 
 topOfOre :: ObjectState -> V2 WorldPos
-topOfOre os = os_pos os - coerce (orTopDist (fromJust $ os_collision os)) - V2 0 20
+topOfOre os = os_pos os - coerce (orTopDist (fromJust $ os_collision os)) - V2 0 40

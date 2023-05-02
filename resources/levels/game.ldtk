@@ -12424,16 +12424,16 @@
 						},
 						{
 							"__identifier": "TutorialRegion",
-							"__grid": [56,34],
+							"__grid": [56,32],
 							"__pivot": [0,0],
 							"__tags": [],
 							"__tile": null,
 							"__smartColor": "#B55088",
 							"iid": "3541b1d0-c640-11ed-b1f7-d1dc19ef2c54",
 							"width": 64,
-							"height": 80,
+							"height": 72,
 							"defUid": 223,
-							"px": [448,272],
+							"px": [448,256],
 							"fieldInstances": [
 								{ "__identifier": "key", "__value": "Z", "__type": "String", "__tile": null, "defUid": 224, "realEditorValues": [{
 									"id": "V_String",
