@@ -18,8 +18,8 @@ main = do
           { postBuild =
               appImageBuildHook
                 [ AppImage
-                  { appName = "ld52-exe"
-                  , appDesktop = "ld52.desktop"
+                  { appName = "ld53-exe"
+                  , appDesktop = "ld53.desktop"
                   , appIcons = ["./resources/textures/chicken.png"]
                   , appResources = do
                       r <- res
