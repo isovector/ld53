@@ -26929,53 +26929,6 @@
 							"fieldInstances": []
 						},
 						{
-							"__identifier": "SpawnTrigger",
-							"__grid": [47,37],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#EAD4AA",
-							"iid": "af4e9e30-c640-11ed-b1f7-bba22b638ee1",
-							"width": 112,
-							"height": 72,
-							"defUid": 213,
-							"px": [376,296],
-							"fieldInstances": [
-								{ "__identifier": "refs", "__value": [{
-									"entityIid": "b6cfda20-c640-11ed-b1f7-810b326bf545",
-									"layerIid": "f25a09b1-c640-11ed-b1f7-3d3799319b39",
-									"levelIid": "f259e2a0-c640-11ed-b1f7-2ba20a38d48e",
-									"worldIid": "59e5b8e0-c640-11ed-935a-53b9aeba0951"
-								}], "__type": "Array<EntityRef>", "__tile": null, "defUid": 214, "realEditorValues": [{
-									"id": "V_String",
-									"params": ["b6cfda20-c640-11ed-b1f7-810b326bf545"]
-								}] },
-								{ "__identifier": "persistent", "__value": true, "__type": "Bool", "__tile": null, "defUid": 216, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Text",
-							"__grid": [70,37],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#7B00FF",
-							"iid": "b6cfda20-c640-11ed-b1f7-810b326bf545",
-							"width": 8,
-							"height": 8,
-							"defUid": 127,
-							"px": [560,296],
-							"fieldInstances": [
-								{ "__identifier": "size", "__value": 6, "__type": "Float", "__tile": null, "defUid": 128, "realEditorValues": [] },
-								{ "__identifier": "text", "__value": "Replenishment", "__type": "String", "__tile": null, "defUid": 129, "realEditorValues": [{
-									"id": "V_String",
-									"params": ["Replenishment"]
-								}] },
-								{ "__identifier": "color", "__value": "#7B00FF", "__type": "Color", "__tile": null, "defUid": 130, "realEditorValues": [{ "id": "V_Int", "params": [8061183] }] },
-								{ "__identifier": "duration", "__value": 5, "__type": "Float", "__tile": null, "defUid": 219, "realEditorValues": [{ "id": "V_Float", "params": [5] }] }
-							]
-						},
-						{
 							"__identifier": "BreakableWall",
 							"__grid": [70,0],
 							"__pivot": [0,0],
@@ -27016,6 +26969,50 @@
 							"defUid": 301,
 							"px": [748,76],
 							"fieldInstances": []
+						},
+						{
+							"__identifier": "Text",
+							"__grid": [12,17],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#11E8B6",
+							"iid": "cf130680-c640-11ed-afd6-173dedf6d40e",
+							"width": 8,
+							"height": 8,
+							"defUid": 127,
+							"px": [96,136],
+							"fieldInstances": [
+								{ "__identifier": "size", "__value": 6, "__type": "Float", "__tile": null, "defUid": 128, "realEditorValues": [] },
+								{ "__identifier": "text", "__value": "Our (accountant) protagonist vows to grow stronger", "__type": "String", "__tile": null, "defUid": 129, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Our (accountant) protagonist vows to grow stronger"]
+								}] },
+								{ "__identifier": "color", "__value": "#11E8B6", "__type": "Color", "__tile": null, "defUid": 130, "realEditorValues": [{ "id": "V_Int", "params": [1173686] }] },
+								{ "__identifier": "duration", "__value": null, "__type": "Float", "__tile": null, "defUid": 219, "realEditorValues": [] }
+							]
+						},
+						{
+							"__identifier": "Text",
+							"__grid": [39,25],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#F9B91B",
+							"iid": "8a578bf0-c640-11ed-afd6-43f10deba6f1",
+							"width": 8,
+							"height": 8,
+							"defUid": 127,
+							"px": [312,200],
+							"fieldInstances": [
+								{ "__identifier": "size", "__value": 6, "__type": "Float", "__tile": null, "defUid": 128, "realEditorValues": [] },
+								{ "__identifier": "text", "__value": "before seeing his boss (Dracula)", "__type": "String", "__tile": null, "defUid": 129, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["before seeing his boss (Dracula)"]
+								}] },
+								{ "__identifier": "color", "__value": "#F9B91B", "__type": "Color", "__tile": null, "defUid": 130, "realEditorValues": [{ "id": "V_Int", "params": [16365851] }] },
+								{ "__identifier": "duration", "__value": null, "__type": "Float", "__tile": null, "defUid": 219, "realEditorValues": [] }
+							]
 						}
 					]
 				},
@@ -27054,7 +27051,7 @@
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+						0,0,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 						1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,
 						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
@@ -29272,6 +29269,9 @@
 						{ "px": [768,464], "src": [32,64], "f": 1, "t": 122, "d": [238,2658] },
 						{ "px": [832,480], "src": [32,64], "f": 1, "t": 122, "d": [238,2752] },
 						{ "px": [912,496], "src": [32,64], "f": 1, "t": 122, "d": [238,2847] },
+						{ "px": [384,96], "src": [64,128], "f": 1, "t": 244, "d": [244,564] },
+						{ "px": [352,96], "src": [80,128], "f": 1, "t": 245, "d": [245,562] },
+						{ "px": [368,96], "src": [80,128], "f": 0, "t": 245, "d": [245,563] },
 						{ "px": [224,192], "src": [176,176], "f": 0, "t": 341, "d": [276,1185] },
 						{ "px": [224,208], "src": [176,192], "f": 0, "t": 371, "d": [276,1185] },
 						{ "px": [240,192], "src": [192,176], "f": 0, "t": 342, "d": [276,1185] },
