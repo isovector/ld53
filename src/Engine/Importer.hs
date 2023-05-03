@@ -42,16 +42,13 @@ buildCollisionMap offset sz col = \purpose (coerce -> subtract offset -> V2 x y)
 checkPurpose :: CollisionPurpose -> Int -> Bool
 checkPurpose _ 0 = False
 checkPurpose c 1 = c /= CollisionOnElevator
+checkPurpose c 3 = c /= CollisionOnElevator
 checkPurpose CollisionGround 2 = True
 checkPurpose CollisionCheckGround 2 = True
 checkPurpose _ 2 = False
-checkPurpose CollisionCeiling 3 = True
-checkPurpose _ 3 = False
+checkPurpose CollisionGround 4 = True
 checkPurpose CollisionCheckGround 4 = True
-checkPurpose _ 4 = False
-checkPurpose _ 5 = False
-checkPurpose _ 6 = False
-checkPurpose _ i = error $ "unknown tile: " <> show i
+checkPurpose _ x = False -- trace ("unknown tile " <> show x) False
 
 chunksOf :: Int -> [a] -> [[a]]
 chunksOf _ [] = []
