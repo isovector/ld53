@@ -403,6 +403,7 @@ player pos0 starting_pus = loopPre (0, PStateIdle, Standing) $ proc (oi, (vel, s
               & #os_pos .~ bool pos' pos dead
               & #os_collision .~ Just ore
               & #os_tags %~ S.insert IsPlayer
+              & #os_camera_offset .~ V2 0 (- 70)
               & #os_facing .~ facing'
               & #os_hp .~ hp''
         , oo_render = mconcat
@@ -434,8 +435,8 @@ slideSpeed = 300
 jumpPower = 250
 slideDur = 0.5
 
-antigravity :: Bool -> V2 Double
-antigravity holding_jump = - bool 0 (V2 0 200) holding_jump
+antigravity :: V2 Double -> Bool -> V2 Double
+antigravity v holding_jump = negate $ bool 0 (V2 0 600) $ holding_jump && view _y v < 0
 
 
 airDampening :: Double
@@ -443,7 +444,7 @@ airDampening = 1
 
 updateVel :: Bool -> Time -> V2 Double -> V2 Double -> V2 Double
 updateVel holding_jump dt old_v dv =
-  ((old_v & _x .~ 0) + (dv & _x *~ airDampening) + (gravity + antigravity holding_jump) ^* dt)
+  ((old_v & _x .~ 0) + (dv & _x *~ airDampening) + (gravity + antigravity old_v holding_jump) ^* dt)
     & _x %~ clampAbs walkSpeed
 
 playerOre :: OriginRect Double
@@ -458,9 +459,6 @@ duckingOre = mkGroundOriginRect $ V2 16 34
 slidingOre :: OriginRect Double
 slidingOre = mkGroundOriginRect $ V2 16 16
 
-ducksz :: Num a => V2 a
-ducksz = V2 16 34
-
 
 touchingGround :: WorldPos -> (V2 WorldPos -> Bool) -> OriginRect Double -> V2 WorldPos -> Bool
 touchingGround d toHit ore pos =
@@ -473,7 +471,7 @@ touchingGround d toHit ore pos =
 
 
 gravity :: Num a => V2 a
-gravity = V2 0 625
+gravity = V2 0 1025
 
 clampAbs :: (Num a, Ord a) => a -> a -> a
 clampAbs maxv val =
