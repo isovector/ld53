@@ -125,16 +125,18 @@ setDuckHandler ss = proc _ -> do
 jumpHandler :: StateHandler
 jumpHandler = proc _ -> do
   returnA -<
-    mkSHR PlayerJump duckingOre $ \v -> v & _y .~ -jumpPower
+    mkSHR PlayerJump jumpOre $ \v -> v & _y .~ -jumpPower
 
 airControlHandler :: PuppetAnim -> StateHandler
 airControlHandler anim = proc shi -> do
   let oi = shi_oi shi
   let holding_jump = c_jump $ controls oi
-  let xdir = view _x $ c_dir $ controls $ shi_oi shi
-  let airVel = V2 (fromIntegral xdir * airSpeed) 0
-  returnA -< mkSHR anim duckingOre $ \v ->
-    updateVel False holding_jump (deltaTime oi) v airVel
+      dir = bool (-1) 1 $ os_facing $ oi_state $ shi_oi shi
+  let xdir' = view _x $ c_dir $ controls $ shi_oi shi
+      xdir = bool (* 0.25) id (dir == xdir') $ fromIntegral xdir'
+  let airVel = V2 (xdir * airSpeed) 0
+  returnA -< mkSHR anim jumpOre $ \v ->
+    updateVel holding_jump (deltaTime oi) v airVel
 
 slideHandler :: PuppetAnim -> StateHandler
 slideHandler anim = proc shi -> do
@@ -404,8 +406,8 @@ player pos0 starting_pus = loopPre (0, PStateIdle, Standing) $ proc (oi, (vel, s
               & #os_facing .~ facing'
               & #os_hp .~ hp''
         , oo_render = mconcat
-            [ -- drawOriginRect (V4 255 255 255 92) ore pos
-              drawn
+            [ drawOriginRect (V4 255 255 255 92) ore pos
+            , drawn
             -- , flip foldMap hits $ \(ab_rect -> Rect abpos absz) ->
             --     drawOriginRect (V4 0 255 0 92) (OriginRect absz 0) $ coerce abpos
             -- , flip foldMap hurts $ \(ab_rect -> Rect abpos absz) ->
@@ -426,7 +428,7 @@ pick = arr $ uncurry $ flip ($)
 walkSpeed, crawlSpeed, airSpeed, runSpeed, slideSpeed, slideDur, jumpPower :: Double
 walkSpeed = 200
 crawlSpeed = 80
-airSpeed = 150
+airSpeed = 300
 runSpeed = 300
 slideSpeed = 300
 jumpPower = 250
@@ -437,17 +439,18 @@ antigravity holding_jump = - bool 0 (V2 0 200) holding_jump
 
 
 airDampening :: Double
-airDampening = 0.025
+airDampening = 1
 
-updateVel :: Bool -> Bool -> Time -> V2 Double -> V2 Double -> V2 Double
-updateVel True _ _ old_v dv =
-    (old_v & _x .~ 0) + dv
-updateVel False holding_jump dt old_v dv =
-  (old_v + (dv & _x *~ airDampening) + (gravity + antigravity holding_jump) ^* dt)
+updateVel :: Bool -> Time -> V2 Double -> V2 Double -> V2 Double
+updateVel holding_jump dt old_v dv =
+  ((old_v & _x .~ 0) + (dv & _x *~ airDampening) + (gravity + antigravity holding_jump) ^* dt)
     & _x %~ clampAbs walkSpeed
 
 playerOre :: OriginRect Double
 playerOre = mkGroundOriginRect $ V2 16 68
+
+jumpOre :: OriginRect Double
+jumpOre = mkGroundOriginRect $ V2 16 54
 
 duckingOre :: OriginRect Double
 duckingOre = mkGroundOriginRect $ V2 16 34
