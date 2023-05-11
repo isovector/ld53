@@ -13,6 +13,7 @@ import Data.Tuple (swap)
 import Data.Foldable (traverse_)
 import Data.Bool (bool)
 import Control.DeepSeq
+import qualified Data.Map.Strict as IM
 
 #ifndef __HLINT__
 
@@ -140,5 +141,12 @@ fromEvent _ (Event a') = a'
 whenE :: Bool -> Event a -> Event a
 whenE False _ = noEvent
 whenE True ev = ev
+
+machine :: (Enum a, Bounded a) => (a -> SF i o) -> SF (a, i) o
+machine f = proc (a, i) -> do
+  os <- sequenceA as -< i
+  returnA -< os IM.! fromEnum a
+  where
+    as = IM.fromList $ fmap (fromEnum &&& f) $ enumFromTo minBound maxBound
 
 #endif

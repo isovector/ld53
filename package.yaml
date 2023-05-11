@@ -43,6 +43,7 @@ dependencies:
 - bones
 - random
 - linear
+- generic-data
 
 custom-setup:
   dependencies:

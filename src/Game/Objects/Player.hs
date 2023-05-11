@@ -1,15 +1,18 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE PatternSynonyms   #-}
 {-# OPTIONS_GHC -Wno-orphans   #-}
+{-# LANGUAGE BlockArguments #-}
 
 module Game.Objects.Player where
 
 import           Control.Lens ((*~))
+import           Control.Monad (void)
 import qualified Data.Set as S
 import           Engine.Collision
 import           Engine.Drawing
 import           Game.Common
-import Game.Objects.Particle (gore)
+import           Game.Objects.Particle (gore)
+import           Generic.Data (FiniteEnumeration (..))
 
 data StandState = Standing | Ducking
   deriving stock (Eq, Ord, Show, Read, Generic, Enum, Bounded)
@@ -26,14 +29,14 @@ data Side
   | RightSide
   deriving stock (Eq, Ord, Show, Read, Generic, Enum, Bounded)
 
-data PlayerState
+data PlayerState a
   = PStateIdle
   | PStateWalk
   | PStateDoDuck
   | PStateDoUnduck
   | PStateSetDuck StandState
   | PStateTakeoff
-  | PStateJump PlayerState
+  | PStateJump a
   | PStateRise JumpNumber
   | PStateRiseStab
   | PStateFall JumpNumber
@@ -43,7 +46,10 @@ data PlayerState
   | PStateStartSlide
   | PStateSlide
   | PStateKnockback Side
-  deriving stock (Eq, Ord, Show, Read, Generic)
+  deriving stock (Eq, Ord, Show, Read, Generic, Functor)
+
+deriving via FiniteEnumeration (PlayerState ()) instance Enum (PlayerState ())
+deriving via FiniteEnumeration (PlayerState ()) instance Bounded (PlayerState ())
 
 data StateHandlerInput = StateHandlerInput
   { shi_oi :: ObjectInput
@@ -192,8 +198,9 @@ pattern JR = Just RightSide
 hasItem :: ObjectInput -> PowerupType -> Bool
 hasItem oi pu = S.member pu $ gs_inventory $ gs_gameState $fi_global $ oi_frameInfo oi
 
+
 player :: V2 WorldPos -> [PowerupType] -> Object
-player pos0 starting_pus = loopPre (0, PStateIdle, Standing) $ proc (oi, (vel, st, stand)) -> do
+player pos0 starting_pus = loopPre (0, PStateIdle @(PlayerState ()), Standing) $ proc (oi, (vel, st, stand)) -> do
   let max_hp = 100
 
   on_start <- nowish () -< ()
@@ -222,44 +229,27 @@ player pos0 starting_pus = loopPre (0, PStateIdle, Standing) $ proc (oi, (vel, s
 
   -- handle current
   let input = StateHandlerInput oi (() <$ st_changed) stand on_ground dt
-  shr_idle       <- idleHandler                       -< input
-  shr_walk       <- walkHandler 1                     -< input
-  shr_duck       <- animHandler PlayerDucking   duckingOre (const 0) -< input
-  shr_unduck     <- animHandler PlayerUnducking duckingOre (const 0) -< input
-  shr_setducks   <- setDuckHandler Standing           -< input
-  shr_setduckd   <- setDuckHandler Ducking            -< input
-  shr_takeoff    <- animHandler PlayerTakeoff duckingOre id -< input
-  shr_jump       <- jumpHandler                       -< input
-  shr_rise       <- airControlHandler PlayerJump      -< input
-  shr_riseStab   <- airControlHandler PlayerJumpStab  -< input
-  shr_fall       <- airControlHandler PlayerFall      -< input
-  shr_fallSlice  <- airControlHandler PlayerFallSlice -< input
-  shr_stab       <- stabHandler                       -< input
-  shr_startSlide <- slideHandler PlayerSlidePrep      -< input
-  shr_slide      <- slideHandler PlayerSlide          -< input
-  shr_airslide   <- airSlideHandler                   -< input
-  shr_knockbackl <- knockbackHandler LeftSide         -< input
-  shr_knockbackr <- knockbackHandler RightSide        -< input
 
-  shr <- pick -< (st,) $ \case
-    PStateIdle                -> shr_idle
-    PStateWalk                -> shr_walk
-    PStateDoDuck              -> shr_duck
-    PStateDoUnduck            -> shr_unduck
-    PStateSetDuck Standing    -> shr_setducks
-    PStateSetDuck Ducking     -> shr_setduckd
-    PStateTakeoff             -> shr_takeoff
-    PStateJump _              -> shr_jump
-    PStateRise _              -> shr_rise
-    PStateFall _              -> shr_fall
-    PStateStab                -> shr_stab
-    PStateRiseStab            -> shr_riseStab
-    PStateFallSlice           -> shr_fallSlice
-    PStateStartSlide          -> shr_startSlide
-    PStateSlide               -> shr_slide
-    PStateAirSlide            -> shr_airslide
-    PStateKnockback LeftSide  -> shr_knockbackl
-    PStateKnockback RightSide -> shr_knockbackr
+  shr <- machine \case
+          PStateIdle                -> idleHandler
+          PStateWalk                -> walkHandler 1
+          PStateDoDuck              -> animHandler PlayerDucking   duckingOre (const 0)
+          PStateDoUnduck            -> animHandler PlayerUnducking duckingOre (const 0)
+          PStateSetDuck Standing    -> setDuckHandler Standing
+          PStateSetDuck Ducking     -> setDuckHandler Ducking
+          PStateTakeoff             -> animHandler PlayerTakeoff duckingOre id
+          PStateJump _              -> jumpHandler
+          PStateRise _              -> airControlHandler PlayerJump
+          PStateFall _              -> airControlHandler PlayerFall
+          PStateStab                -> stabHandler
+          PStateRiseStab            -> airControlHandler PlayerJumpStab
+          PStateFallSlice           -> airControlHandler PlayerFallSlice
+          PStateStartSlide          -> slideHandler PlayerSlidePrep
+          PStateSlide               -> slideHandler PlayerSlide
+          PStateAirSlide            -> airSlideHandler
+          PStateKnockback LeftSide  -> knockbackHandler LeftSide
+          PStateKnockback RightSide -> knockbackHandler RightSide
+      -< (void st, input)
 
   let V2 xdir ydir = c_dir $ controls oi
 
@@ -376,7 +366,7 @@ player pos0 starting_pus = loopPre (0, PStateIdle, Standing) $ proc (oi, (vel, s
               (PStateRiseStab,   _, T, _, _, _, _, _, _, _, _, _, _, _, _, _) -> PStateIdle
               (PStateFallSlice,  _, T, _, _, _, _, _, _, _, _, _, _, _, _, _) -> PStateIdle
               -- automatic transitions
-              (PStateJump goto,  _, _, _, _, _, _, _, _, _, _, _, _, _, _, _) -> goto
+              (PStateJump goto,  _, _, _, _, _, _, _, _, _, _, _, _, _, _, _) -> fmap (const PStateIdle) goto
               (PStateSetDuck _,  _, _, _, _, _, _, _, _, _, _, _, _, _, _, _) -> PStateIdle
               (PStateRise j,     _, _, _, _, _, _, _, _, _, F, _, _, _, _, _) -> PStateFall j
               (p,                _, _, _, _, _, _, _, _, _, _, _, _, _, _, _) -> p

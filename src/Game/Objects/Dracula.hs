@@ -1,3 +1,5 @@
+{-# LANGUAGE BlockArguments #-}
+
 module Game.Objects.Dracula where
 
 import Game.Common
@@ -191,18 +193,14 @@ dracula pos0 = pauseWhenOffscreen $ loopPre NoAttack $ proc (oi, attack) -> do
   new_attack <- onChange -< attack
   let input = DraculaInput (oi & #oi_state .~ os) $ void new_attack
 
-  atk_none <- noAttackHandler -< input
-  atk_bullet <- bulletHellHandler -< input
-  atk_teleport <- teleportHandler -< input
-  atk_home <- homerHandler -< input
-  atk_lightning <- lightningHandler -< input
-
-  (done, anim, os', evs) <- pick -< (attack,) $ \case
-     NoAttack -> atk_none
-     BulletHell -> atk_bullet
-     Teleport -> atk_teleport
-     HomeBall -> atk_home
-     Lightning -> atk_lightning
+  (done, anim, os', evs)
+    <- machine \case
+        NoAttack   -> noAttackHandler
+        BulletHell -> bulletHellHandler
+        Teleport   -> teleportHandler
+        HomeBall   -> homerHandler
+        Lightning  -> lightningHandler
+    -< (attack, input)
 
   new_state <- fmap toEnum $ noiseR (fromEnum $ succ NoAttack, fromEnum $ maxBound @DraculaAttack) (mkStdGen 1337) -< ()
   let attack' = event attack (const $ bool NoAttack new_state $ attack == NoAttack) done
